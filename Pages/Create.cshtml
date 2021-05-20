@@ -1,0 +1,96 @@
+﻿@page "~/Home/SCxPage/Create"
+@model DbWebAPI.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>SCxItem</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            @{ var sCxItem = Model.sCxItem; }
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" style="visibility:hidden">
+                @Html.DisplayNameFor(model => model.sCxItem.Id)
+                @{ Model.sCxItem.Id = Guid.NewGuid(); }
+                @Html.EditorFor(model => model.sCxItem.Id, new { htmlAttributes = new { @placeholder = "Enter a Value", @Value = Guid.NewGuid() } })
+            </div>
+            <div class="form-group">
+                @Html.DisplayNameFor(model => model.sCxItem.TimeStamp)
+                @if (Model.sCxItem.TimeStamp == DateTime.MinValue) { Model.sCxItem.TimeStamp = DateTime.Now; }
+                @Html.EditorFor(model => model.sCxItem.TimeStamp, new { htmlAttributes = new { @placeholder = "Enter a Value", @Value = DateTime.Now } })
+                <span asp-validation-for="sCxItem.TimeStamp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @Html.DisplayNameFor(model => model.sCxItem.Type)
+                @Html.DropDownListFor(model => model.sCxItem.Type, new SelectList(Helpers.DropListSCx, "id", "text"))
+                <span asp-validation-for="sCxItem.Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @Html.DisplayNameFor(model => model.sCxItem.Dept)
+                @Html.EditorFor(model => model.sCxItem.Dept, new { htmlAttributes = new { @placeholder = "Catering Department?" } })
+                <span asp-validation-for="sCxItem.Dept" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="sCxItem.Food" class="control-label"></label>
+                <input asp-for="sCxItem.Food" class="form-control" />
+                <span asp-validation-for="sCxItem.Food" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="sCxItem.Supplier" class="control-label"></label>
+                <input asp-for="sCxItem.Supplier" class="form-control" />
+                <span asp-validation-for="sCxItem.Supplier" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @Html.DisplayNameFor(model => model.sCxItem.CheckUBD)
+                @Html.DropDownListFor(model => model.sCxItem.CheckUBD, new SelectList(Helpers.DropListUBD, "id", "text"))
+                <span asp-validation-for="sCxItem.CheckUBD" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="sCxItem.Temperature" class="control-label"></label>
+                <input asp-for="sCxItem.Temperature" class="form-control" />
+                <span asp-validation-for="sCxItem.Temperature" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="sCxItem.Comment" class="control-label"></label>
+                <input asp-for="sCxItem.Comment" class="form-control" />
+                <span asp-validation-for="sCxItem.Comment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="sCxItem.SignOff" class="control-label"></label>
+                <input asp-for="sCxItem.SignOff" class="form-control" />
+                <span asp-validation-for="sCxItem.SignOff" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+            <input type="submit" value="Create" asp-action="Create" class="btn btn-primary" />
+        </div>*@
+            @*<div class="form-group">
+            <input type="hidden"/>
+            <input type="submit" asp-action="Create" asp-method="Post" asp-for="sCxItem" value="Create" style="float:left; margin:0 0 10px 0;" class="btn btn-danger" /> &nbsp; |
+            <a asp-page="Index">Back to List</a>
+        </div>*@
+            <div>
+                <input type="hidden" asp-for="@sCxItem" />
+                <input type="submit" value="Create" class="btn btn-danger" />
+                | <a asp-page="./Index">Back to List</a>
+            </div>
+        </form>
+        @*@{ var sCxItem = Model.sCxItem;
+            <form asp-action="Create" >
+                <input type="hidden" />
+                <input type="submit" asp-for="@sCxItem" value="Create" class="btn btn-danger" /> |
+                <a asp-page="./Index">Back to List</a>
+            </form>
+        }*@
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

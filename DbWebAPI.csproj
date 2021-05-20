@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <StartupObject>DbWebAPI.Program</StartupObject>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>OperationId;ProducesConsumes;ApiConventions;TRACE;DEBUG;NET;NET5_0;NETCOREAPP;</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+    <WarningsAsErrors>;NU1605;MVC1004</WarningsAsErrors>
+    <DocumentationFile>D:\Users\Dave\Documents\Visual Studio 2019\Projects\DbWebAPI\DbWebAPI.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Models\Class.cs" />
+    <Compile Remove="Models\DateItem.cs" />
+    <Compile Remove="Models\DateItemContext.cs" />
+    <Compile Remove="Pages\Create.cshtml.cs" />
+    <Compile Remove="Pages\Delete.cshtml.cs" />
+    <Compile Remove="Pages\Details.cshtml.cs" />
+    <Compile Remove="Pages\Edit.cshtml.cs" />
+    <Compile Remove="Pages\_popupCreate.cshtml.cs" />
+    <Compile Remove="Pages\_PopupSearch.cshtml.cs" />
+    <Compile Remove="Pages\_Search.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="nlog.config" />
+    <Content Remove="nswag.json" />
+    <Content Remove="Pages\Create.cshtml" />
+    <Content Remove="Pages\Delete.cshtml" />
+    <Content Remove="Pages\Details.cshtml" />
+    <Content Remove="Pages\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="DbWebAPInew.txt" />
+    <None Remove="npm-debug.log" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.0-preview.1.21102.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="NLog" Version="4.7.9" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.12.0" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.10.8" />
+    <PackageReference Include="NSwag.CodeGeneration.CSharp" Version="13.10.8" /> 
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" /> 
+    <PackageReference Include="System.Console" Version="4.3.1" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
+  </ItemGroup>
+
+</Project>

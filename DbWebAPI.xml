@@ -1,0 +1,863 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DbWebAPI</name>
+    </assembly>
+    <members>
+        <member name="T:DbWebAPI.Controllers.HomeController">
+            <summary>
+            
+                DbWebAPI.Controllers.HomeController - http://localhost:5001;http://localhost:5001/Home
+                
+                Home Page. Allows exploration of DbWebApi services via Swagger/Views/Pages etc.
+                
+            </summary>
+        </member>
+        <member name="M:DbWebAPI.Controllers.HomeController.#ctor(Microsoft.Extensions.Logging.ILogger{DbWebAPI.Controllers.HomeController})">
+            <summary>Home View Logging</summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.HomeController.Index">
+            <summary>API Landing Page</summary>
+        </member>
+        <member name="M:DbWebAPI.Controllers.HomeController.Privacy">
+            <summary>API Privacy Page</summary>
+        </member>
+        <member name="M:DbWebAPI.Controllers.HomeController.Error">
+            <summary>API Error Page</summary>
+        </member>
+        <member name="T:DbWebAPI.Controllers.SCxItemsController">
+            <summary>
+            
+                DbWebApi.Controllers.SCxItemsController - Database Web Open API Controller
+                
+                This controller exposes the web API CRUD endpoints for mobile app to access the SCx 
+                Documents database.
+                
+            </summary>
+            <remarks>
+            
+                The Database holds various food industry regulatory documents, required by the UK  
+                governments 'Food Standards Agency', to be archived and held by catering companies 
+                as a record of their compliance with UK food hygiene regulation.
+                
+                * SCxItem.cs is the document archive Class, holding the Food Hygiene Document data. 
+                  Each Documents is TimeStamped and Typed. 
+                
+            </remarks>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.#ctor(DbWebAPI.Models.SCxItemContext)">
+            <summary>
+                This method gets called by the runtime and configures the Database context.
+            </summary>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.GetSCxItemsAsync">
+            <summary>
+                GET: SCxItems/GetSCxItemsAsync - Get all. 
+                HTTP get request endpoint. This method responds with all SCx Document data.
+            </summary>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.GetSCxItemAsync(System.Guid)">
+            <summary>
+                GET: SCxItems/GetSCxItemAsync/5 - Get by Id.
+                HTTP get by id request endpoint. This method responds with single SCx Document data.
+            </summary>
+            <param name="id">Document Id</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.GetSCxItemsSelectAsync(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.String,System.String,System.String,System.Nullable{System.Int32},System.String)">
+            <summary>
+                GET: SCxItems/GetSCxItemsSelectAsync - Select entries.
+                HTTP get by selection request endpoint. This method responds with selected SCx Documents.
+            </summary>
+            <param name="SearchFromTimeStamp">Search start Date/Time</param>
+            <param name="SearchToTimeStamp">Search end Date/Time</param>
+            <param name="Type">Document Type</param>
+            <param name="Dept">Catering Department</param>
+            <param name="Supplier">Supplier Name</param>
+            <param name="CheckUBD">Use-By-Date status</param>
+            <param name="SignOff">Supervisor sign off</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.GetSCxItemsSelectDtoAsync(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.String,System.String)">
+            <summary>
+                GET: SCxItems/GetSCxItemsSelectDtoAsync - select entries DTO.
+                HTTP get by selection request endpoint. This method responds with a Data Transfer Object subset of selected SCx Document data.
+            </summary>
+            <param name="SearchFromTimeStamp">Search Start Date/Time</param>
+            <param name="SearchToTimeStamp">Search End Date/Time</param>
+            <param name="Type">Document Type</param>
+            <param name="Dept">Department</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.PutSCxItemAsync(System.Guid,DbWebAPI.Models.SCxItem)">
+            <summary>
+                PUT: SCxItem/PutSCxItemAsync/5 - update by Id.
+                HTTP Put by id request endpoint. This method responds by updating a single SCx Document.
+            </summary>
+            <param name="id">Document Id</param>
+            <param name="sCxItem">Document</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.PostSCxItemAsync(DbWebAPI.Models.SCxItem)">
+            <summary>
+                POST: SCxItems/PostSCxItemAsync - create SCxItem.
+                HTTP Post request endpoint. This method responds by creating a new SCx Document.
+            </summary>
+            <param name="sCxItem">Document</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.DeleteSCxItemAsync(System.Guid)">
+            <summary>
+                DELETE: SCxItems/DeleteSCxItemAsync/5 - delete by Id.
+                HTTP Delete by id request endpoint. This method responds by deleting a single SCx Document.
+            </summary>
+            <param name="id">Document Id</param>
+        </member>
+        <member name="T:DbWebAPI.Controllers.SCxViewController">
+            <summary>
+            
+                DbWebAPI.Controllers.SCxViewController - MVC View Controller
+            
+                This controller exposes the View pages CRUD endpoints for SCx Document Views. 
+                
+            </summary>
+            <remarks>
+                
+                The Database holds various food industry regulatory documents, required by the UK  
+                governments 'Food Standards Agency', to be archived and held by catering companies 
+                as a record of their compliance with UK food hygiene regulation.
+                
+                * SCxItem.cs is the document archive Class, holding the Food Hygiene Document data. 
+                  Each Documents is TimeStamped and Typed. 
+                
+            </remarks>>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxViewController.#ctor(DbWebAPI.Models.SCxItemContext)">
+            <summary>
+                This method gets called by the runtime and configures the Database context.
+            </summary>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxViewController.Index">
+            <summary>
+                GET: SCxItems - Get all. 
+                This method returns all SCx Document data to the Index View.
+            </summary>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxViewController.Details(System.Guid)">
+            <summary>
+                GET: SCxItems/Details/5 - Get by Id.
+                This method returns a single SCx Document to the View.
+            </summary>
+            <param name="id">Document Id</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxViewController.Create">
+            <summary>
+                GET: SCxItems/Create - Create new Document.
+                This method returns an initialised SCx Document shell to Create View
+            </summary>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxViewController.CreateConfirmed(DbWebAPI.Models.SCxItem)">
+            <summary>
+                POST: SCxItems/Create - Create new Document.
+                This method creates a new SCx Document.
+            </summary>
+            <param name="sCxItem">Document</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxViewController.Edit(System.Guid)">
+            <summary>
+                GET: SCxItems/Edit/5 - Update Document.
+                This method returns the Document to the Edit View.
+            </summary>
+            <param name="id">Document Id</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxViewController.EditUpdate(System.Guid,DbWebAPI.Models.SCxItem)">
+            <summary>
+                POST: SCxItems/EditUpdate/5 - Update Document.
+                This method updates a single SCx Document.
+            </summary>
+            <param name="id">Document Id</param>
+            <param name="sCxItem">Document</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxViewController.Delete(System.Guid)">
+            <summary>
+                GET: SCxItems/Delete/5 - Delete Document.
+                This method returns the Document to the Delete View.
+            </summary>
+            <param name="id">Document Id</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxViewController.DeleteConfirmed(System.Guid)">
+            <summary>
+                POST: SCxItems/DeleteConfirmed/5 - Delete Document
+                This method deletes a single SCx Document.
+            </summary>
+            <param name="id">Document Id</param>
+        </member>
+        <member name="T:DbWebAPI.Helpers.Helpers">
+            <summary> General Helper Class </summary>
+        </member>
+        <member name="T:DbWebAPI.Helpers.Helpers.DropListItem">
+            <summary>
+                DbWebApi.Helpers.DropListUBD
+                Class for Drop Down List key pairings.
+            </summary>
+        </member>
+        <member name="P:DbWebAPI.Helpers.Helpers.DropListItem.Id">
+            <summary>Document Type Id</summary>
+        </member>
+        <member name="P:DbWebAPI.Helpers.Helpers.DropListItem.Text">
+            <summary>Description of Document Type</summary>
+        </member>
+        <member name="F:DbWebAPI.Helpers.Helpers.DropListUBD">
+            <summary>
+                DbWebApi.Helpers.DropListUBD
+                Drop Down List for Use-By-Date Indicator (not-applicable/OK/Out-Of-Date)
+            </summary>
+            <example>
+                @Html.DropDownListFor(model => model.sCxItem.CheckUBD, new SelectList(Helpers.DropListUBD, "id", "text"))
+            </example>
+        </member>
+        <member name="F:DbWebAPI.Helpers.Helpers.DropListSCx">
+            <summary>
+                DbWebApi.Helpers.DropListUBD
+                Drop Down List for Document Type (SC1: - SC9:)
+            </summary>
+            <example>
+                @Html.DropDownListFor(model => model.sCxItem.Type, new SelectList(Helpers.DropListSCx, "id", "text"))
+            </example>
+        </member>
+        <member name="M:DbWebAPI.Helpers.Helpers.GetReflectedPropertyValue(System.Object,System.String)">
+            <summary>
+                DbWebApi.Helpers.GetReflectedPropertyValue(object, string)
+                Get the value of an object property from a complex structure
+            </summary>
+            <example>
+                var reflectedValue = Helpers.GetReflectedPropertyValue(sCxItem, "TimeStamp");
+            </example>
+            <param name="_object">structure</param>
+            <param name="_property">Property to get</param>
+        </member>
+        <member name="T:DbWebAPI.Models.ErrorViewModel">
+            <summary>
+            DbWebApi.Models.ErrorViewModel
+            </summary>
+        </member>
+        <member name="P:DbWebAPI.Models.ErrorViewModel.RequestId">
+            <summary>Request Id</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.ErrorViewModel.ShowRequestId">
+            <summary>Show/NoShow</summary>
+        </member>
+        <member name="T:DbWebAPI.Models.SCxItemDto">
+            <summary>
+            
+                DbWebAPI.Models.SCxItem - SCx Documents Data
+                
+                SCxItem is a class holding Food Hygiene Documents data. The Documents are 'TimeStamp' ordered 
+                and the document type is defined by the 'Type' attribute which ranges from SC1: to SC9:. 
+            
+            </summary>
+            <remarks>
+            
+                These are regulatory Documents required by the government Food Standards Agency to be archived and 
+                held by catering companies as a record of their compliance with UK food hygiene regulation.
+                
+            </remarks>>
+            <summary>
+            
+                DbWebAPI.Models.SCxItemDto - SCx Documents DTO Data Model
+                
+            </summary>
+            <remarks>
+            
+                Data Transfer Object for SCxItem. Used by the mobile app to
+                scaffold the folder and document structure for the archive screen.
+                It returns only minimal document data.
+                
+            </remarks>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItemDto.Id">
+            <summary>Guid Unique Id</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItemDto.TimeStamp">
+            <summary>Date of transaction</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItemDto.Type">
+            <summary>Document type SC1: - SC9:</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItemDto.Dept">
+            <summary>Catering Department (Kitchen, Prep-area, Stores etc)</summary>
+        </member>
+        <member name="T:DbWebAPI.Models.SCxSearchCriteria">
+            <summary>
+            
+                Search class for List of SCxItem.
+                
+            </summary>
+            <remarks>
+            
+                These properties are all the possible search criteria for the document archive (SCx).
+                The class is used as by a search method to retirve a selection of documents.
+                All the properties are optional.
+                
+                Note: Using seperate fields for Date and Time allow for greater compatablity across browsers
+                    
+            </remarks>        
+        </member>
+        <member name="P:DbWebAPI.Models.SCxSearchCriteria.FromDate">
+            <summary>Search start date</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxSearchCriteria.FromTime">
+            <summary>Search start time</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxSearchCriteria.ToDate">
+            <summary>Search end date</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxSearchCriteria.ToTime">
+            <summary>Search end time</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxSearchCriteria.Type">
+            <summary>Document Type (SC1 - SC9)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxSearchCriteria.Dept">
+            <summary>Catering Department. Kitchen, Prep-area, Stores etc</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxSearchCriteria.Food">
+            <summary>Food Item or Ingredient</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxSearchCriteria.Supplier">
+            <summary>Stock Supplier Name</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxSearchCriteria.CheckUBD">
+            <summary>Use-By-Date indicator (not-applicable/checked/Expired)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxSearchCriteria.SignOff">
+            <summary>Supervisor sign-off of completed Document</summary>
+        </member>
+        <member name="M:DbWebAPI.Models.SCxSearchCriteria.SCxSearch(System.Collections.Generic.IList{DbWebAPI.Models.SCxItem})">
+            <summary>
+            
+                DbWebAPI.Model.SCxSearchCriteria.SCxSearch() - search method for list of SCx documents
+            
+            </summary>
+            <remarks>
+                
+                This is a search method of the SCxSearchCriteria class with access to the bound search 
+                criteria entered by the user (this = SCxSearchParams). 
+                
+                The method uses the search critera entered by the user (SCxSearchParams) to select a 
+                subset of document records from the database to pass back to the client (sCxItems).
+            
+                The following SCxSearchCriteria class values are setup (optionaly) by the client...
+                
+                    this.FromDate   - Search start date.
+                    this.FromTime   - Search start time.
+                    this.ToDate     - Search end date.
+                    this.ToTime     - Search end time.
+                    this.Type       - SCx document type (SC1 - SC9).
+                    this.Dept       - Catering department
+                    this.Supplier   - Stock supplier
+                    this.CheckUBD   - Use-By-Date status (n/a, OK or Expired)
+                    this.SignOff    - Name of supervisor who signed-off of the completed document
+            
+                Note: 
+                    *   Using seperate fields for Date and Time, allows for greater compatablity across browsers.
+                    *   If the user does not input a value then the coresponding property is null.
+                    *   if no date or time is entered, the appropriate default DateTime.MinValue / DateTime.MaxValue is used (ie all documents).  
+                    *   If time is entered without the accompanying date, the date defaults to today or FromDate, whichever is appropriate. 
+                    *   If a date is entered without an accompanying time, the default 'search from' time is 00:00.00, the default 'search to' time is 23:59.59.
+                    *   SCxSearchCriteria DateTime values are nullable so the DateTime members have to be exposed via '.Value' property.
+            
+            </remarks>
+            <example>
+                sCxItems = searchParams.SCxSearch(await _context.SCxItems.ToListAsync());
+            </example>
+            <param name="sCxSearchItems">List of documents to search</param>
+        </member>
+        <member name="T:DbWebAPI.Models.SCxItem">
+             <summary>
+             
+                 DbWebAPI.Models.SCxItem - SCx Documents Data Model
+                 Food Standards Agency 'Safe Catering' Regulatory Food Monitoring Records (SC1-SC9).
+                 
+             </summary>
+             <remarks>
+            
+                 Id          - Guid unique Key. 
+                 TimeStamp   - Documents transaction date/time stamp used to order the document archive.
+                 Type        - Safe Catering Document Type...
+            
+                     SC1: Deliveries In      – Food Delivery Record. To record the monitoring of incoming deliveries (high risk, ready-to-eat food only).
+                     SC2: Chiller Checks     – Fridge/Cold room/Display Chiller Temperature records. To record the monitoring of the chill units, 
+                                               refrigerator's, cold units (and the function of freezer's).
+                     SC3: Cooking Log        – Cooking/Cooling/Reheating Records. To record the monitoring of cooking, cooling and reheating temperatures.
+                     SC4: Hot-Holding        – Hot Hold/Display Records. To record hot holding temperatures of food.
+                     SC5: Hygiene Inspection – Hygiene Inspection Checklist. To record managers/supervisors checks of premises.
+                     SC6: Hygiene Training   – Hygiene Training Records. To record training of staff.
+                     SC7: Fitness To Work    – Fitness to Work Assessment Form. To record assessment of staff fitness to work.
+                     SC8: All-In-One Form    – All-in-one Record. An alternative to SC1-4 (not used).
+                     SC9: Deliveries Out     – Customer Delivery Record. To record monitoring of food deliveries out to customers.
+                     COP: Opening Checks     - Daily opening checks by supervisor.
+                     CCL: Closing Checks     - Daily closing checks by supervisor.
+             
+                 Dept        - Catering department (Kitchen, Prep-area, Stores etc).
+                 Food        - Food type or ingredient.
+                 Supplier    - Stock Supplier Name.
+                 CheckUBD    - Use-By-Date indicator (not-applicable/checked/out-of-date)
+                 Temperature - Food Temperature in Celsius
+                 Comment     - General comment box
+                 SignOff     - Manger sign-off of completed Document
+                 
+                 
+             </remarks>
+            
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItem.Id">
+            <summary>Guid Unique Key</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItem.TimeStamp">
+            <summary>Date/Time Document Created</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItem.Type">
+            <summary>SCx Document Type (SC1: - SC9:)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItem.Dept">
+            <summary>Catering department (Kitchen, Prep-area, Stores etc)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItem.Food">
+            <summary>Food type</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItem.Supplier">
+            <summary>SC1: Stock Supplier Name</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItem.CheckUBD">
+            <summary>SC1: Use-By-Date indicator (not-applicable/checked-OK/expired)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItem.Temperature">
+            <summary>Food Temperature in Celsius</summary>  
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItem.Comment">
+            <summary>General comment box</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItem.SignOff">
+            <summary>Manger sign-off of completed Document</summary>
+        </member>
+        <member name="M:DbWebAPI.Models.SCxItem.Initialise(DbWebAPI.Models.SCxItem)">
+            <summary>
+                DbWebAPI.Models.SCxItem.Initialise();
+                On Creation of an SCxItem, any uninitialised data will be given default value.
+            </summary>
+            <param name="item">Document to initialise</param>
+        </member>
+        <member name="M:DbWebAPI.Models.SCxItem.AddSCxData">
+            <summary>Add test archive data to database </summary>
+        </member>
+        <member name="M:DbWebAPI.Models.SCxItem.AddThisWeeksSCxData">
+            <summary> Add 'This weeks' test archive data to database </summary>
+        </member>
+        <member name="T:DbWebAPI.Models.SCxItemContext">
+            <summary>
+                DbWebAPI.Models.SCxItemContext - DbContext
+            </summary>
+        </member>
+        <member name="M:DbWebAPI.Models.SCxItemContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{DbWebAPI.Models.SCxItemContext})">
+            <summary>
+                DbWebAPI.Models.SCxItemContext - Set Database context for SCxItem
+            </summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItemContext.SCxItems">
+            <summary>
+                DbWebAPI.Models.SCxItems - Document List (IList of SCxItem)
+            </summary>
+        </member>
+        <member name="T:DbWebAPI.IndexModel">
+            <summary>
+            
+                DbWebAPI.Models.Index.cshtml.cs - SCx Documents View
+                
+                Main Landing page for Razor Pages. initially displays all documents in table form.
+                
+            </summary>
+            <remarks>
+            
+                Index.cshtml displays a tabular list of documents and allows the client to perform 
+                the following actions via the pages clickables...
+                
+                    Search  - Search the document archive for a subset of data based on 
+                              date-Range/Document-Type/Department etc. 
+                    Sort    - Sort the table by column.
+                    New     - Create a new document.
+                    Edit    - Click on an individual row to invoke _popupEdit modal where 
+                              a document can be Updated, Deleted or Copied. The client can 
+                              also navigate the documents without leaving the modal via
+                              the Next and previous buttons.
+                              
+                    Crud operations do not have their own page (as per the VS boilerplate). 
+                    most functionallity is provided by the Edit modal which allows the client 
+                    to navigate the document whilst making amendments.
+                    
+                    Edit, Create and Search operations are provided from the modal by the 
+                    relevant partial view.
+                
+            </remarks>>
+        </member>
+        <member name="P:DbWebAPI.IndexModel.sCxItems">
+            <summary>Document List</summary>
+        </member>
+        <member name="P:DbWebAPI.IndexModel.sCxItem">
+            <summary>Document</summary>
+        </member>
+        <member name="P:DbWebAPI.IndexModel.SCxSearchParams">
+            <summary>Document Search Criteria</summary>
+        </member>
+        <member name="M:DbWebAPI.IndexModel.#ctor(DbWebAPI.Models.SCxItemContext)">
+            <summary>Set Razor Pages Databas Context</summary>
+        </member>
+        <member name="M:DbWebAPI.IndexModel.OnGetAsync">
+            <summary>
+                DbWebAPI.IndexModel.OnGetAsync() -  Entry point.
+                On 1st use, all document records are retrieved for display.
+            </summary>
+        </member>
+        <member name="M:DbWebAPI.IndexModel.OnPostSortAsync(System.String)">
+            <summary>
+            
+                DbWebAPI.IndexModel.OnPostSortAsync("column") - Sort Handler
+                Sort handler POST end point for '/Index?handler=sort'
+            
+                Sorts a table of data by column when a column heading is clicked.
+            
+            </summary>
+            <remarks>
+            
+                Each column heading is wrapped in a form statement in which
+                the method type is set to post and the asp-page-handler is set to 'sort'. 
+                when clicked, invokes this handler OnPost'Sort'Async (inserts 'Sort' into OnPostAsync).
+            
+                The method is passed the name of the column which identifies the column to sort on.
+            
+            </remarks>
+            <example>
+                <form asp-page-handler="sort" asp-route-column="Supplier" method="post">
+                    <input type = "hidden" />
+                    <input type="submit" value="Supplier"/>
+                </form>
+            </example>
+            <param name="column">Column name to sort on</param>
+        </member>
+        <member name="M:DbWebAPI.IndexModel.OnGetCreate">
+            <summary>
+            
+                DbWebAPI.IndexModel.OnGetCreate() - Create New Document Handler (data entry)
+                Search Handler. GET End point for '/Index?handler=search'
+                
+            </summary>
+            <remarks>
+            
+                This handler is invoked by the Create button ('+') in Index.cshtml.
+                Returns the modal _PopupCreate.cshtml for user input
+                
+            </remarks>
+            <example>
+                <form asp-page-handler="create" method="get">
+                    <input type="hidden" />
+                    <input id="modal" class="create" type="submit" value="create" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'create')" />
+                </form>
+            </example>
+        </member>
+        <member name="M:DbWebAPI.IndexModel.OnPostCreateAsync">
+            <summary>
+            
+                DbWebAPI.IndexModel.OnPostCreateAsync() Create New Document Handler (database update)
+                Create handler - POST end point for '/Index?hanler=Create'
+            
+            </summary>
+            <remarks>
+            
+                The view uses a '+' button to invoke a JavaScript function which loads the popup
+                (_popupCreate.cshtml) and prompts the user to enter document data. 
+                
+                the popup specifies a Create button with the method type set to 'post'
+                and the asp-page-handler set to 'create'. When clicked this OnPost'Create'Async handler
+                is invoked (injects 'Create' into OnPostAsync).
+            
+                This method then creates a new document in SCxItems.
+            
+            </remarks>
+            <example>
+                <form asp-page-handler="create" method="post">
+                    <input type="hidden" />
+                    <input class="create" type="submit" value="create" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'edit')" />
+                </form>
+            </example>
+        </member>
+        <member name="M:DbWebAPI.IndexModel.OnGetSearch">
+            <summary>
+            
+                DbWebAPI.IndexModel.OnGetSearch() - Search Handler (data entry)
+                Search Handler. GET End point for '/Index?handler=search'
+                
+            </summary>
+            <remarks>
+            
+                This handler is invoked by the Search button in Index.cshtml.
+                Returns the modal _PopupSearch.cshtml for user input
+                
+            </remarks>
+            <example>
+                <form asp-page-handler="search" method="get">
+                    <input type="hidden" />
+                    <input id="modal" class="search" type="submit" value="search" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'search')" />
+                </form>
+            </example>
+        </member>
+        <member name="M:DbWebAPI.IndexModel.OnPostSearchAsync">
+            <summary>
+            
+                DbWebAPI.IndexModel.OnPostSearchAsync() - Search Handler - (retrieve list)
+                Search handler - POST end point for '/Index?handler=search'
+            
+            </summary>
+            <remarks>
+            
+                The view uses a Search button to invoke a JavaScript function which loads a popup 
+                (_popupSearch.cshtml) and prompts the user to enter the search criteria.
+                
+                the popup specifies a Search button with the method type set to 'post'
+                and the asp-page-handler set to 'search'. When clicked this OnPost'Search'Async handler
+                is invoked (injects 'Search' into OnPostAsync).
+            
+                This method then calls the ScxSearchCriteria search method SCxSearch(), which uses 
+                the bound search criteria (SCxSearchParams) entered by the user, to return a subset 
+                of documents from SCxItems.
+            
+            </remarks>
+            <example>
+                <form asp-page-handler="search" method="post">
+                    <input type="hidden" />
+                    <input class="search" type="submit" value="Search" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'search')" />
+                </form>
+            </example>
+        </member>
+        <member name="M:DbWebAPI.IndexModel.OnGetEditAsync(System.Nullable{System.Guid})">
+            <summary>
+            
+                DbWebAPI.IndexModel.OnGetEdit() - Edit Handler (data entry)
+                Edit Handler. GET End point for '/Index?hanler=edit'
+                
+            </summary>
+            <remarks>
+            
+                This handler is invoked by clicking a row in Index.cshtml.
+                
+                This handler then returns the modal _PopupSearch.cshtml which 
+                displays the details of the document clicked on, for user amendment.
+                
+            </remarks>
+            <example>
+                <form asp-page-handler="edit" asp-route-id="@item.Id" method="get">
+                    <input type="hidden" />
+                    <input id="modal" class="edit" type="submit" value="edit" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'edit')" />
+                </form>
+            </example>
+            <param name="id">Document Id</param>
+        </member>
+        <member name="M:DbWebAPI.IndexModel.OnGetNextAsync(System.Guid,System.String)">
+            <summary>
+            
+                DbWebAPI.IndexModel.OnGetNextAsync() - Get Nex/Prev Document
+                Next Handler. GET End point for '/Index?hanler=next'
+                
+            </summary>
+            <remarks>
+            
+                This handler is invoked by the Previous or Next document button in _popupEdit.cshtml.
+                It uses the cmd parameter to set sCxItem to the next or previous document index of sCxItems. 
+                
+            </remarks>
+            <example>
+                <form asp-page-handler="next" asp-route-id="@item.Id" asp-route-cmd="next" method="get">
+                    <input type="hidden" />
+                    <input id="GetNewModalContent" type="submit" value=">"  />
+                </form>
+            </example>
+            <param name="id">Document Id</param>
+            <param name="cmd">Next or Prev Document</param>
+        </member>
+        <member name="M:DbWebAPI.IndexModel.OnGetSaveAsync">
+            <summary>
+            
+                DbWebAPI.IndexModel.OnGetSaveAsync() - Update Handler (database update)
+                Edit handler - POST end point for '/Index?hanler=Edit'
+            
+            </summary>
+            <remarks>
+            
+                The user clicks a row in the view to invoke a JavaScript function which 
+                loads a popup (_popupEdit.cshtml) and prompts the user to Amend the document. 
+                
+                the popup specifies a Save button with the method type set to 'get'
+                When clicked, JavaScript invokes this handler, passing the Model (sCxItem) as 'data:'.
+            
+                This handler then updates the changed document data in SCxItems and returns 
+                the same document back to the JavaScript as a partialView.
+            
+            </remarks>
+            <example>
+                <form asp-page-handler="save" asp-route-id="@item" method="get">
+                    <input type="hidden" />
+                    <input id="GetNewModalContent" type="submit" value="Save" />
+                </form>
+            </example>
+        </member>
+        <member name="M:DbWebAPI.IndexModel.OnGetDeleteAsync(System.Guid)">
+            <summary>
+            
+                DbWebAPI.IndexModel.OnGetDeleteAsync() - Document Delete Handler (database update)
+                Delete handler - GET end point for '/Index?hanler=Delete'
+            
+            </summary>
+            <remarks>
+            
+                The user clicks a row in the view to invoke a JavaScript function which loads a popup 
+                (_popupEdit.cshtml) prompts the user to enter Amend a document. 
+                
+                the popup specifies a Delete button with the method type set to 'get'
+                and the asp-page-handler set to 'delete'. When clicked this OnGet'Delete'Async handler
+                is invoked (injects 'Delete' into OnGetAsync).
+            
+                This method then deletes the current document data in SCxItems, and returns the 
+                next record to the modal as a partialView for display.
+            
+            </remarks>
+            <example>
+                <button asp-page-handler="delete" asp-route-id="@Model.Id" method="get">
+                    <input id="GetNewModalContent" type="submit" value="delete" />
+                </button>
+            </example>
+            <param name="id">Document Id</param>
+        </member>
+        <member name="M:DbWebAPI.IndexModel.OnGetCopyAsync(System.Guid)">
+            <summary>
+            
+                DbWebAPI.IndexModel.OnGetCopyAsync() - Copy Document Handler (database update)
+                Copy handler - GET end point for '/Index?hanler=Copy'
+            
+            </summary>
+            <remarks>
+            
+                The view uses a Edit button to invoke a JavaScript function which loads a popup
+                (_popupEdit.cshtml) and prompts the user to enter Amend a document. 
+                
+                the popup specifies a Copy button with the method type set to 'get'
+                and the asp-page-handler set to 'copy'. When clicked this OnGet'Copy'Async handler
+                is invoked (injects 'Copy' into OnGetAsync).
+            
+                This method then copies the document data with a new Guid and TimeStamp  
+                and creates a new document in SCxItems. The new document partial view is 
+                returned to the modal for display.
+            
+            </remarks>
+            <example>
+                <button asp-page-handler="copy" method="get" asp-route-id="@Model.Id" >
+                    <input type="hidden" />
+                    <input id="GetNewModalContent" value="copy" />
+                </button>
+            </example>
+            <param name="id">Document Id</param>
+        </member>
+        <member name="T:DbWebAPI.Program">
+             <summary>
+             
+                 DbWebApi v1.2 - Database Web Service for archival of regulatory food hygiene documents.
+             
+             </summary>
+             <remarks>
+             
+                 V1.0 2021-04-10 D.McDonald 
+                 Creation of Web API controller for use by Xamarin Mobile App 'FSAdiary'. 
+                 
+                 V1.1 2021-04-14 D.McDonald
+                 Added simple View controller for browser access.
+                 
+                 V1.2 2021-04-17 D.McDonald
+                 Added Razor Pages with sort, search and modal CRUD facility.
+             
+                 The Database holds various food industry regulatory documents. The governments   
+                 'Food Standards Agency' require these documents to be archived and held by 
+                 catering companies as a record of their compliance with UK food hygiene regulation...
+                 
+                     SC1: Deliveries In      – Food Delivery Record. To record the monitoring of incoming deliveries (high risk, ready-to-eat food only).
+                     SC2: Chiller Checks     – Fridge/Cold room/Display Chiller Temperature records. To record the monitoring of the chill units, 
+                                               refrigerator's, cold units (and the function of freezer's).
+                     SC3: Cooking Log        – Cooking/Cooling/Reheating Records. To record the monitoring of cooking, cooling and reheating temperatures.
+                     SC4: Hot-Holding        – Hot Hold/Display Records. To record hot holding temperatures of food.
+                     SC5: Hygiene Inspection – Hygiene Inspection Checklist. To record managers/supervisors checks of premises.
+                     SC6: Hygiene Training   – Hygiene Training Records. To record training of staff.
+                     SC7: Fitness To Work    – Fitness to Work Assessment Form. To record assessment of staff fitness to work.
+                     SC8: All-In-One Form    – All-in-one Record. An alternative to SC1-4 (not used).
+                     SC9: Deliveries Out     – Customer Delivery Record. To record monitoring of food deliveries out to customers.
+                     COP: Opening Checks     - Daily opening checks by supervisor.
+                     CCL: Closing Checks     - Daily closing checks by supervisor.
+                 
+                 The Xamarin Mobile Application 'FSAdiary' manages the regulatory reqiurements of the business
+                 and uses this REST Api to store and retrieve the users documents.
+                 
+                 * SCxItem.cs is the document archive Class, holding the Food Hygiene Document data. 
+                   Each Documents is TimeStamped and Typed. 
+                 
+                 * SCxItemController.cs is The Api's endpoints controller and services the CRUD requests.
+                
+                 "http://.../Home" is the API's landing page and offers access to Swagger, MVC Views and
+                 Razor Pages. The latter 2 options were added to extend the web services offered by the API. 
+                 
+                 
+                 For Open API Web Service please see...
+            
+                    DbWebAPI.Controllers.SCxItemsController.cs
+                    DbWebAPI.Models.SCxItems.cs
+            
+                For MVC View Web Service please see...
+            
+                    DbWebAPI.Views.SCxView.Index.cshtml
+                    DbWebAPI.Controllers.SCxViewController.cs
+                    DbWebAPI.Models.SCxItems.cs
+            
+                For Razor Page Web Service please see...
+            
+                    DbWebAPI.Pages.Index.cshtml.cs
+                    DbWebAPI.Pages.Shared._popupEdit.cshtml
+                    DbWebAPI.Models.SCxItems.cs
+                    
+             </remarks>>
+        </member>
+        <member name="M:DbWebAPI.Program.Main(System.String[])">
+            <summary>API Entry Point</summary>
+        </member>
+        <member name="M:DbWebAPI.Program.CreateHostBuilder(System.String[])">
+            <summary>Startup Web Service</summary>
+        </member>
+        <member name="T:DbWebAPI.Startup">
+            <summary>
+            
+                DbWebApi.Startup - Configure API services.
+            
+            </summary>
+            <remarks>
+            
+                2021-04-10 - Created. 
+                2021-04-11 - Implemented Swashbuckle for Swagger testing (replacing Postman).
+                2021-04-12 - Switched from Swashbuckle to Nswag.
+                2021-04-17 - Configured Razor Pages.
+            
+            </remarks>
+        </member>
+        <member name="M:DbWebAPI.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>Setup Process called from Main()</summary>
+        </member>
+        <member name="P:DbWebAPI.Startup.Configuration">
+            <summary> API startup Configuration </summary>
+        </member>
+        <member name="M:DbWebAPI.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary> This method gets called by the runtime. Use this method to add services to the container.</summary>
+        </member>
+        <member name="M:DbWebAPI.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary> This method gets called by the runtime. Use this method to configure the HTTP request pipeline.</summary>
+        </member>
+    </members>
+</doc>

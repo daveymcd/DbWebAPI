@@ -1,0 +1,193 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@*
+    DbWebAPI.Views.Home.Index.cshtml - API Home Page.
+
+    For Open API Web Service please see...
+
+        DbWebAPI.Controllers.SCxItemsController.cs
+        DbWebAPI.Models.SCxItems.cs
+
+    For MVC View Web Service Please see...
+
+        DbWebAPI.Views.SCxView.Index.cshtml
+        DbWebAPI.Controllers.SCxViewController.cs
+        DbWebAPI.Models.SCxItems.cs
+
+    For Razor Page Web Service please see...
+
+        DbWebAPI.Pages.Index.cshtml.cs
+        DbWebAPI.Pages.Shared._popupEdit.cshtml
+        DbWebAPI.Models.SCxItems.cs
+*@
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--Set device screen default scale for Responsive Design-->
+
+    <style>
+        .blue {
+            color: lightskyblue;
+        }
+
+            .blue button {
+                background-color: lightskyblue;
+            }
+
+            .blue hr {
+                border-color: lightskyblue;
+            }
+
+        .green {
+            color: lightgreen;
+        }
+
+            .green button {
+                background-color: lightgreen;
+            }
+
+            .green hr {
+                border-color: lightgreen;
+            }
+
+        .red {
+            color: lightcoral;
+        }
+
+            .red button {
+                background-color: lightcoral;
+            }
+
+            .red hr {
+                border-color: lightcoral;
+            }
+
+        button {
+            width: 15%;
+        }
+
+            button:hover {
+                -webkit-transition: all 0.75s ease-out;
+                -moz-transition: all 0.75s ease-out;
+                -o-transition: all 0.75s ease-out;
+                transition: all 1.25s ease-in-out;
+                box-shadow: -6px 6px 20px 0 rgba(0,0,0,0.2),-8px 8px 25px 0 rgba(0,0,0,0.19);
+            }
+
+        .mainContainer {
+            max-width: 100%;
+            height: auto;
+            margin: 0 6% 0 4%;
+            text-align: center;
+            justify-content: space-between;
+        }
+
+        hr {
+            margin: 0  0 auto;
+            margin: 0 0 0 0;
+        }
+
+        .flexContainerColumn {
+            text-align:left; 
+            padding:0 0; 
+            margin:0 0.5% 0.5% 0; 
+            width:100%;
+        }
+    </style>
+
+    <script>
+        function revealDIV(idx) {                                              // reveal/hide detail div when button clicked
+            var detail = document.getElementsByClassName("toggle");
+            var plusSign = document.getElementsByClassName("revealBut");
+
+            detail[idx].style.transition = "all 1s ease-out 0";
+            plusSign[idx].style.transition = "all 1s ease-out 0";
+            if (detail[idx].style.display == "none") {
+                detail[idx].style.display = "inline";
+                //plusSign[idx].style.transform = "rotate(360deg)";
+            }
+            else {
+                detail[idx].style.display = "none";
+                //plusSign[idx].style.transform = "rotate(0deg)";
+            }
+        }
+    </script>
+
+    <!-- impose Responsive Design via CSS and JavaScript -->
+    @*<link href="/css/ResponsiveDesign.css" rel="stylesheet" type="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script async src="/js/ResponsiveDesign.js"></script>*@
+</head>
+
+<div class="mainContainer">
+    <h1>DbWebAPI</h1>
+    <h5 style="text-align:center">ASP.Net Core Web Service Demo</h5>
+    <br />
+    <div style="text-align:left; width:100%;">
+        <p>
+            This demonstration API uses an in-memory database which holds an archive of mock
+            food industry documents. The governments 'Food Standards Agency' require these
+            documents to be archived and held by catering companies as a record, of their
+            compliance with UK food hygiene regulation.
+        </p>
+    </div>
+    <div style="text-align:left; width:100%;">
+        <p>
+            A Xamarin Mobile Application manages the buisness requirements of the regulation, 
+            and uses the CRUD operations of this REST API to store and retrieve FSA documents
+            from the remote server.
+        </p>
+    </div>
+
+    <div class="flexContainerRow clearfix blue">
+        <div class="col1 flexContainerColumn sideBySide1col" style="margin:10% 0.5% 0.5% 0;">
+            <h6>REST API</h6>
+        </div>
+        <div class="col11 flexContainerColumn">
+            <hr />
+        </div>
+    </div>
+    <div class="flexContainerRow clearfix blue">
+        <div class="col11 flexContainerColumn sideBySide10col" >
+            <p>The OPEN API Controller exposes the Json Endpoints used by the Xamarin App for CRUD access to the Document Archive database. Written in C# and uses Nswag</p>
+        </div>
+        <div class="col1 flexContainerColumn sideBySide1col" >
+            <button class="clearfix" title="Swagger Page"><a href="https://localhost:5001/swagger/index.html#/SCxItems">Nswag</a></button>
+        </div>
+    </div>
+
+    <div class="flexContainerRow clearfix red">
+        <div class="col1 flexContainerColumn sideBySide1col" style="margin:10% 0.5% 0.5% 0;">
+            <h6>MVC View Pages</h6>
+        </div>
+        <div class="col11 flexContainerColumn">
+            <hr />
+        </div>
+    </div>
+    <div class="flexContainerRow clearfix red">
+        <div class="col11 flexContainerColumn sideBySide10col" >
+            <p>Simple Modle-View-Controller web pages allow basic CRUD operations on database. Written in C#, HTML & CSS.</p>
+        </div>
+        <div class="col1 flexContainerColumn sideBySide1col">
+            <button class="clearfix" title="MVC View Pages"><a href="https://localhost:5001/Home/SCxView/Index">MVC</a></button>
+        </div>
+    </div>
+
+    <div class="flexContainerRow clearfix green">
+        <div class="col1 flexContainerColumn sideBySide1col" style="margin:10% 0.5% 0.5% 0;">
+            <h6>Razor Pages</h6>
+        </div>
+        <div class="col11 flexContainerColumn">
+            <hr />
+        </div>
+    </div>
+    <div class="flexContainerRow clearfix green">
+        <div class="col11 flexContainerColumn sideBySide10col">
+            <p>Razor web pages allow search & sort of document data and use a single popup modal to navigate the documents and execute Ajax CRUD requests. Written in C#, HTML, CSS & JavaScript.</p>
+        </div>
+        <div class="col1 flexContainerColumn sideBySide1col" >
+            <button class="clearfix" title="Razor Pages"><a href="https://localhost:5001/Home/SCxPage/Index">Razor</a></button>
+        </div>
+    </div>
+</div>

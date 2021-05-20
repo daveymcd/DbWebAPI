@@ -1,0 +1,99 @@
+﻿@model IEnumerable<DbWebAPI.Models.SCxItem>
+@using DbWebAPI.Helpers;
+@{
+    ViewData["Title"] = "Index";
+}
+@*
+    DbWebAPI.Views.SCxViews.Index.cshtml - MVC Views landing page.
+    Browser access to simple CRUD operations (For project documentation & 
+    more functionallity, please see Razor Pages).
+*@
+<div>
+    <h4 style="float:left;">DbWebAPI - ASP.NET MVC Views</h4>
+</div>
+<div style="padding: 40px 0 0 0 ; text-align:center">
+    <h5>Safe Catering Document Archive</h5>
+    @*<form asp-action="Search" style="float:right;">
+            <input type="hidden" /> &nbsp;
+            <input type="submit" value="&#8981;" title="Search for documents" style="background-color:Highlight; float:left; margin:0 0 10px 0; color:white; font-size:larger;" class="btn btn-danger flipped" /> &nbsp;
+        </form>*@
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th title="Create new document">
+                <form asp-action="Create" style="float:left;">
+                    <input type="submit" value="&nbsp; New &nbsp;" class="btn btn-sm btn-danger" />
+                </form>
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeStamp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dept)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Food)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Supplier)
+            </th>
+            @*<th>
+                    @Html.DisplayNameFor(model => model.CheckUBD)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Temperature).ToString()
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SignOff)
+                </th>
+                <th style="max-width:200px;">
+                    @Html.DisplayNameFor(model => model.Comment)
+                </th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td title="Amend Details">
+                    <form asp-action="Details" asp-route-id="@item.Id" style="float:left">
+                        <input type="hidden" asp-for="@item.Id" />
+                        <input type="submit" value="Amend" class="btn btn-sm btn-danger" />
+                    </form>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeStamp)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Dept)
+                </td>
+                <td>
+                    @{ var typDesc = Helpers.DropListSCx.FirstOrDefault(listEntry => listEntry.Id.ToString() == item.Type).Text; }
+                    @Html.Raw(typDesc)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Food)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Supplier)
+                </td>
+                @*<td>
+                        @Html.DisplayFor(modelItem => item.CheckUBD)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Temperature)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SignOff)
+                    </td>
+                    <td style="max-width:200px;text-wrap:normal;word-wrap:break-word;">
+                        @Html.DisplayFor(modelItem => item.Comment)
+                    </td>*@
+            </tr>
+        }
+    </tbody>
+</table>

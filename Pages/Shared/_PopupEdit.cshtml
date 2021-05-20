@@ -1,0 +1,146 @@
+﻿@*
+///    DbWebAPI.IndexModel.OnPostEdit() - Modal Edit Handler (popup).
+///    POST End point for '/Index?hanler=edit'
+*@
+@model DbWebAPI.Models.SCxItem
+@using DbWebAPI.Helpers;
+@{Layout = null; }
+
+<div id="editModal">
+
+    @{var typDesc = Helpers.DropListSCx.FirstOrDefault(listEntry => listEntry.Id.ToString() == Model.Type).Text; }
+    @{var docMsg = string.Concat("Document ", typDesc, " - ", Model.TimeStamp.ToShortDateString(), " ", Model.TimeStamp.ToShortTimeString(), " "); }
+
+    @*
+        This associated Javascript handles the Ajax calls (page handlers are not invoked by form submits)
+        and the disposing and loading of partial views, for this modal.
+
+        For the functional documentation please see site.js & the following Javascript file...
+    *@
+    
+    <script async src="/js/_PopupEdit.js"></script>
+
+    <div id="editModalBody">
+        <div id="editNextButtoms">
+            <button id="GetNewModalContent"
+                    class="btn btn-primary btn-sm"
+                    value="Next"
+                    href="&id=@Model.Id&cmd=next"
+                    data-url="@Url.Page("Index", "next")"
+                    data-docMsg="@docMsg"
+                    title="Next Document >"
+                    type="submit"
+                    style="float:right;">
+                >
+            </button>
+            <button id="GetNewModalContent"
+                    class="btn btn-sm btn-primary"
+                    value="Prev"
+                    href="&id=@Model.Id&cmd=prev"
+                    data-url="@Url.Page("Index", "next")"
+                    data-docMsg="@docMsg"
+                    title="< Previous Document"
+                    type="submit"
+                    style="float:left;">
+                <
+            </button>
+            <h5 style="text-align:center;">Amend Document Information</h5>
+            <hr />
+        </div>
+        <div id="editModalRow" class="row">
+            <div id="editModalLayout" class="col-sm-12">
+                <form>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group">
+                        @Html.DropDownListFor(model => model.Type, new SelectList(Helpers.DropListSCx, "id", "text"), new { @class = "col-sm-4 changeable", @required = "required", @title = "Document type (SC1 - SC9) - Required" })
+                        <span asp-validation-for="Type" class="text-danger"></span>
+
+                        <input type="datetime-local" asp-for="TimeStamp" asp-format="{0:yyyy-MM-ddTHH:mm}" class="col-sm-5 changeable" , required="required" placeholder="Date & Time" title="Creation Date & Time - Required" />
+                        <span asp-validation-for="TimeStamp" class="text-danger"></span>
+
+                        <input asp-for="Dept" class="col-sm-2 changeable" placeholder="Catering Department" title="Catering Department (Kitchen, Stores etc)" />
+                        <span asp-validation-for="Dept" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        @{ if (Model.Type == "SC9:")
+                            {
+                                <label asp-for="Supplier" class="control-label col-sm-2">Customer</label>
+                            }
+                            else
+                            {
+                                <label asp-for="Supplier" class="control-label col-sm-2"></label>
+                            }
+                        }
+                        @Html.TextAreaFor(model => model.Supplier, new { placeholder = "Supplier Name?", title = "Supplier of Food Product", style = "word-wrap:hyphenate", @class = "col-sm-3 changeable" })
+                        <span asp-validation-for="Supplier" class="text-danger"></span>
+
+                        <label asp-for="Food" class="control-label col-sm-2"></label>
+                        @Html.TextAreaFor(model => model.Food, new { @placeholder = "Food Item?", @title = "Food Item or Ingredient", @class = "col-sm-4 changeable", @style = "word-wrap:hyphenate" })
+                        <span asp-validation-for="Food" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Temperature" class="control-label  col-sm-2">Temp&#176;C</label>
+                        <input asp-for="Temperature" class="col-sm-3 changeable" placeholder="Temperature in Temp&#176;C" title="Recorded &#176;C of Food Item " />
+                        <span asp-validation-for="Temperature" class="text-danger"></span>
+
+                        <label asp-for="CheckUBD" class="control-label col-sm-2">UBD</label>
+                        @Html.DropDownListFor(model => model.CheckUBD, new SelectList(Helpers.DropListUBD, "id", "text"), new { @class = "col-sm-4 changeable", @title = "Use-By-Date Status" })
+                        <span asp-validation-for="CheckUBD" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Comment" class="control-label col-sm-2">Notes</label>
+                        @Html.TextAreaFor(model => model.Comment, new { @placeholder = "Comment/Action?", @title = "Comments/Actions Taken", @class = "col-sm-9 changeable", @rows = "4" })
+                        <span asp-validation-for="Comment" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SignOff" class="control-label col-sm-2"></label>
+                        <input asp-for="SignOff" class="col-sm-9 changeable" placeholder="Signator" title="Document checked and signed off by" />
+                        <span asp-validation-for="SignOff" class="text-danger"></span>
+                    </div>
+                </form>
+                <hr />
+                <div id="editAmendButtons" style="margin:0 0 20px 0;">
+                    <button id="GetNewModalContent"
+                            class="btn btn-sm btn-danger"
+                            value="Save"
+                            method="get"
+                            data-url="@Url.Page("Index", "save")"
+                            data-docMsg="@docMsg"
+                            title="Save Changes To Document">
+                        Save
+                    </button>
+                    <button id="GetNewModalContent"
+                            class="btn btn-sm btn-danger"
+                            value="Delete"
+                            method="get"
+                            data-url="@Url.Page("Index", "delete")"
+                            data-docMsg="@docMsg"
+                            href="&id=@Model.Id"
+                            title="Permanently Delete Document">
+                        Delete
+                    </button>
+                    <button id="GetNewModalContent"
+                            class="btn btn-sm btn-danger"
+                            value="Copy"
+                            method="get"
+                            data-url="@Url.Page("Index", "copy")"
+                            data-docMsg="@docMsg"
+                            href="&id=@Model.Id"
+                            title="Create a new Document like this one">
+                        Copy
+                    </button>
+                    <button id="Close"
+                            class="btn btn-sm btn-primary"
+                            data-docMsg="@docMsg"
+                            data-dismiss="modal"
+                            aria-label="Close"
+                            title="Finished - Return To List">
+                        <span aria-hidden="true">Close</span>
+                    </button>
+                    <span id="infoPopover" data-toggle="popover"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

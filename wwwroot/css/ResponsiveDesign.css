@@ -1,0 +1,222 @@
+/* Responsive Design CSS file.  D.McDonald 15/03/2021
+
+     @media will retrieve the characteristics of the device the web page is being displayed upon 
+     (requires <meta name="viewport" content="width=device-width, initial-scale=1.0"> to be set on page).
+     Break points are set at key resolutions to scale the viewport to the devices screen size... 
+
+         extra small, small, medium, large, extra large & Retina.
+     
+     For each screen size breakpoint, the screen is divided into 12 equal columns and responsive 
+     elements will specify the number of columns they wish to span using a class for each breakpoint. 
+
+     The accompanying .js file simply creates an abreviated class containing all 'col' classes that span 
+     the same number of columns ie...
+
+       <div class="col4"> is the same as <div class="col-xs-4 col-s-4 col-m-4 col-l-4 col-xl-4 col-xxl-4">
+   
+*/
+        * {
+            box-sizing: border-box;                 /* element size = width (or height) + padding + border */
+        }
+
+        .box {                                      /* box definition used to create columns in a row */
+            float: left;
+            width: 33.33%;
+            padding: 50px;
+        }
+
+       .flexContainerRow {                          /* rows of boxes */  
+            display: -webkit-flex;                  /* Safari */
+            display: flex;                          /* Standard syntax */
+        }
+            .flexContainerRow .flexContainerColumn {/* columns of boxes */
+                -webkit-flex: 1;                    /* Safari */
+                -ms-flex: 1;                        /* IE 10 */
+                flex: 1;                            /* Standard syntax */
+            }
+
+        .sideBySide1col {                            /* single column Side by side container (1 12th)*/
+            width: 8.33%;
+            height: auto;
+            display: inline-block;
+        }
+        .sideBySide4col {                           /* 4 column Side-by-side container (quater)*/
+            width: 33%;
+            height: auto;
+            display: inline-block;
+        }
+        .sideBySide10col {                           /* 10 column Side by side container (10 12ths)*/
+            width: 83.33%;
+            height: auto;
+            display: inline-block;
+        }
+        .sideBySide11col {                           /* 11 column Side by side container (11 12ths)*/
+            width: 91.66%;
+            height: auto;
+            display: inline-block;
+        }
+
+        /*img {*/                                       /* Images will auto size and maintain ratio as screen size changes */
+            /*max-width: 100%;
+            height: auto;
+            margin: 0 0 auto;
+            padding: 0 0 0 0;
+            border: 0 0 0 0;
+        }
+
+        div {*/                                       /* Div's will auto size and maintain ratio as screen size changes */
+            /*width: 100%;
+            height: auto;
+            margin: 0 0 auto;
+            padding: 0 0 0 0;
+            border: 0 0 0 0;
+        }
+
+        p {*/                                         /* paragraph's will auto size and maintain ratio as screen size changes */
+            /*width: 100%;
+            height: auto;
+            margin: 0 0 auto;
+            padding: 0 0 0 0;
+            border: 0 0 0 0;
+        }*/
+
+        [class*="col-"] {                           /* Each row should be wrapped in a <div>. The number of columns inside a row should always add up to 12 */
+            float: left;                            /* All columns should be floating to the left, and have a padding of 15px */
+            padding: 10%;
+            width: 100%;                            /* default setting is for phones and tablets in portrait oriantation */
+        }
+
+        .clearfix::after {                          /* Clear the flow after the div so next div is not affected */
+            content: "";
+            clear: both;
+            display: table;
+        }
+
+        /*  The screen width is divided into 12 equal columns. 
+            Each column div in the row (a webpage column) will cover a number of screen columns by usin 'coln' (where n = number of screen coluns). 
+            the Column div's in each row must cover all 12 screen colums.
+
+            ie. for 3 Webpage colums, each div in the row will use 'col4' (3x4=12)
+        */
+
+        .col1{} .col2{} .col3{} .col4{} .col5{} .col6{} .col7{} .col8{} .col9{} .col10{} .col11{} .col12{}
+
+        @media only screen and (max-width: 600px) { /* Extra small devices (phones, 600px and down) */
+            .col1 .col-xs-1 {width: 8.33%;}         /* Single column width (% of screen) followed by multiple column span widths */
+            .col2 .col-xs-2 {width: 16.66%;}
+            .col3 .col-xs-3 {width: 25%;}
+            .col4 .col-xs-4 {width: 33.33%;}
+            .col5 .col-xs-5 {width: 41.66%;}
+            .col6 .col-xs-6 {width: 50%;}
+            .col7 .col-xs-7 {width: 58.33%;}
+            .col8 .col-xs-8 {width: 66.66%;}
+            .col9 .col-xs-9 {width: 75%;}
+            .col10 .col-xs-10 {width: 83.33%;}
+            .col11 .col-xs-11 {width: 91.66%;}
+            .col12 .col-xs-12 {width: 100%;}
+            body {
+                /*font-size:xx-small;*/
+                color:pink;
+                font-size: calc(((1vh + 1vw) / 2) * 1.6); /* recalculate font size relative to screen size. 
+                                                             NOTE: 'smaller' and 'larger' are relative to font-size. other predefined sizes (x-small etc) are absolute (pixles) */
+            }
+        }
+        @media only screen and (min-width: 600px) { /* Small devices (portrait tablets and large phones, 600px and up) */
+            .col1 .col-s-1 {width: 8.33%;}
+            .col2 .col-s-2 {width: 16.66%;}
+            .col3 .col-s-3 {width: 25%;}
+            .col4 .col-s-4 {width: 33.33%;}
+            .col5 .col-s-5 {width: 41.66%;}
+            .col6 .col-s-6 {width: 50%;}
+            .col7 .col-s-7 {width: 58.33%;}
+            .col8 .col-s-8 {width: 66.66%;}
+            .col9 .col-s-9 {width: 75%;}
+            .col10 .col-s-10 {width: 83.33%;}
+            .col11 .col-s-11 {width: 91.66%;}
+            .col12 .col-s-12 {width: 100%;}
+            body {
+                /*font-size: x-small;*/
+                color:red;
+                font-size: calc(((1vh + 1vw) / 2) * 1.5);
+            }
+        }  
+        @media only screen and (min-width: 768px) { /* Medium devices (landscape tablets, 768px and up) */
+            .col1 .col-m-1 {width: 8.33%;}
+            .col2 .col-m-2 {width: 16.66%;}
+            .col3 .col-m-3 {width: 25%;}
+            .col4 .col-m-4 {width: 33.33%;}
+            .col5 .col-m-5 {width: 41.66%;}
+            .col6 .col-m-6 {width: 50%;}
+            .col7 .col-m-7 {width: 58.33%;}
+            .col8 .col-m-8 {width: 66.66%;}
+            .col9 .col-m-9 {width: 75%;}
+            .col10 .col-m-10 {width: 83.33%;}
+            .col11 .col-m-11 {width: 91.66%;}
+            .col12 .col-m-12 {width: 100%;}
+            body {
+                /*font-size: smaller;*/
+                color:orange;
+                font-size: calc(((1vh + 1vw) / 2) * 1.4);
+            }
+        }        
+        @media only screen and (min-width: 992px) { /* Large devices (laptops/desktops, 992px and up) */
+            .col1 .col-l-1 {width: 8.33%;}
+            .col2 .col-l-2 {width: 16.66%;}
+            .col3 .col-l-3 {width: 25%;}
+            .col4 .col-l-4 {width: 33.33%;}
+            .col5 .col-l-5 {width: 41.66%;}
+            .col6 .col-l-6 {width: 50%;}
+            .col7 .col-l-7 {width: 58.33%;}
+            .col9 .col-l-8 {width: 66.66%;}
+            .col9 .col-l-9 {width: 75%;}
+            .col10 .col-l-10 {width: 83.33%;}
+            .col11 .col-l-11 {width: 91.66%;}
+            .col12 .col-l-12 {width: 100%;}
+            body {
+                /*font-size: small;*/
+                color:blue;
+                font-size: calc(((1vh + 1vw) / 2) * 1.3);
+            }
+        }
+        @media only screen and (min-width: 1200px) { /* Extra large devices (large laptops and desktops, 1200px and up) */
+            .col1 .col-xl-1 {width: 8.33%;}
+            .col2 .col-xl-2 {width: 16.66%;}
+            .col3 .col-xl-3 {width: 25%;}
+            .col4 .col-xl-4 {width: 33.33%;}
+            .col5 .col-xl-5 {width: 41.66%;}
+            .col6 .col-xl-6 {width: 50%;}
+            .col7 .col-xl-7 {width: 58.33%;}
+            .col8 .col-xl-8 {width: 66.66%;}
+            .col9 .col-xl-9 {width: 75%;}
+            .col10 .col-xl-10 {width: 83.33%;}
+            .col11 .col-xl-11 {width: 91.66%;}
+            .col12 .col-xl-12 {width: 100%;}
+            body {
+                /*font-size: medium;*/
+                color:green;
+                font-size: calc(((1vh + 1vw) / 2) * 1.2);
+            }
+        }
+        @media only screen and (min-width: 1600px) { /* Retina devices (2K & 4k laptops and desktops, 1600px and up) */
+            .col1 .col-xxl-1 {width: 8.33%;}
+            .col2 .col-xxl-2 {width: 16.66%;}
+            .col3 .col-xxl-3 {width: 25%;}
+            .col4 .col-xxl-4 {width: 33.33%;}
+            .col5 .col-xxl-5 {width: 41.66%;}
+            .col6 .col-xxl-6 {width: 50%;}
+            .col7 .col-xxl-7 {width: 58.33%;}
+            .col8 .col-xxl-8 {width: 66.66%;}
+            .col9 .col-xxl-9 {width: 75%;}
+            .col10 .col-xxl-10 {width: 83.33%;}
+            .col11 .col-xxl-11 {width: 91.66%;}
+            .col12 .col-xxl-12 {width: 100%;}
+            body {
+                /*font-size: large;*/
+                color:yellow;
+                font-size: calc(((1vh + 1vw) / 2) * 1.1);
+            }
+        }
+
+        body {color:white;}                         /* Debug - comment out for screen width tests*/
+
+

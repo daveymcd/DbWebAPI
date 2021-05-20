@@ -1,0 +1,79 @@
+﻿@model DbWebAPI.Models.SCxItem
+@using DbWebAPI.Helpers;
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Safe Catering Documents</h1>
+
+<div>
+    <h4>Details</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TimeStamp)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TimeStamp)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Dept)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Dept)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Type)
+        </dt>
+        <dd class="col-sm-10">
+            @{ var typDesc = Helpers.DropListSCx.FirstOrDefault(listEntry => listEntry.Id.ToString() == Model.Type).Text; }
+            @Html.Raw(typDesc)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Food)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Food)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Supplier)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Supplier)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CheckUBD)
+        </dt>
+        <dd class="col-sm-10">
+            @{var ubdDesc = Helpers.DropListUBD.FirstOrDefault(listEntry => Convert.ToInt32(listEntry.Id) == Model.CheckUBD).Text; }
+            @Html.Raw(ubdDesc)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Temperature)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Temperature)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Comment)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Comment)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.SignOff)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SignOff)
+        </dd>
+    </dl>
+</div>
+<div>
+    <form style="float:left">
+        <input type="hidden" asp-for="@Model.Id" />
+        <input asp-action="Edit" type="submit" value="Edit" class="btn btn-sm btn-danger" />
+        <input type="hidden" asp-for="@Model.Id" />
+        <input asp-action="Delete" type="submit" value="Delete" class="btn btn-sm btn-danger" /> &nbsp; |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

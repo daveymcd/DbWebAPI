@@ -1,0 +1,75 @@
+﻿@*
+    DbWebAPI.IndexModel.OnPostSearch() - Modal Search Handler (popup).
+    End point for '/Index?hanler=search'
+*@
+@model DbWebAPI.Models.SCxSearchCriteria
+@using DbWebAPI.Helpers;
+@{
+    Layout = null;
+}
+
+<h5>Enter (optional) search criteria:</h5>
+<hr />
+<div>
+    <form asp-page-handler="search" method="post" style="float:left;" title="Enter Search Criteria">
+        <dl class="row col-sm-12" style="color:black; margin:0 0 auto; padding:0 0 0 0;">
+            <dt class="col-sm-3">
+                @Html.Raw("From:")
+            </dt>
+            <dd class="col-sm-6">
+                @Html.EditorFor(model => model.FromDate, new { htmlAttributes = new { @title = "Search Start Date (Optional)", @Value = DateTime.Now.Date } })
+            </dd>
+            <dd class="col-sm-3">
+                @Html.EditorFor(model => model.FromTime, new { htmlAttributes = new { @title = "Search Start Time (Optional)", @Value = DateTime.Now.TimeOfDay } })
+            </dd>
+            <dt class="col-sm-3">
+                @Html.Raw("To:")
+            </dt>
+            <dd class="col-sm-6">
+                @Html.EditorFor(model => model.ToDate, new { htmlAttributes = new { @title = "Search End Date (Optional)", @Value = DateTime.Now.Date } })
+            </dd>
+            <dd class="col-sm-3">
+                @Html.EditorFor(model => model.ToTime, new { htmlAttributes = new { @title = "Search End Time (Optional)", @Value = DateTime.Now.TimeOfDay } })
+            </dd>
+            <dt class="col-sm-3">
+                @Html.Raw("Document:")
+            </dt>
+            <dd class="col-sm-9" title="Select Document Type (Optional)">
+                @Html.DropDownListFor(model => model.Type, new SelectList(Helpers.DropListSCx, "id", "text"), new { htmlAttributes = new { @title = "Document Type (SC1 - SC9) (Optional)" } })
+            </dd>
+            <dt class="col-sm-3">
+                @Html.Raw("Department:")
+            </dt>
+            <dd class="col-sm-9">
+                @Html.EditorFor(model => model.Dept, new { htmlAttributes = new { @placeholder = "Department", @title = "Enter Catering Department (Kitchen/Stores etc) (Optional)" } })
+            </dd>
+            <dt class="col-sm-3">
+                @Html.Raw("Supplier:")
+            </dt>
+            <dd class="col-sm-9">
+                @Html.EditorFor(model => model.Supplier, new { htmlAttributes = new { @placeholder = "Supplier", @Title = "Enter Supplier Name (Optional)" } })
+            </dd>
+            <dt class="col-sm-3">
+                @Html.Raw("Food:")
+            </dt>
+            <dd class="col-sm-9">
+                @Html.EditorFor(model => model.Food, new { htmlAttributes = new { @placeholder = "Food Item", @Title = "Enter Food Item (Optional)" } })
+            </dd>
+            <dt class="col-sm-3">
+                @Html.Raw("Sign Off:")
+            </dt>
+            <dd class="col-sm-9">
+                @Html.EditorFor(model => model.SignOff, new { htmlAttributes = new { @placeholder = "Signator", @Title = "Enter Signator Name (Optional)" } })
+            </dd>
+        </dl>
+        @* asp-route-FromTime="@FromTime"
+            asp-route-ToTime="@ToTime"
+            asp-route-Type="@Type"
+            asp-route-Dept="@Dept"*@
+        <input type="hidden" />
+        <input  class="btn btn-sm btn-danger" type="submit" value="Search" title="Submit Search Criteria" />
+        <button class="btn btn-sm btn-danger" type="button" value="Cancel" title="Cancel & Return To List" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">Cancel</span>
+        </button>
+    </form>
+</div>

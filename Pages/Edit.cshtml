@@ -1,0 +1,72 @@
+﻿@page "~/Home/SCxPage/Edit"
+@model DbWebAPI.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>SCxItem</h4>
+<hr />
+<div class="row">
+    <div class="col-12">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="sCxItem.Id" />
+            <div class="form-group">
+                <label asp-for="sCxItem.Type" class="control-label col-2"></label>
+                <input asp-for="sCxItem.TimeStamp" asp-format = "{0:yyyy-MM-ddTHH:mm}",  class="col-3" placeholder="Date & Time" title="Date & Time of last action" />
+                <span asp-validation-for="sCxItem.TimeStamp" class="text-danger"></span>
+
+                @*<label asp-for="sCxItem.Type" class="control-label col-sm-5"></label>*@
+                @Html.DropDownListFor(model => model.sCxItem.Type, new SelectList(Helpers.DropListSCx, "id", "text"), new { @class = "col-4", @title = "Document type (SC1 - SC9)" })
+                <span asp-validation-for="sCxItem.Type" class="text-danger"></span>
+
+                @*<label asp-for="sCxItem.Dept" class="control-label col-sm-5"></label>*@
+                <input asp-for="sCxItem.Dept" class="col-2" placeholder="Catering Department" title="Catering Department (Kitchen, Stores etc)" />
+                <span asp-validation-for="sCxItem.Dept" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="sCxItem.Supplier" class="control-label col-2"></label>
+                <input asp-for="sCxItem.Supplier" class="col-2" placeholder="Supplier Name" title="Supplier of Food Product" />
+                <span asp-validation-for="sCxItem.Supplier" class="text-danger"></span>
+
+                <label asp-for="sCxItem.Food" class="control-label col-2"></label>
+                <input asp-for="sCxItem.Food" class="col-2" placeholder="Food Item" title="Food Product or Ingredient"/>
+                <span asp-validation-for="sCxItem.Food" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="sCxItem.Temperature" class="control-label  col-2">Temp&#176;C</label>
+                <input asp-for="sCxItem.Temperature" class="col-2" placeholder="Temperature in Temp&#176;C" title="Recorded &#176;C of Food Item "/>
+                <span asp-validation-for="sCxItem.Temperature" class="text-danger"></span>
+
+                <label asp-for="sCxItem.CheckUBD" class="control-label col-2"></label>
+                @Html.DropDownListFor(model => model.sCxItem.CheckUBD, new SelectList(Helpers.DropListUBD, "id", "text"), new { @class = "col-3", @title = "Use-By-Date Status" })
+                <span asp-validation-for="sCxItem.CheckUBD" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="sCxItem.Comment" class="control-label col-2"></label>
+                @*<input asp-for="sCxItem.Comment" class="col-3" />*@
+                @Html.EditorFor(model => model.sCxItem.Comment, new { htmlAttributes = new { @placeholder = "Comment/Action?", @title = "Comments/Actions Taken", @class = "col-3" } })
+                <span asp-validation-for="sCxItem.Comment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="sCxItem.SignOff" class="control-label col-2"></label>
+                <input asp-for="sCxItem.SignOff" class="col-3" placeholder="Signator" title="Document checked and signed off by"/>
+                <span asp-validation-for="sCxItem.SignOff" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

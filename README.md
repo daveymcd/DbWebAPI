@@ -67,7 +67,7 @@ Documents:
      
 Notes:
 
-     A Xamarin mobile application manages the buisness requirements 
+     A Xamarin mobile application manages the business requirements 
      of the regulation and uses the REST API service to access the 
      document archive.
      

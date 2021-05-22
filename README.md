@@ -4,21 +4,22 @@ ASP.Net Core Web Service Demo
      DbWebApi v1.2 - Database Web Service for archival of documents.
  
      V1.0 2021-04-01 D.McDonald 
-     Creation of Web API controller for use by Xamarin Mobile App. 
+     Creation of REST API controller for use by Xamarin Mobile App. 
      
      V1.1 2021-04-14 D.McDonald
-     Added simple View controller for browser access.
+     Added simple MVC View controller for browser access.
      
      V1.2 2021-04-17 D.McDonald
      Added Razor Pages with sort, search and modal CRUD facility.
  
 Overview:
 
-     The in-memory Database holds mock-up's of various food industry 
-     regulatory documents. The governments 'Food Standards Agency' 
-     require these documents to be archived and held by catering 
-     companies as a record of their compliance with UK food hygiene 
-     regulation...
+     This OoenAPI uses an in-memory Database to hold mock-up's 
+     of various food industry regulatory documents. 
+     
+     The governments 'Food Standards Agency' require these documents 
+     to be archived and held by catering companies as a record of their 
+     compliance with UK food hygiene regulation.
      
 Documents:
 
@@ -38,7 +39,7 @@ Documents:
                                cooling and reheating temperatures.
                                
      SC4: Hot-Holding        – Hot Hold/Display Records. 
-                               To record the hott-holding 
+                               To record the hot holding 
                                temperatures of food.
                                    
      SC5: Hygiene Inspection – Hygiene Inspection Checklist. 
@@ -65,15 +66,15 @@ Documents:
      
 Notes:
 
-     A Xamarin Mobile Application manages the regulatory reqiurements 
-     of the business and uses this REST Api to store and retrieve the 
-     users documents.
+     A Xamarin mobile application manages the regulatory requirements 
+     of the business and uses the REST API service to access the 
+     document archive.
      
-     * SCxItem.cs is the document archive Class, holding the Food Hygiene 
-       Document data. Each Documents is TimeStamped and Typed. 
+     * SCxItem.cs is the document archive Class, holding the food hygiene 
+       document data. Each document is time stamped and typed. 
      
-     * SCxItemController.cs is The API's endpoints controller and services 
-       the CRUD requests.
+     * SCxItemController.cs is The REST API's endpoints controller and 
+       services the CRUD requests.
        
      * SCxViewController.cs is The MVC View controller.
     
@@ -81,22 +82,25 @@ Notes:
      Swagger, MVC Views and Razor Pages. The latter 2 options were added 
      to extend the web services offered by the API. 
      
-For the Open API Web Service please see...
+For the REST API Web Service code please see...
 
      DbWebAPI.Controllers.SCxItemsController.cs
      DbWebAPI.Models.SCxItems.cs
 
-For the MVC View Web Service (Views project folder) please see...
+For the MVC View Web Service code (Views project folder) please see...
+
 
       DbWebAPI.Controllers.SCxViewController.cs
       DbWebAPI.Models.SCxItems.cs
       DbWebAPI.Views.SCxView.Index.cshtml
 
-For the Razor Page Web Service (Pages project folder) please see...
+For the Razor Page Web Service code (Pages project folder) please see...
     
         DbWebAPI.Models.SCxItems.cs
         DbWebAPI.Pages.Index.cshtml.cs
         DbWebAPI.Pages.Shared._PopupEdit.cshtml
         
         
-        
+HomePage:
+
+![Home](https://user-images.githubusercontent.com/39599997/119224050-9173bd00-baf4-11eb-986e-c80befd23300.JPG)

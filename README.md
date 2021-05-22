@@ -1,8 +1,7 @@
 # DbWebAPI 
 ASP.Net Core Web Service Demo
 
-
-DbWebApi v1.2 - Database Web Service for archival of documents.
+     DbWebApi v1.2 - Database Web Service for archival of documents.
  
      V1.0 2021-04-01 D.McDonald 
      Creation of Web API controller for use by Xamarin Mobile App. 

@@ -14,8 +14,9 @@ ASP.Net Core Web Service Demo
  
 Overview:
 
-     This OoenAPI uses an in-memory Database to hold mock-up's 
-     of various food industry regulatory documents. 
+     This demonstration of an OpenAPI Web Service uses an in-memory  
+     Database to hold mock-up's of various food industry regulatory 
+     documents. 
      
      The governments 'Food Standards Agency' require these documents 
      to be archived and held by catering companies as a record of their 
@@ -66,8 +67,8 @@ Documents:
      
 Notes:
 
-     A Xamarin mobile application manages the regulatory requirements 
-     of the business and uses the REST API service to access the 
+     A Xamarin mobile application manages the buisness requirements 
+     of the regulation and uses the REST API service to access the 
      document archive.
      
      * SCxItem.cs is the document archive Class, holding the food hygiene 
@@ -103,4 +104,5 @@ For the Razor Page Web Service code (Pages project folder) please see...
         
 HomePage:
 
-![Home](https://user-images.githubusercontent.com/39599997/119224050-9173bd00-baf4-11eb-986e-c80befd23300.JPG)
+![Home](https://user-images.githubusercontent.com/39599997/119225080-a30b9380-baf9-11eb-85c1-c57f606d4dd3.JPG)
+

@@ -83,13 +83,16 @@ Notes:
      Swagger, MVC Views and Razor Pages. The latter 2 options were added 
      to extend the web services offered by the API. 
      
+Model:
+
+![image](https://user-images.githubusercontent.com/39599997/119809008-9497f000-bedc-11eb-9d57-df750d56de90.png)
+
 For the REST API Web Service code please see...
 
      DbWebAPI.Controllers.SCxItemsController.cs
      DbWebAPI.Models.SCxItems.cs
 
 For the MVC View Web Service code (Views project folder) please see...
-
 
       DbWebAPI.Controllers.SCxViewController.cs
       DbWebAPI.Models.SCxItems.cs
@@ -100,7 +103,6 @@ For the Razor Page Web Service code (Pages project folder) please see...
         DbWebAPI.Models.SCxItems.cs
         DbWebAPI.Pages.Index.cshtml.cs
         DbWebAPI.Pages.Shared._PopupEdit.cshtml
-        
         
 HomePage:
 

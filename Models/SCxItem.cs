@@ -247,6 +247,7 @@ namespace DbWebAPI.Models
 
         /// <summary>SCx Document Type (SC1: - SC9:)</summary>
         [DisplayName("Document")]
+        //[Required(ErrorMessage = "Document Type Is Required.")]
         public string Type { get; set; }
 
         /// <summary>Catering department (Kitchen, Prep-area, Stores etc)</summary>
@@ -314,6 +315,9 @@ namespace DbWebAPI.Models
         ///// <summary>Item Accepted/Rejected tick box</summary>
         //public bool Accepted { get; set; } // can be infered!
 
+        ///// <summary>Staff Name Completion Details</summary>
+        //public string StaffName { get; set; }
+
         ///// <summary>SC3: Date/Time task completed</summary>
         //[DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)] 
         //public DateTime TimeStampCompleted { get; set; } 
@@ -340,14 +344,16 @@ namespace DbWebAPI.Models
         }
 
         /// <summary>Add test archive data to database </summary>
-        public static ObservableCollection<SCxItem> AddSCxData()
-        { 
+        public static ObservableCollection<SCxItem> AddThisMonthsSCxData(double? monthOffset = 0)
+        {
+
+            monthOffset = 31 * -monthOffset;
             var scxItems = new ObservableCollection<SCxItem>
             {
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Parse("2017-04-10 10:01:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-31),
                     Dept = "Pantry",
                     Food = "Lamb Shank in Onion Gravy",
                     Supplier = "Jones the Butcher",
@@ -359,7 +365,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC4:",
-                    TimeStamp = DateTime.Parse("2017-05-12 10:04:02", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-30),
                     Dept = "Front-Of-House",
                     Food = "Chicken & Leek Pie",
                     Supplier = "Porkies Pies",
@@ -371,7 +377,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC3:",
-                    TimeStamp = DateTime.Parse("2017-05-12 10:05:03", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-29),
                     Dept = "Kitchen",
                     Food = "Lamb Leg Steaks in Red Wine Sauce",
                     Supplier = "Jones the Butcher",
@@ -383,7 +389,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC3:",
-                    TimeStamp = DateTime.Parse("2017-05-12 10:02:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-28),
                     Dept = "Kitchen",
                     Food = "Beef",
                     Supplier = "Jones the Butcher",
@@ -395,7 +401,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Parse("2017-05-12 10:03:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-27),
                     Dept = "Pantry",
                     Food = "Pork Loin in Gravy",
                     Supplier = "Jones the Butcher",
@@ -407,7 +413,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC3:",
-                    TimeStamp = DateTime.Parse("2017-05-12 10:06:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-26),
                     Dept = "Prep-Area",
                     Food = "Lamb in onion Gravy",
                     Supplier = "Jones the Butcher",
@@ -419,7 +425,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Parse("2017-05-21 10:02:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-25),
                     Dept = "Pantry",
                     Food = "Sole",
                     Supplier = "Fish Monger",
@@ -431,7 +437,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Parse("2017-07-21 10:02:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-24),
                     Dept = "Pantry",
                     Food = "Lamb Cuttlets in Gravy",
                     Supplier = "Jones the Butcher",
@@ -443,7 +449,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Parse("2017-07-22 10:02:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-23),
                     Dept = "Pantry",
                     Food = "Fish in Batter",
                     Supplier = "Fish Monger",
@@ -455,7 +461,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Parse("2018-04-21 10:02:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-22),
                     Dept = "Prep-Area",
                     Food = "Chicken",
                     Supplier = "Jones the Butcher",
@@ -467,7 +473,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Parse("2018-04-21 10:03:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-21),
                     Dept = "Prep-Area",
                     Food = "Fish",
                     Supplier = "Fish Monger",
@@ -479,7 +485,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC3:",
-                    TimeStamp = DateTime.Parse("2019-05-10 10:03:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-20),
                     Dept = "Prep-Area",
                     Food = "Venison",
                     Supplier = "Jones the Butcher",
@@ -491,7 +497,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Parse("2019-05-15 10:02:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-19),
                     Dept = "Prep-Area",
                     Food = "Cod",
                     Supplier = "Fish Monger",
@@ -503,7 +509,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC3:",
-                    TimeStamp = DateTime.Parse("2019-06-20 10:02:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-18),
                     Dept = "Prep-Area",
                     Food = "Scampi",
                     Supplier = "Fish Monger",
@@ -514,80 +520,8 @@ namespace DbWebAPI.Models
                 },
                 new SCxItem {
                     Id = Guid.NewGuid(),
-                    Type = "SC3:",
-                    TimeStamp = DateTime.Parse("2019-06-21 10:03:01", System.Globalization.CultureInfo.InvariantCulture),
-                    Dept = "Kitchen",
-                    Food = "Fries",
-                    Supplier = "Fast Food Supplies",
-                    CheckUBD = 1,
-                    Temperature = 85,
-                    Comment = "16 portions prepared",
-                    SignOff = "Charlie"
-                },
-                new SCxItem {
-                    Id = Guid.NewGuid(),
-                    Type = "SC3:",
-                    TimeStamp = DateTime.Parse("2019-06-21 10:04:01", System.Globalization.CultureInfo.InvariantCulture),
-                    Dept = "Kitchen",
-                    Food = "Hamburger",
-                    Supplier = "Fast Food Supplies",
-                    CheckUBD = 1,
-                    Temperature = 87,
-                    Comment = "16 patties prepared",
-                    SignOff = "Charlie"
-                },
-                new SCxItem {
-                    Id = Guid.NewGuid(),
-                    Type = "SC4:",
-                    TimeStamp = DateTime.Parse("2019-06-21 10:07:01", System.Globalization.CultureInfo.InvariantCulture),
-                    Dept = "Front-Of-House",
-                    Food = "Fries",
-                    Supplier = "Fast Food Supplies",
-                    CheckUBD = 1,
-                    Temperature = 75,
-                    Comment = "16 portions received into Hot-Holding",
-                    SignOff = "Staff"
-                },
-                new SCxItem {
-                    Id = Guid.NewGuid(),
-                    Type = "SC4:",
-                    TimeStamp = DateTime.Parse("2019-06-21 10:08:01", System.Globalization.CultureInfo.InvariantCulture),
-                    Dept = "Front-Of-House",
-                    Food = "Hamburger",
-                    Supplier = "Fast Food Supplies",
-                    CheckUBD = 1,
-                    Temperature = 80,
-                    Comment = "16 patties recieved into Hot-Holding",
-                    SignOff = "Staff"
-                },
-                new SCxItem {
-                    Id = Guid.NewGuid(),
-                    Type = "SC3:",
-                    TimeStamp = DateTime.Parse("2019-06-21 10:02:01", System.Globalization.CultureInfo.InvariantCulture),
-                    Dept = "Kitchen",
-                    Food = "Hamburger",
-                    Supplier = "Fast Food Supplies",
-                    CheckUBD = 1,
-                    Temperature = 2,
-                    Comment = "24 Frozen patties defrosted",
-                    SignOff = string.Empty
-                },
-                new SCxItem {
-                    Id = Guid.NewGuid(),
-                    Type = "SC9:",
-                    TimeStamp = DateTime.Parse("2019-06-21 10:10:01", System.Globalization.CultureInfo.InvariantCulture),
-                    Dept = "Dispatch",
-                    Food = "Burger & Chips",
-                    Supplier = "Dr John H Watson, 221b Baker St.",
-                    CheckUBD = 0,
-                    Temperature = 77,
-                    Comment = "2 1/4 pounders with cheese, 2 Fries. ",
-                    SignOff = "Point-Of-Sale"
-                },
-                new SCxItem {
-                    Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Parse("2019-06-22 10:02:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-17),
                     Dept = "Pantry",
                     Food = "Fish",
                     Supplier = "Fish Monger",
@@ -599,7 +533,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Parse("2019-06-23 10:02:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-16),
                     Dept = "Pantry",
                     Food = "Kebab",
                     Supplier = "Fast Food Supplies",
@@ -610,44 +544,32 @@ namespace DbWebAPI.Models
                 },
                 new SCxItem {
                     Id = Guid.NewGuid(),
-                    Type = "SC9:",
-                    TimeStamp = DateTime.Parse("2019-06-25 10:02:01", System.Globalization.CultureInfo.InvariantCulture),
-                    Dept = "Dispatch",
-                    Food = "Pizza",
-                    Supplier = "Mr Hercule Poirot, Coach 3, Orient Express",
-                    CheckUBD = 0,
-                    Temperature = 60,
-                    Comment = "2 pepperoni Passion, 1 Sloppy Joe & 1 Veggie Volcano",
-                    SignOff = "Point-Of-Sale"
-                },
-                new SCxItem {
-                    Id = Guid.NewGuid(),
                     Type = "SC3:",
-                    TimeStamp = DateTime.Parse("2019-06-26 10:02:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-15),
                     Dept = "Kitchen",
                     Food = "Haddock in white wine sauce",
                     Supplier = "Fish Monger",
                     CheckUBD = 0,
                     Temperature = 80,
-                    Comment = "12 portions",
+                    Comment = "12 portions prepared",
                     SignOff = "Chef"
                 },
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC4:",
-                    TimeStamp = DateTime.Parse("2019-06-26 10:10:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-14),
                     Dept = "Front-of-House",
                     Food = "Pork & Leek Pie",
                     Supplier = "Porkies Pies",
-                    CheckUBD = 2,
+                    CheckUBD = 1,
                     Temperature = 81,
-                    Comment = "6 pies",
+                    Comment = "6 pies received into hot-holding",
                     SignOff = string.Empty
                 },
                 new SCxItem{
                     Id = Guid.NewGuid(),
                     Type = "SC4:",
-                    TimeStamp = DateTime.Parse("2019-07-01 10:02:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-13),
                     Dept = "Front-of-House",
                     Food = "Beef Wellington",
                     Supplier = "Bob's Bakers",
@@ -659,7 +581,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC3:",
-                    TimeStamp = DateTime.Parse("2019-07-01 10:10:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-12),
                     Dept = "Kitchen",
                     Food = "Singapore Noodles",
                     Supplier = "Singapore Supplies ltd",
@@ -671,7 +593,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC3:",
-                    TimeStamp = DateTime.Parse("2020-01-01 10:10:01", System.Globalization.CultureInfo.InvariantCulture),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-11),
                     Dept = "Kitchen",
                     Food = "Lentil Soup",
                     Supplier = "Corner Greengrocer",
@@ -682,53 +604,32 @@ namespace DbWebAPI.Models
                 },
                 new SCxItem {
                     Id = Guid.NewGuid(),
-                    Type = "SC9:",
-                    TimeStamp = DateTime.Parse("2020-01-01 10:10:01", System.Globalization.CultureInfo.InvariantCulture),
-                    Dept = "Dispatch",
-                    Food = "Curry",
-                    Supplier = "Miss Marple, Milchester cottage, St. Mary Mead",
-                    CheckUBD = 0,
-                    Temperature = 69,
-                    Comment = "1 Chicken Vindaloo, 1 Fried Rice & 1 Garlic Nann",
-                    SignOff = "Point-Of-Sale"
+                    Type = "SC1:",
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-10),
+                    Dept = "Pantry",
+                    Food = "Chicken Nuggets",
+                    Supplier = "Fast Food Supplies",
+                    CheckUBD = 1,
+                    Temperature = 81,
+                    Comment = "20 child portions in individual foil trays.",
+                    SignOff = "Charlie"
                 },
-            };
-            return scxItems;
-        }
-
-        ///<summary> Add 'This weeks' test archive data to database </summary>
-        public static ObservableCollection<SCxItem> AddThisWeeksSCxData()
-        { 
-            var scxItems = new ObservableCollection<SCxItem>
-            {
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC3:",
-                    TimeStamp = DateTime.Now.AddDays(-7),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-9),
                     Dept = "Kitchen",
-                    Food = "Beef Sirloin",
-                    Supplier = "Jones the Butcher",
+                    Food = "Penne Carbonara",
+                    Supplier = "Little Italy",
                     CheckUBD = 1,
-                    Temperature = 79,
-                    Comment = "6 16oz size steaks Medium Rare",
-                    SignOff = string.Empty
-                },
-                new SCxItem {
-                    Id = Guid.NewGuid(),
-                    Type = "SC4:",
-                    TimeStamp = DateTime.Now.AddDays(-7),
-                    Dept = "Front-Of-House",
-                    Food = "Beef Sirloin",
-                    Supplier = "Jones the Butcher",
-                    CheckUBD = 1,
-                    Temperature = 73,
-                    Comment = "6 16oz size steaks received into Hot-Holding",
-                    SignOff = string.Empty
+                    Temperature = 80,
+                    Comment = "12 Boil-in-the-bag portions ready to serve",
+                    SignOff = "Supervisor"
                 },
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC3:",
-                    TimeStamp = DateTime.Now.AddDays(-6),
+                    TimeStamp = DateTime.Now.AddDays((double)monthOffset-8),
                     Dept = "Kitchen",
                     Food = "Cod Fishcakes",
                     Supplier = "Fish Monger",
@@ -736,23 +637,117 @@ namespace DbWebAPI.Models
                     Temperature = 79,
                     Comment = "12 cakes defrosted (2 per portion)",
                     SignOff = "Manager"
+                }
+            };
+            foreach (SCxItem sCxItem in AddThisWeeksSCxData(monthOffset)) { scxItems.Add(sCxItem); }
+            return scxItems;
+        }
+
+        ///<summary> Add 'This weeks' test archive data to database </summary>
+        public static ObservableCollection<SCxItem> AddThisWeeksSCxData(double? weekOffset = 0)
+        {
+            var scxItems = new ObservableCollection<SCxItem>
+            {
+                new SCxItem {
+                    Id = Guid.NewGuid(),
+                    Type = "SC9:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-7).AddMinutes(-45),
+                    Dept = "Dispatch",
+                    Food = "Pizza",
+                    Supplier = "Mr Hercule Poirot, Coach 3, Orient Express",
+                    CheckUBD = 0,
+                    Temperature = 60,
+                    Comment = "2 pepperoni Passion, 1 Sloppy Joe & 1 Veggie Volcano",
+                    SignOff = "Point-Of-Sale"
                 },
                 new SCxItem {
                     Id = Guid.NewGuid(),
-                    Type = "SC1:",
-                    TimeStamp = DateTime.Now.AddDays(-5),
-                    Dept = "Pantry",
-                    Food = "Chicken Nuggets",
+                    Type = "SC9:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-6).AddMinutes(-45),
+                    Dept = "Dispatch",
+                    Food = "Curry Take Away",
+                    Supplier = "Miss Marple, Milchester cottage, St. Mary Mead",
+                    CheckUBD = 0,
+                    Temperature = 69,
+                    Comment = "1 Chicken Vindaloo, 1 Fried Rice & 1 Garlic Naan",
+                    SignOff = "Point-Of-Sale"
+                },
+                new SCxItem {
+                    Id = Guid.NewGuid(),
+                    Type = "SC3:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-5).AddMinutes(-45),
+                    Dept = "Kitchen",
+                    Food = "Fries",
                     Supplier = "Fast Food Supplies",
                     CheckUBD = 1,
-                    Temperature = 81,
-                    Comment = "20 cild portions in individual foil trays.",
+                    Temperature = 85,
+                    Comment = "16 portions prepared",
                     SignOff = "Charlie"
                 },
                 new SCxItem {
                     Id = Guid.NewGuid(),
+                    Type = "SC3:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-5).AddMinutes(-30),
+                    Dept = "Kitchen",
+                    Food = "Hamburger",
+                    Supplier = "Fast Food Supplies",
+                    CheckUBD = 1,
+                    Temperature = 87,
+                    Comment = "16 patties prepared",
+                    SignOff = "Charlie"
+                },
+                new SCxItem {
+                    Id = Guid.NewGuid(),
+                    Type = "SC4:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-5).AddMinutes(-25),
+                    Dept = "Front-Of-House",
+                    Food = "Fries",
+                    Supplier = "Fast Food Supplies",
+                    CheckUBD = 1,
+                    Temperature = 75,
+                    Comment = "16 portions received into Hot-Holding",
+                    SignOff = "Staff"
+                },
+                new SCxItem {
+                    Id = Guid.NewGuid(),
+                    Type = "SC4:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-5).AddMinutes(-20),
+                    Dept = "Front-Of-House",
+                    Food = "Hamburger",
+                    Supplier = "Fast Food Supplies",
+                    CheckUBD = 1,
+                    Temperature = 80,
+                    Comment = "16 patties recieved into Hot-Holding",
+                    SignOff = "Staff"
+                },
+                new SCxItem {
+                    Id = Guid.NewGuid(),
+                    Type = "SC3:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-5).AddMinutes(-110),
+                    Dept = "Kitchen",
+                    Food = "Hamburger",
+                    Supplier = "Fast Food Supplies",
+                    CheckUBD = 1,
+                    Temperature = 2,
+                    Comment = "24 Frozen patties defrosted",
+                    SignOff = string.Empty
+                },
+                new SCxItem {
+                    Id = Guid.NewGuid(),
+                    Type = "SC9:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-5).AddMinutes(-10),
+                    Dept = "Dispatch",
+                    Food = "Burger & Chips",
+                    Supplier = "Dr John H Watson, 221b Baker St.",
+                    CheckUBD = 0,
+                    Temperature = 77,
+                    Comment = "2 1/4 pounders with cheese, 2 Fries. ",
+                    SignOff = "Point-Of-Sale"
+                },
+                new SCxItem {
+                    Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Now.AddDays(-4),
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-4).AddMinutes(-10),
                     Dept = "Kitchen",
                     Food = "Moules Marinier",
                     Supplier = "Fish Monger",
@@ -764,7 +759,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Now.AddDays(-3),
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-4).AddMinutes(-5),
                     Dept = "Kitchen",
                     Food = "Apple & Blackberry Pie",
                     Supplier = "Sams Baker's",
@@ -775,8 +770,32 @@ namespace DbWebAPI.Models
                 },
                 new SCxItem {
                     Id = Guid.NewGuid(),
+                    Type = "SC3:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-3).AddMinutes(-10),
+                    Dept = "Kitchen",
+                    Food = "Beef Sirloin",
+                    Supplier = "Jones the Butcher",
+                    CheckUBD = 1,
+                    Temperature = 79,
+                    Comment = "6 16oz size steaks Medium Rare",
+                    SignOff = string.Empty
+                },
+                new SCxItem {
+                    Id = Guid.NewGuid(),
+                    Type = "SC4:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-3).AddMinutes(-20),
+                    Dept = "Front-Of-House",
+                    Food = "Beef Sirloin",
+                    Supplier = "Jones the Butcher",
+                    CheckUBD = 1,
+                    Temperature = 73,
+                    Comment = "6 16oz size steaks received into Hot-Holding",
+                    SignOff = string.Empty
+                },
+                new SCxItem {
+                    Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Now.AddDays(-2),
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-2),
                     Dept = "Pantry",
                     Food = "Salt & Pepper Squid",
                     Supplier = "Singapore Supplies ltd",
@@ -788,7 +807,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC3:",
-                    TimeStamp = DateTime.Now.AddDays(-2),
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-2),
                     Dept = "Kitchen",
                     Food = "Salt & Pepper Squid",
                     Supplier = "Singapore Supplies ltd",
@@ -800,7 +819,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC4:",
-                    TimeStamp = DateTime.Now.AddDays(-2),
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-2),
                     Dept = "Front-Of-House",
                     Food = "Salt & Pepper Squid",
                     Supplier = "Singapore Supplies ltd",
@@ -812,7 +831,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Now.AddDays(-1),
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-1),
                     Dept = "Prep-Area",
                     Food = "Fillet of Sole",
                     Supplier = "Fish Monger",
@@ -824,19 +843,79 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC3:",
-                    TimeStamp = DateTime.Now,
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-1).AddMinutes(-50),
                     Dept = "Kitchen",
-                    Food = "Penne Carbonara",
-                    Supplier = "Little Italy",
+                    Food = "Southern Fried Chicken",
+                    Supplier = "Fast Food Supplies",
                     CheckUBD = 1,
-                    Temperature = 80,
-                    Comment = "12 Boil-in-the-bag portions ready to serve",
-                    SignOff = "Supervisor"
+                    Temperature = 1,
+                    Comment = "20 Frozen portions defrosted",
+                    SignOff = string.Empty
+                },
+                 new SCxItem {
+                    Id = Guid.NewGuid(),
+                    Type = "SC3:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-1).AddMinutes(-45),
+                    Dept = "Kitchen",
+                    Food = "Fries",
+                    Supplier = "Fast Food Supplies",
+                    CheckUBD = 1,
+                    Temperature = 81,
+                    Comment = "14 portions prepared",
+                    SignOff = "Charlie"
+                },
+                new SCxItem {
+                    Id = Guid.NewGuid(),
+                    Type = "SC3:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-1).AddMinutes(-40),
+                    Dept = "Kitchen",
+                    Food = "Southern Fried Chicken",
+                    Supplier = "Fast Food Supplies",
+                    CheckUBD = 1,
+                    Temperature = 84,
+                    Comment = "12 portions prepared",
+                    SignOff = "Charlie"
+                },
+                new SCxItem {
+                    Id = Guid.NewGuid(),
+                    Type = "SC4:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-1).AddMinutes(-30),
+                    Dept = "Front-Of-House",
+                    Food = "Fries",
+                    Supplier = "Fast Food Supplies",
+                    CheckUBD = 1,
+                    Temperature = 79,
+                    Comment = "14 portions received into Hot-Holding",
+                    SignOff = "Staff"
+                },
+                new SCxItem {
+                    Id = Guid.NewGuid(),
+                    Type = "SC4:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-1).AddMinutes(-20),
+                    Dept = "Front-Of-House",
+                    Food = "Southern Fried Chicken",
+                    Supplier = "Fast Food Supplies",
+                    CheckUBD = 1,
+                    Temperature = 81,
+                    Comment = "12 portions recieved into Hot-Holding",
+                    SignOff = "Staff"
+                },
+                new SCxItem {
+                    Id = Guid.NewGuid(),
+                    Type = "SC9:",
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset-1).AddMinutes(-10),
+                    Dept = "Dispatch",
+                    Food = "Chicken & Chips",
+                    Supplier = "Mr Philip Marlow, Hobart Arms, Franklin Ave, Los Angeles County",
+                    CheckUBD = 0,
+                    Temperature = 77,
+                    Comment = "Family Chicken Bucket and 2 Fries. ",
+                    SignOff = "Point-Of-Sale"
                 },
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Now,
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset).AddMinutes(-20),
                     Dept = "Prep-Area",
                     Food = "Beef Stir Fry",
                     Supplier = "Singapore Supplies ltd",
@@ -848,7 +927,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC3:",
-                    TimeStamp = DateTime.Now,
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset).AddMinutes(-10),
                     Dept = "Kitchen",
                     Food = "Beef Stir Fry",
                     Supplier = "Singapore Supplies ltd",
@@ -860,19 +939,19 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC9:",
-                    TimeStamp = DateTime.Now,
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset).AddMinutes(-5),
                     Dept = "Dispatch",
-                    Food = "Chineese Take Away",
+                    Food = "Chinese Take Away",
                     Supplier = "Mr Sam Spade, Falcon Hotel, Malta.",
                     CheckUBD = 0,
                     Temperature = 77,
-                    Comment = "1 Beef Stir Fry, 1 King Prawn Curry, 1 Singapore Noodles & 2 Rice",
+                    Comment = "1 Beef Stir Fry, 1 King Prawn Kung Po, 1 Singapore Noodles, 2 Salt & Pepper Squid & 2 Fried Rice",
                     SignOff = "Point-Of-Sale"
                 },
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC3:",
-                    TimeStamp = DateTime.Now,
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset).AddMinutes(-3),
                     Dept = "Kitchen",
                     Food = "Pork & Leek Pie",
                     Supplier = "Porkies Pies",
@@ -884,7 +963,7 @@ namespace DbWebAPI.Models
                 new SCxItem {
                     Id = Guid.NewGuid(),
                     Type = "SC1:",
-                    TimeStamp = DateTime.Now,
+                    TimeStamp = DateTime.Now.AddDays((double)weekOffset).AddMinutes(-1),
                     Dept = "Prep-Area",
                     Food = "Lamb Passanda",
                     Supplier = "Curry House ltd",

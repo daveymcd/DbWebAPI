@@ -1,6 +1,6 @@
 ﻿@*
-///    DbWebAPI.IndexModel.OnPostEdit() - Modal Edit Handler (popup).
-///    POST End point for '/Index?hanler=edit'
+    ///    DbWebAPI.IndexModel.OnPostEdit() - Modal Edit Handler (popup).
+    ///    POST End point for '/Index?hanler=edit'
 *@
 @model DbWebAPI.Models.SCxItem
 @using DbWebAPI.Helpers;
@@ -8,44 +8,49 @@
 
 <div id="editModal">
 
-    @{var typDesc = Helpers.DropListSCx.FirstOrDefault(listEntry => listEntry.Id.ToString() == Model.Type).Text; }
-    @{var docMsg = string.Concat("Document ", typDesc, " - ", Model.TimeStamp.ToShortDateString(), " ", Model.TimeStamp.ToShortTimeString(), " "); }
+    @{ var typDesc = string.Empty;
+       if (Model.Type is not null) 
+       { 
+         typDesc = DropList.DropListSCx.FirstOrDefault(listEntry => listEntry.Id.ToString() == Model.Type).Text; 
+       }
+       var docMsg = string.Concat("Document ", typDesc, " - ", Model.TimeStamp.ToShortDateString(), " ", Model.TimeStamp.ToShortTimeString(), " "); 
+    }
 
-    @*
-        This associated Javascript handles the Ajax calls (page handlers are not invoked by form submits)
-        and the disposing and loading of partial views, for this modal.
-
-        For the functional documentation please see site.js & the following Javascript file...
-    *@
-    
-    <script async src="/js/_PopupEdit.js"></script>
+    @*This Jquery handles the modal processing.
+      For the functional documentation please see...*@
+    <script async src="/js/_PopupModal.js"></script>
 
     <div id="editModalBody">
-        <div id="editNextButtoms">
-            <button id="GetNewModalContent"
-                    class="btn btn-primary btn-sm"
-                    value="Next"
-                    href="&id=@Model.Id&cmd=next"
-                    data-url="@Url.Page("Index", "next")"
-                    data-docMsg="@docMsg"
-                    title="Next Document >"
-                    type="submit"
-                    style="float:right;">
-                >
-            </button>
-            <button id="GetNewModalContent"
-                    class="btn btn-sm btn-primary"
-                    value="Prev"
-                    href="&id=@Model.Id&cmd=prev"
-                    data-url="@Url.Page("Index", "next")"
-                    data-docMsg="@docMsg"
-                    title="< Previous Document"
-                    type="submit"
-                    style="float:left;">
-                <
-            </button>
-            <h5 style="text-align:center;">Amend Document Information</h5>
-            <hr />
+        <h5 style="text-align:center;">Amend Document Information</h5>
+        <hr />
+        <div id="editNextButtoms" class="row">
+            <div id="editNextRow" class="form-group col-sm-12" style="margin:0 0 0.5% 0;">
+                <button onclick=GetNewModalContent(this);
+                        class="btn btn-primary btn-sm"
+                        value="Next"
+                        href="&id=@Model.Id&cmd=next"
+                        data-url="@Url.Page("Index", "next")"
+                        data-docMsg="@docMsg"
+                        title="Next Document >"
+                        type="submit"
+                        style="float:right;">
+                    >
+                </button>
+                <label asp-for="Type" class="control-label col-sm-3" style="text-align:center; font-weight:bold;"></label>
+                <label asp-for="TimeStamp" class="control-label col-sm-5" style="text-align:center; font-weight:bold;"></label>
+                <label asp-for="Dept" class="control-label col-sm-2" style="text-align:center; font-weight:bold;"></label>
+                <button onclick=GetNewModalContent(this);
+                        class="btn btn-sm btn-primary"
+                        value="Prev"
+                        href="&id=@Model.Id&cmd=prev"
+                        data-url="@Url.Page("Index", "next")"
+                        data-docMsg="@docMsg"
+                        title="< Previous Document"
+                        type="submit"
+                        style="float:left;">
+                    <
+                </button>
+            </div>
         </div>
         <div id="editModalRow" class="row">
             <div id="editModalLayout" class="col-sm-12">
@@ -53,10 +58,10 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Id" />
                     <div class="form-group">
-                        @Html.DropDownListFor(model => model.Type, new SelectList(Helpers.DropListSCx, "id", "text"), new { @class = "col-sm-4 changeable", @required = "required", @title = "Document type (SC1 - SC9) - Required" })
+                        @Html.DropDownListFor(model => model.Type, new SelectList(DropList.DropListSCx, "Id", "Text"), new { id="selectedDoc", @class="col-sm-4 changeable", @title="Document type (SC1 - SC9) - Required" })
                         <span asp-validation-for="Type" class="text-danger"></span>
 
-                        <input type="datetime-local" asp-for="TimeStamp" asp-format="{0:yyyy-MM-ddTHH:mm}" class="col-sm-5 changeable" , required="required" placeholder="Date & Time" title="Creation Date & Time - Required" />
+                        <input type="datetime-local" asp-for="TimeStamp" asp-format="{0:yyyy-MM-ddTHH:mm}" id="selectedTS" class="col-sm-5 changeable" , required="required" placeholder="Date & Time" title="Creation Date & Time - Required" />
                         <span asp-validation-for="TimeStamp" class="text-danger"></span>
 
                         <input asp-for="Dept" class="col-sm-2 changeable" placeholder="Catering Department" title="Catering Department (Kitchen, Stores etc)" />
@@ -72,11 +77,11 @@
                                 <label asp-for="Supplier" class="control-label col-sm-2"></label>
                             }
                         }
-                        @Html.TextAreaFor(model => model.Supplier, new { placeholder = "Supplier Name?", title = "Supplier of Food Product", style = "word-wrap:hyphenate", @class = "col-sm-3 changeable" })
-                        <span asp-validation-for="Supplier" class="text-danger"></span>
+                        @Html.TextAreaFor(model => model.Supplier, new { @placeholder = "Supplier Name?", @title = "Supplier of Food Product", @style = "word-wrap:hyphenate;", @class = "col-sm-3 changeable" })
+                        <span asp-validation-for="Supplier" class="text-danger" style="float:right"></span>
 
                         <label asp-for="Food" class="control-label col-sm-2"></label>
-                        @Html.TextAreaFor(model => model.Food, new { @placeholder = "Food Item?", @title = "Food Item or Ingredient", @class = "col-sm-4 changeable", @style = "word-wrap:hyphenate" })
+                        @Html.TextAreaFor(model => model.Food, new { @placeholder = "Food Item?", @title = "Food Item or Ingredient", @style = "word-wrap:hyphenate", @class = "col-sm-4 changeable" })
                         <span asp-validation-for="Food" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -85,7 +90,7 @@
                         <span asp-validation-for="Temperature" class="text-danger"></span>
 
                         <label asp-for="CheckUBD" class="control-label col-sm-2">UBD</label>
-                        @Html.DropDownListFor(model => model.CheckUBD, new SelectList(Helpers.DropListUBD, "id", "text"), new { @class = "col-sm-4 changeable", @title = "Use-By-Date Status" })
+                        @Html.DropDownListFor(model => model.CheckUBD, new SelectList(DropList.DropListUBD, "Id", "Text"), new { @class = "col-sm-4 changeable", @title = "Use-By-Date Status" })
                         <span asp-validation-for="CheckUBD" class="text-danger"></span>
                     </div>
                     <div class="form-group">
@@ -101,7 +106,7 @@
                 </form>
                 <hr />
                 <div id="editAmendButtons" style="margin:0 0 20px 0;">
-                    <button id="GetNewModalContent"
+                    <button onclick=GetNewModalContent(this);
                             class="btn btn-sm btn-danger"
                             value="Save"
                             method="get"
@@ -110,7 +115,7 @@
                             title="Save Changes To Document">
                         Save
                     </button>
-                    <button id="GetNewModalContent"
+                    <button onclick=GetNewModalContent(this);
                             class="btn btn-sm btn-danger"
                             value="Delete"
                             method="get"
@@ -120,7 +125,7 @@
                             title="Permanently Delete Document">
                         Delete
                     </button>
-                    <button id="GetNewModalContent"
+                    <button onclick=GetNewModalContent(this);
                             class="btn btn-sm btn-danger"
                             value="Copy"
                             method="get"
@@ -131,6 +136,7 @@
                         Copy
                     </button>
                     <button id="Close"
+                            value="Close"
                             class="btn btn-sm btn-primary"
                             data-docMsg="@docMsg"
                             data-dismiss="modal"

@@ -41,9 +41,8 @@ namespace DbWebAPI.Controllers
         {
             _context = context;
             if (!_context.SCxItems.Any())
-            { // If no data - setup test data.
-                foreach (SCxItem sCxItem in SCxItem.AddSCxData()) { _context.SCxItems.Add(sCxItem); }
-                foreach (SCxItem sCxItem in SCxItem.AddThisWeeksSCxData()) { _context.SCxItems.Add(sCxItem); }
+            {                                       // If no data - setup test data for the last 31 days.
+                foreach (SCxItem sCxItem in SCxItem.AddThisMonthsSCxData(0)) { _context.SCxItems.Add(sCxItem); }
                 _context.SaveChangesAsync();
             }
         }
@@ -58,7 +57,7 @@ namespace DbWebAPI.Controllers
         //[Route("~/SCxView/Index")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SCxItems.ToListAsync());
+            return View(await _context.SCxItems.OrderByDescending(item => item.TimeStamp).ToListAsync());
         }
 
         /// <summary>

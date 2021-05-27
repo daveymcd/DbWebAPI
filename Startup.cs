@@ -54,10 +54,10 @@ namespace DbWebAPI
                     document.Info.TermsOfService = "None";
                     document.Info.Contact = new NSwag.OpenApiContact
                     {
-                        Name = "Davey McDonald",
-                        Email = "davey.mc@live.co.uk",
-                        Url = "https://github.com/daveymcd"
+                        Name = "DbWebAPI Home Page",
+                        Url = "https://localhost:5001/Home"
                     };
+                    //Email = "davey.mc@live.co.uk",
                     //document.Info.License = new NSwag.OpenApiLicense
                     //{
                     //    Name = "Use under LICX",

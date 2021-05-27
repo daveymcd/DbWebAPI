@@ -7,44 +7,10 @@
 @using System.Text;
 @using DbWebAPI.Helpers;
 
-@section scripts{
-
-    <script>
-      @*// This JQuery click handler function is wired to all clickables with an 'id="modal"' attribute.
-        // By specifying class="search" or class="edit", the event url points to the HTML of the handler
-        // (_PopupSearch.cshtml, _PopupEdit.cshtml etc) which the JQuery will reference to load the partial view into
-        // the 'popup-modal' Div of the Html imediately below here, and toggle the popup between hidden and visible.
-        //
-        // Note: When table row is clicked (in <tr>), the query string is tacked onto the end of the URL.
-        //
-      *@
-        $(function () {
-            var placeholderPopup = $('#modal-insert');
-
-            $('*[id="modal"]').click(function (event) {
-                var url = $(this).data('url');                          // url points to handler
-                var qry = this.getAttribute('href');                    // query string for <tr> event. append to 'url'
-                if (qry != null && qry.startsWith("&", 0)) {
-                    url = url + qry;
-                }
-                //alert(url);
-                //$(this).find('.modal-dialog').css({                     // for larger popup window override the model-dialog CSS
-                //    width: 'auto',
-                //    height: '250px',
-                //    'max-height': '300px'
-                //});
-                $.get(url).done(function (data) {
-                    placeholderPopup.html(data);                        // load HTML into 'modal-body' section of this view
-                    placeholderPopup.find('.modal').modal('show');      // aria-hidden is toggled to show popup
-                });
-            });
-        })
-    </script>
-}
 @*
     Popup Modal Div.
     wired to Search & New buttons immediately below and the clickable row in the main body of the view.
-    populated and revealed by JS above.
+    populated and revealed by wwwroot.js.site.GetModal(this);
 *@
 <div class="modal fade" tabindex="-1" role="dialog" id="popup-modal">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -63,22 +29,22 @@
 <div style="padding: 80px 0 0 0 ;">
     <h5 style="text-align:center">Safe Catering Document Archive</h5>
     @* Create NEW document button *@
-    <form asp-page-handler="create" method="get">
+    <form asp-page-handler="new" method="get">
         <input type="hidden" asp-for="sCxItem" />
-        <input id="modal"
-               class="btn btn-sm btn-sm btn-primary create"
+        <input onclick=GetModal(this);
+               class="btn btn-sm btn-sm btn-primary new"
                type="button" 
                value="&#43;"
                data-toggle="modal"
                data-target="#popup-modal"
-               data-url="@Url.Page("Index", "create")"
+               data-url="@Url.Page("Index", "new")"
                style="float:right; margin:0 0 10px 10px; font-size:larger;"
                title="Create New Document" />
     </form>
     @* Document SEARCH button *@
     <form asp-page-handler="search" method="get">
         <input type="hidden" asp-for="SCxSearchParams" />
-        <input id="modal"
+        <input onclick=GetModal(this);
                class="btn btn-sm btn-sm btn-primary flipped search"
                type="button" 
                value="&#8981;"
@@ -93,7 +59,7 @@
     Main body - documents list in table format...
 *@
 
-<table class="table">
+<table id="documentList" class="table">
     @* Table Headings (Sortable) *@
     <thead>
         <tr style="text-align:center">
@@ -130,7 +96,7 @@
         {
             var id = item.Id;
             // setup description from Drop down list for document Type
-            var typDesc = Helpers.DropListSCx.FirstOrDefault(listEntry => listEntry.Id.ToString() == item.Type).Text;
+            var typDesc = DropList.DropListSCx.FirstOrDefault(listEntry => listEntry.Id.ToString() == item.Type).Text;
             var docMsg = string.Concat("Click to amend Document ",
                                         //"<span style='font-weight:bold'>",
                                         typDesc,
@@ -145,7 +111,7 @@
             //using var writer = new StringWriter();
             //docMsg.WriteTo(writer, HtmlEncoder);
             ViewData["docMsg"] = docMsg;
-            <tr id="modal" 
+            <tr onclick=GetModal(this);
                 class="edit" 
                 href="&id=@item.Id" 
                 data-toggle="modal" 

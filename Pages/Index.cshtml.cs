@@ -59,9 +59,8 @@ namespace DbWebAPI
         {
             _context = context;
             if (!_context.SCxItems.Any())
-            { // If no data - setup test data.
-                foreach (SCxItem sCxItem in SCxItem.AddSCxData()) { _context.SCxItems.Add(sCxItem); }
-                foreach (SCxItem sCxItem in SCxItem.AddThisWeeksSCxData()) { _context.SCxItems.Add(sCxItem); }
+            {                                           // If no data - setup test data for the last 31 days.
+                foreach (SCxItem sCxItem in SCxItem.AddThisMonthsSCxData()) { _context.SCxItems.Add(sCxItem); }
                 _context.SaveChangesAsync();
             }
         }
@@ -125,65 +124,6 @@ namespace DbWebAPI
 
         /// <summary>
         /// 
-        ///     DbWebAPI.IndexModel.OnGetCreate() - Create New Document Handler (data entry)
-        ///     Search Handler. GET End point for '/Index?handler=search'
-        ///     
-        /// </summary>
-        /// <remarks>
-        /// 
-        ///     This handler is invoked by the Create button ('+') in Index.cshtml.
-        ///     Returns the modal _PopupCreate.cshtml for user input
-        ///     
-        /// </remarks>
-        /// <example>
-        ///     <form asp-page-handler="create" method="get">
-        ///         <input type="hidden" />
-        ///         <input id="modal" class="create" type="submit" value="create" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'create')" />
-        ///     </form>
-        /// </example>
-        public PartialViewResult OnGetCreate()
-        {
-            sCxItem = new();
-            sCxItem.Initialise(sCxItem);
-            return Partial("_PopupCreate", sCxItem);
-        }
-
-        /// <summary>
-        /// 
-        ///     DbWebAPI.IndexModel.OnPostCreateAsync() Create New Document Handler (database update)
-        ///     Create handler - POST end point for '/Index?hanler=Create'
-        /// 
-        /// </summary>
-        /// <remarks>
-        /// 
-        ///     The view uses a '+' button to invoke a JavaScript function which loads the popup
-        ///     (_popupCreate.cshtml) and prompts the user to enter document data. 
-        ///     
-        ///     the popup specifies a Create button with the method type set to 'post'
-        ///     and the asp-page-handler set to 'create'. When clicked this OnPost'Create'Async handler
-        ///     is invoked (injects 'Create' into OnPostAsync).
-        /// 
-        ///     This method then creates a new document in SCxItems.
-        /// 
-        /// </remarks>
-        /// <example>
-        ///     <form asp-page-handler="create" method="post">
-        ///         <input type="hidden" />
-        ///         <input class="create" type="submit" value="create" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'edit')" />
-        ///     </form>
-        /// </example>
-        public async void OnPostCreateAsync()
-        {
-            sCxItem.Id = Guid.NewGuid();
-            _context.SCxItems.Add(sCxItem);
-            await _context.SaveChangesAsync();
-
-            sCxItems = await _context.SCxItems.OrderByDescending(item => item.TimeStamp).ToListAsync();
-        }
-
-
-        /// <summary>
-        /// 
         ///     DbWebAPI.IndexModel.OnGetSearch() - Search Handler (data entry)
         ///     Search Handler. GET End point for '/Index?handler=search'
         ///     
@@ -234,6 +174,76 @@ namespace DbWebAPI
         public async void OnPostSearchAsync()
         {
            sCxItems = SCxSearchParams.SCxSearch(await _context.SCxItems.ToListAsync());
+        }
+
+        /// <summary>
+        /// 
+        ///     DbWebAPI.IndexModel.OnGetNew() - Create New Document Handler (data entry)
+        ///     Search Handler. GET End point for '/Index?handler=new'
+        ///     
+        /// </summary>
+        /// <remarks>
+        /// 
+        ///     This handler is invoked by the Create button ('+') in Index.cshtml.
+        ///     Returns the modal _PopupNew.cshtml for user input
+        ///     
+        /// </remarks>
+        /// <example>
+        ///     <form asp-page-handler="new" method="get">
+        ///         <input type="hidden" />
+        ///         <input id="modal" class="create" type="submit" value="create" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'new')" />
+        ///     </form>
+        /// </example>
+        public PartialViewResult OnGetNew()
+        {
+            sCxItem = new();
+            sCxItem.Initialise(sCxItem);
+            return Partial("_PopupNew", sCxItem);
+        }
+
+        /// <summary>
+        /// 
+        ///     DbWebAPI.IndexModel.OnGetCreateAsync() Create New Document Handler (database update)
+        ///     Create handler - Get end point for '/Index?hanler=Create'
+        /// 
+        /// </summary>
+        /// <remarks>
+        /// 
+        ///     The view uses a '+' button to invoke a JavaScript function which loads the popup
+        ///     (_PopupNew.cshtml) and prompts the user to enter document data. 
+        ///     
+        ///     the popup specifies a Create button with the method type set to 'get'
+        ///     and the asp-page-handler set to 'create'. When clicked this OnGet'Create'Async handler
+        ///     is invoked (injects 'Create' into OnGetAsync).
+        /// 
+        ///     This method then creates a new document in SCxItems and returns a partialView
+        ///     to the modal, ready for the next create.
+        /// 
+        /// </remarks>
+        /// <example>
+        ///     <form asp-page-handler="create" method="get">
+        ///         <input type="hidden" />
+        ///         <input class="create" type="submit" value="create" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'create')" />
+        ///     </form>
+        /// </example>
+        public async Task<IActionResult> OnGetCreateAsync()
+        {
+            if (!ModelState.IsValid) return BadRequest();
+            else if (sCxItem.Type is null || sCxItem.Type == "") return NotFound();
+            else
+            {
+                try
+                {
+                    sCxItem.Id = Guid.NewGuid();
+                    _context.SCxItems.Add(sCxItem);
+                    var rtn = await _context.SaveChangesAsync();
+                    return Partial("_PopupNew", sCxItem);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
         }
 
         /// <summary>

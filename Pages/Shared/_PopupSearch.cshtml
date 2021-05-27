@@ -1,13 +1,17 @@
 ﻿@*
     DbWebAPI.IndexModel.OnPostSearch() - Modal Search Handler (popup).
-    End point for '/Index?hanler=search'
+    GET End point for '/Index?hanler=search'
 *@
 @model DbWebAPI.Models.SCxSearchCriteria
 @using DbWebAPI.Helpers;
 @{
     Layout = null;
 }
-
+<script>
+    $('*[id="searchBtn"]').on('click', function (e) {
+        $(this).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ');
+    });
+</script>
 <h5>Enter (optional) search criteria:</h5>
 <hr />
 <div>
@@ -35,7 +39,7 @@
                 @Html.Raw("Document:")
             </dt>
             <dd class="col-sm-9" title="Select Document Type (Optional)">
-                @Html.DropDownListFor(model => model.Type, new SelectList(Helpers.DropListSCx, "id", "text"), new { htmlAttributes = new { @title = "Document Type (SC1 - SC9) (Optional)" } })
+                @Html.DropDownListFor(model => model.Type, new SelectList(DropList.DropListSCx, "Id", "Text"), new { htmlAttributes = new { @title = "Document Type (SC1 - SC9) (Optional)" } })
             </dd>
             <dt class="col-sm-3">
                 @Html.Raw("Department:")
@@ -67,8 +71,8 @@
             asp-route-Type="@Type"
             asp-route-Dept="@Dept"*@
         <input type="hidden" />
-        <input  class="btn btn-sm btn-danger" type="submit" value="Search" title="Submit Search Criteria" />
-        <button class="btn btn-sm btn-danger" type="button" value="Cancel" title="Cancel & Return To List" data-dismiss="modal" aria-label="Close">
+        <input  id="searchBtn" class="btn btn-sm btn-danger" type="submit" value="Search" title="Submit Search Criteria" />
+        <button id="Close" class="btn btn-sm btn-primary" type="button" value="Cancel" title="Cancel & Return To List" data-dismiss="modal" aria-label="Close" data-docMsg="Close">
             <span aria-hidden="true">Cancel</span>
         </button>
     </form>

@@ -1,12 +1,16 @@
-﻿using System;
+﻿using NLog;
+using NLog.Fluent;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace DbWebAPI.Helpers
 {
     /// <summary> General Helper Class </summary>
-    public static class Helpers
+    public class DropList
     {
         /// <summary>
         ///     DbWebApi.Helpers.DropListUBD
@@ -25,39 +29,45 @@ namespace DbWebAPI.Helpers
         ///     Drop Down List for Use-By-Date Indicator (not-applicable/OK/Out-Of-Date)
         /// </summary>
         /// <example>
-        ///     @Html.DropDownListFor(model => model.sCxItem.CheckUBD, new SelectList(Helpers.DropListUBD, "id", "text"))
+        ///     @Html.DropDownListFor(model => model.sCxItem.CheckUBD, new SelectList(Helpers.DropListUBD, "Id", "Text"))
         /// </example>
         public static List<DropListItem> DropListUBD = new()
         {
             //new DropListItem { id = null, text = "" }, // position zero in list is not assigned!
-            new DropListItem { Id = 0, Text = "\u274E n/a"},
-            new DropListItem { Id = 1, Text = "\u2705 Checked"},
-            new DropListItem { Id = 2, Text = "\u26D4 Expired"}
+            new DropListItem { Id = 0, Text = "\u274E n/a" },
+            new DropListItem { Id = 1, Text = "\u2705 Checked" },
+            new DropListItem { Id = 2, Text = "\u26D4 Expired" }
         };
         /// <summary>
         ///     DbWebApi.Helpers.DropListUBD
         ///     Drop Down List for Document Type (SC1: - SC9:)
         /// </summary>
         /// <example>
-        ///     @Html.DropDownListFor(model => model.sCxItem.Type, new SelectList(Helpers.DropListSCx, "id", "text"))
+        ///     @Html.DropDownListFor(model => model.sCxItem.Type, new SelectList(Helpers.DropListSCx, "Id", "Text"))
         /// </example>
         public static List<DropListItem> DropListSCx = new()
         {
-            new DropListItem { Id = "",     Text = ""}, // position zero in list is not assigned!
-            new DropListItem { Id = "SC1:", Text = "SC1: Deliveries-In"},
-            new DropListItem { Id = "SC2:", Text = "SC2: Chiller Checks"},
-            new DropListItem { Id = "SC3:", Text = "SC3: Cooking Log"},
-            new DropListItem { Id = "SC4:", Text = "SC4: Hot Holding"},
-            new DropListItem { Id = "SC5:", Text = "SC5: Hygiene Inspection"},
-            new DropListItem { Id = "SC6:", Text = "SC6: Hygiene Training"},
-            new DropListItem { Id = "SC7:", Text = "SC7: Fitness To Work"},
-            new DropListItem { Id = "SC8:", Text = "SC8: All-In-One Form (SC1: - SC4: inc)"},
-            new DropListItem { Id = "SC9:", Text = "SC9: Deliveries-Out"},
+            new DropListItem { Id = "", Text = "" }, // position zero in list is not assigned!
+            new DropListItem { Id = "SC1:", Text = "SC1: Deliveries-In" },
+            new DropListItem { Id = "SC2:", Text = "SC2: Chiller Checks" },
+            new DropListItem { Id = "SC3:", Text = "SC3: Cooking Log" },
+            new DropListItem { Id = "SC4:", Text = "SC4: Hot Holding" },
+            new DropListItem { Id = "SC5:", Text = "SC5: Hygiene Inspection" },
+            new DropListItem { Id = "SC6:", Text = "SC6: Hygiene Training" },
+            new DropListItem { Id = "SC7:", Text = "SC7: Fitness To Work" },
+            new DropListItem { Id = "SC8:", Text = "SC8: All-In-One Form (SC1: - SC4: inc)" },
+            new DropListItem { Id = "SC9:", Text = "SC9: Deliveries-Out" },
             new DropListItem { Id = "OPN:", Text = "OPN: Opening Checks" },
-            new DropListItem { Id = "CLS:", Text = "CLS: Closing Checks"}
+            new DropListItem { Id = "CLS:", Text = "CLS: Closing Checks" }
         };
+    }
+
+    /// <summary>
+    ///     DbWebApi.Helpers.GetReflectedPropertyValue(object, string)
+    /// </summary>
+    public static class GetReflectedPropertyVal
+    {
         /// <summary>
-        ///     DbWebApi.Helpers.GetReflectedPropertyValue(object, string)
         ///     Get the value of an object property from a complex structure
         /// </summary>
         /// <example>

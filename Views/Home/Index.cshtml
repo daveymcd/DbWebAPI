@@ -30,7 +30,7 @@
         .blue {
             color: lightskyblue;
         }
-
+            .blue p { text-shadow: 0.3px 0.3px 0.3px rgba(0,0,0,0.5); }
             .blue button {
                 background-color: lightskyblue;
             }
@@ -42,7 +42,7 @@
         .green {
             color: lightgreen;
         }
-
+            .green p { text-shadow: 0.3px 0.3px 0.3px rgba(0,0,0,0.5); }
             .green button {
                 background-color: lightgreen;
             }
@@ -54,7 +54,7 @@
         .red {
             color: lightcoral;
         }
-
+            .red p { text-shadow: 0.3px 0.3px 0.3px rgba(0,0,0,0.5); }
             .red button {
                 background-color: lightcoral;
             }
@@ -122,21 +122,19 @@
 
 <div class="mainContainer">
     <h1>DbWebAPI</h1>
-    <h5 style="text-align:center">ASP.Net Core Web Service Demo</h5>
+    <h5 style="text-align:center">ASP.Net Core OpenAPI Web Service Demo</h5>
     <br />
     <div style="text-align:left; width:100%;">
         <p>
-            This demonstration API uses an in-memory database which holds an archive of mock
-            food industry documents. The governments 'Food Standards Agency' require these
-            documents to be archived and held by catering companies as a record, of their
-            compliance with UK food hygiene regulation.
+            This demonstration of an OpenAPI Web Service uses an in-memory database to hold mock-up's of various food industry regulatory documents.
+        </p>
+        <p>
+            The governments 'Food Standards Agency' require these documents to be archived and held by catering companies as a record of their compliance with UK food hygiene regulation.
         </p>
     </div>
     <div style="text-align:left; width:100%;">
         <p>
-            A Xamarin Mobile Application manages the business requirements of the regulation, 
-            and uses the CRUD operations of this REST API to store and retrieve FSA documents
-            from the remote server.
+            A Xamarin Mobile Application manages the business requirements of the regulation and uses the REST API service to access the document archive.
         </p>
     </div>
 
@@ -150,27 +148,10 @@
     </div>
     <div class="flexContainerRow clearfix blue">
         <div class="col11 flexContainerColumn sideBySide10col" >
-            <p>The OPEN API Controller exposes the Json Endpoints used by the Xamarin App for CRUD access to the Document Archive database. Written in C# and uses Nswag</p>
+            <p>REST API Controller provides CRUD access of the document archive to a Xamarin App. Written in C# and uses Nswag to expose the Json Endpoints. </p>
         </div>
         <div class="col1 flexContainerColumn sideBySide1col" >
-            <button class="clearfix" title="Swagger Page"><a href="https://localhost:5001/swagger/index.html#/SCxItems">Nswag</a></button>
-        </div>
-    </div>
-
-    <div class="flexContainerRow clearfix red">
-        <div class="col1 flexContainerColumn sideBySide1col" style="margin:10% 0.5% 0.5% 0;">
-            <h6>MVC View Pages</h6>
-        </div>
-        <div class="col11 flexContainerColumn">
-            <hr />
-        </div>
-    </div>
-    <div class="flexContainerRow clearfix red">
-        <div class="col11 flexContainerColumn sideBySide10col" >
-            <p>Simple Modle-View-Controller web pages allow basic CRUD operations on database. Written in C#, HTML & CSS.</p>
-        </div>
-        <div class="col1 flexContainerColumn sideBySide1col">
-            <button class="clearfix" title="MVC View Pages"><a href="https://localhost:5001/Home/SCxView/Index">MVC</a></button>
+            <button class="clearfix"><a href="https://localhost:5001/swagger/index.html#/SCxItems" title="Swagger Page">Nswag</a></button>
         </div>
     </div>
 
@@ -184,10 +165,27 @@
     </div>
     <div class="flexContainerRow clearfix green">
         <div class="col11 flexContainerColumn sideBySide10col">
-            <p>Razor web pages allow search & sort of document data and use a single popup modal to navigate the documents and execute Ajax CRUD requests. Written in C#, HTML, CSS & JavaScript.</p>
+            <p>Razor web pages display the list of documents, allow search & sort of document data and use a single popup modal to navigate the documents and execute Ajax CRUD requests. Written in C#, HTML, CSS & JavaScript.</p>
         </div>
         <div class="col1 flexContainerColumn sideBySide1col" >
-            <button class="clearfix" title="Razor Pages"><a href="https://localhost:5001/Home/SCxPage/Index">Razor</a></button>
+            <button class="clearfix"><a href="https://localhost:5001/Home/SCxPage/Index" title="Razor Pages">Razor</a></button>
+        </div>
+    </div>
+
+    <div class="flexContainerRow clearfix red">
+        <div class="col1 flexContainerColumn sideBySide1col" style="margin:10% 0.5% 0.5% 0;">
+            <h6>MVC View Pages</h6>
+        </div>
+        <div class="col11 flexContainerColumn">
+            <hr />
+        </div>
+    </div>
+    <div class="flexContainerRow clearfix red">
+        <div class="col11 flexContainerColumn sideBySide10col" >
+            <p>Simple Model-View-Controller web pages display a list of raw document data and allow basic CRUD operations on the database. Written in C#, HTML & CSS.</p>
+        </div>
+        <div class="col1 flexContainerColumn sideBySide1col">
+            <button class="clearfix"><a href="https://localhost:5001/Home/SCxView/Index" title="MVC Views">MVC</a></button>
         </div>
     </div>
 </div>

@@ -12,6 +12,11 @@
     <h4 style="float:left;">DbWebAPI - ASP.NET MVC Views</h4>
 </div>
 <div style="padding: 40px 0 0 0 ; text-align:center">
+    <button style="float:right;"
+            onclick="location.href='@Url.Action("Create")'"
+            type="submit" value="&#43;" title="Create new document" class="btn btn-sm btn-primary">
+        &#43;
+    </button>
     <h5>Safe Catering Document Archive</h5>
     @*<form asp-action="Search" style="float:right;">
             <input type="hidden" /> &nbsp;
@@ -20,12 +25,12 @@
 </div>
 <table class="table">
     <thead>
-        <tr>
-            <th title="Create new document">
+        <tr style="text-align:center;">
+            @*<th title="Create new document">
                 <form asp-action="Create" style="float:left;">
                     <input type="submit" value="&nbsp; New &nbsp;" class="btn btn-sm btn-danger" />
                 </form>
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.TimeStamp)
             </th>
@@ -58,13 +63,17 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td title="Amend Details">
+            <tr onclick="location.href='@Url.Action("Details", new { id = item.Id })'"
+                class="edit" 
+                style="text-align:center;"
+                title="Click to amend document - @item.Type @item.Dept @item.TimeStamp.ToShortDateString() @item.TimeStamp.ToShortTimeString()">
+                
+                @*<td title="Amend Details">
                     <form asp-action="Details" asp-route-id="@item.Id" style="float:left">
                         <input type="hidden" asp-for="@item.Id" />
                         <input type="submit" value="Amend" class="btn btn-sm btn-danger" />
                     </form>
-                </td>
+                </td>*@
                 <td>
                     @Html.DisplayFor(modelItem => item.TimeStamp)
                 </td>
@@ -72,7 +81,7 @@
                     @Html.DisplayFor(modelItem => item.Dept)
                 </td>
                 <td>
-                    @{ var typDesc = Helpers.DropListSCx.FirstOrDefault(listEntry => listEntry.Id.ToString() == item.Type).Text; }
+                    @{ var typDesc = DropList.DropListSCx.FirstOrDefault(listEntry => listEntry.Id.ToString() == item.Type).Text; }
                     @Html.Raw(typDesc)
                 </td>
                 <td>

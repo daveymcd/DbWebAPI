@@ -49,10 +49,12 @@ namespace DbWebAPI.Controllers
         {
             _context = context;
             if (!_context.SCxItems.Any())
-            { // If no data - setup test data.
-                foreach (SCxItem sCxItem in SCxItem.AddSCxData()) { _context.SCxItems.Add(sCxItem); }
-                foreach (SCxItem sCxItem in SCxItem.AddThisWeeksSCxData()) { _context.SCxItems.Add(sCxItem); }
-                _context.SaveChangesAsync();
+            {                                               // If no data - setup test data for the past 3 years.
+                for (var month = 0; month <= 36; month++)
+                {
+                    foreach (SCxItem sCxItem in SCxItem.AddThisMonthsSCxData(month)) { _context.SCxItems.Add(sCxItem); }
+                    _context.SaveChangesAsync();
+                }
             }
         }
 

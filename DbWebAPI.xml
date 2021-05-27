@@ -188,42 +188,46 @@
             </summary>
             <param name="id">Document Id</param>
         </member>
-        <member name="T:DbWebAPI.Helpers.Helpers">
+        <member name="T:DbWebAPI.Helpers.DropList">
             <summary> General Helper Class </summary>
         </member>
-        <member name="T:DbWebAPI.Helpers.Helpers.DropListItem">
+        <member name="T:DbWebAPI.Helpers.DropList.DropListItem">
             <summary>
                 DbWebApi.Helpers.DropListUBD
                 Class for Drop Down List key pairings.
             </summary>
         </member>
-        <member name="P:DbWebAPI.Helpers.Helpers.DropListItem.Id">
+        <member name="P:DbWebAPI.Helpers.DropList.DropListItem.Id">
             <summary>Document Type Id</summary>
         </member>
-        <member name="P:DbWebAPI.Helpers.Helpers.DropListItem.Text">
+        <member name="P:DbWebAPI.Helpers.DropList.DropListItem.Text">
             <summary>Description of Document Type</summary>
         </member>
-        <member name="F:DbWebAPI.Helpers.Helpers.DropListUBD">
+        <member name="F:DbWebAPI.Helpers.DropList.DropListUBD">
             <summary>
                 DbWebApi.Helpers.DropListUBD
                 Drop Down List for Use-By-Date Indicator (not-applicable/OK/Out-Of-Date)
             </summary>
             <example>
-                @Html.DropDownListFor(model => model.sCxItem.CheckUBD, new SelectList(Helpers.DropListUBD, "id", "text"))
+                @Html.DropDownListFor(model => model.sCxItem.CheckUBD, new SelectList(Helpers.DropListUBD, "Id", "Text"))
             </example>
         </member>
-        <member name="F:DbWebAPI.Helpers.Helpers.DropListSCx">
+        <member name="F:DbWebAPI.Helpers.DropList.DropListSCx">
             <summary>
                 DbWebApi.Helpers.DropListUBD
                 Drop Down List for Document Type (SC1: - SC9:)
             </summary>
             <example>
-                @Html.DropDownListFor(model => model.sCxItem.Type, new SelectList(Helpers.DropListSCx, "id", "text"))
+                @Html.DropDownListFor(model => model.sCxItem.Type, new SelectList(Helpers.DropListSCx, "Id", "Text"))
             </example>
         </member>
-        <member name="M:DbWebAPI.Helpers.Helpers.GetReflectedPropertyValue(System.Object,System.String)">
+        <member name="T:DbWebAPI.Helpers.GetReflectedPropertyVal">
             <summary>
                 DbWebApi.Helpers.GetReflectedPropertyValue(object, string)
+            </summary>
+        </member>
+        <member name="M:DbWebAPI.Helpers.GetReflectedPropertyVal.GetReflectedPropertyValue(System.Object,System.String)">
+            <summary>
                 Get the value of an object property from a complex structure
             </summary>
             <example>
@@ -231,6 +235,55 @@
             </example>
             <param name="_object">structure</param>
             <param name="_property">Property to get</param>
+        </member>
+        <member name="T:DbWebAPI.Helpers.MessageHandler">
+            <summary>
+            
+                DbWebApi.Helpers.MessageHandler - Output Message methods
+                
+            </summary>
+        </member>
+        <member name="M:DbWebAPI.Helpers.MessageHandler.MessageLog(System.String,System.String)">
+            <summary>
+            
+                Helpers.MessageHandler.MessageLog(string, string)
+                Outputs a message to the Windows EventViewer or Nlog (default).
+                
+            </summary>
+            <remarks>
+                
+                Nlog writes messages to a flat file in the project directory 'logs'...
+                
+                    ~\Visual Studio 2019\Projects\DbWebAPI\logs\DbWebAPIlog-'DateTime.log
+                
+            </remarks>
+            <example>
+                Helpers.MessageLog("Exception Name or Message", "Nlog");
+            </example>
+            <param name="exceptionMsg">Exeption Name</param>
+            <param name="logService">Nlog or EventLog</param>
+        </member>
+        <member name="M:DbWebAPI.Helpers.MessageHandler.DebugLog(System.String,System.Boolean,System.String,System.String,System.Int32)">
+            <summary>
+            
+                Helpers.MessageHandler.DebugLog(string, bool, string, string, int)
+                Trace the calling sequence for a method.
+                
+            </summary>
+            <remarks>
+                
+                Loops through the call stack of the current thread, tracing the methods 
+                calling sequence. Logs to output window only in debug mode
+                
+            </remarks>
+            <example>
+                MessageHandler.DebugLog("Starting", true);
+            </example>
+            <param name="msgBody">Main Message</param>
+            <param name="fullTrace">Full Trace History of just calling method name</param>
+            <param name="memberName">Method Name</param>
+            <param name="fileName">File Method defined in</param>
+            <param name="lineNumber">File Line Number call made from</param>
         </member>
         <member name="T:DbWebAPI.Models.ErrorViewModel">
             <summary>
@@ -444,10 +497,10 @@
             </summary>
             <param name="item">Document to initialise</param>
         </member>
-        <member name="M:DbWebAPI.Models.SCxItem.AddSCxData">
+        <member name="M:DbWebAPI.Models.SCxItem.AddThisMonthsSCxData(System.Nullable{System.Double})">
             <summary>Add test archive data to database </summary>
         </member>
-        <member name="M:DbWebAPI.Models.SCxItem.AddThisWeeksSCxData">
+        <member name="M:DbWebAPI.Models.SCxItem.AddThisWeeksSCxData(System.Nullable{System.Double})">
             <summary> Add 'This weeks' test archive data to database </summary>
         </member>
         <member name="T:DbWebAPI.Models.SCxItemContext">
@@ -540,52 +593,6 @@
             </example>
             <param name="column">Column name to sort on</param>
         </member>
-        <member name="M:DbWebAPI.IndexModel.OnGetCreate">
-            <summary>
-            
-                DbWebAPI.IndexModel.OnGetCreate() - Create New Document Handler (data entry)
-                Search Handler. GET End point for '/Index?handler=search'
-                
-            </summary>
-            <remarks>
-            
-                This handler is invoked by the Create button ('+') in Index.cshtml.
-                Returns the modal _PopupCreate.cshtml for user input
-                
-            </remarks>
-            <example>
-                <form asp-page-handler="create" method="get">
-                    <input type="hidden" />
-                    <input id="modal" class="create" type="submit" value="create" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'create')" />
-                </form>
-            </example>
-        </member>
-        <member name="M:DbWebAPI.IndexModel.OnPostCreateAsync">
-            <summary>
-            
-                DbWebAPI.IndexModel.OnPostCreateAsync() Create New Document Handler (database update)
-                Create handler - POST end point for '/Index?hanler=Create'
-            
-            </summary>
-            <remarks>
-            
-                The view uses a '+' button to invoke a JavaScript function which loads the popup
-                (_popupCreate.cshtml) and prompts the user to enter document data. 
-                
-                the popup specifies a Create button with the method type set to 'post'
-                and the asp-page-handler set to 'create'. When clicked this OnPost'Create'Async handler
-                is invoked (injects 'Create' into OnPostAsync).
-            
-                This method then creates a new document in SCxItems.
-            
-            </remarks>
-            <example>
-                <form asp-page-handler="create" method="post">
-                    <input type="hidden" />
-                    <input class="create" type="submit" value="create" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'edit')" />
-                </form>
-            </example>
-        </member>
         <member name="M:DbWebAPI.IndexModel.OnGetSearch">
             <summary>
             
@@ -631,6 +638,53 @@
                 <form asp-page-handler="search" method="post">
                     <input type="hidden" />
                     <input class="search" type="submit" value="Search" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'search')" />
+                </form>
+            </example>
+        </member>
+        <member name="M:DbWebAPI.IndexModel.OnGetNew">
+            <summary>
+            
+                DbWebAPI.IndexModel.OnGetNew() - Create New Document Handler (data entry)
+                Search Handler. GET End point for '/Index?handler=new'
+                
+            </summary>
+            <remarks>
+            
+                This handler is invoked by the Create button ('+') in Index.cshtml.
+                Returns the modal _PopupNew.cshtml for user input
+                
+            </remarks>
+            <example>
+                <form asp-page-handler="new" method="get">
+                    <input type="hidden" />
+                    <input id="modal" class="create" type="submit" value="create" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'new')" />
+                </form>
+            </example>
+        </member>
+        <member name="M:DbWebAPI.IndexModel.OnGetCreateAsync">
+            <summary>
+            
+                DbWebAPI.IndexModel.OnGetCreateAsync() Create New Document Handler (database update)
+                Create handler - Get end point for '/Index?hanler=Create'
+            
+            </summary>
+            <remarks>
+            
+                The view uses a '+' button to invoke a JavaScript function which loads the popup
+                (_PopupNew.cshtml) and prompts the user to enter document data. 
+                
+                the popup specifies a Create button with the method type set to 'get'
+                and the asp-page-handler set to 'create'. When clicked this OnGet'Create'Async handler
+                is invoked (injects 'Create' into OnGetAsync).
+            
+                This method then creates a new document in SCxItems and returns a partialView
+                to the modal, ready for the next create.
+            
+            </remarks>
+            <example>
+                <form asp-page-handler="create" method="get">
+                    <input type="hidden" />
+                    <input class="create" type="submit" value="create" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'create')" />
                 </form>
             </example>
         </member>
@@ -812,18 +866,22 @@
                     DbWebAPI.Controllers.SCxItemsController.cs
                     DbWebAPI.Models.SCxItems.cs
             
-                For MVC View Web Service please see...
+                For MVC View Web Service (Views project folder) please see...
             
                     DbWebAPI.Views.SCxView.Index.cshtml
                     DbWebAPI.Controllers.SCxViewController.cs
                     DbWebAPI.Models.SCxItems.cs
             
-                For Razor Page Web Service please see...
+                For Razor Page Web Service (Pages project folder) please see...
             
                     DbWebAPI.Pages.Index.cshtml.cs
                     DbWebAPI.Pages.Shared._popupEdit.cshtml
                     DbWebAPI.Models.SCxItems.cs
                     
+             
+                 VS Log Files - C:\Users\dave\AppData\Local\Temp\visualstudio-js-debugger.txt
+                 also check %APPDATA%/
+             
              </remarks>>
         </member>
         <member name="M:DbWebAPI.Program.Main(System.String[])">

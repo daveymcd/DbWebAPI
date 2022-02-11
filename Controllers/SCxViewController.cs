@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DbWebAPI.Models;
 using System.Net.Mime;
+using System.Diagnostics;
+using System.Collections.ObjectModel;
 
 namespace DbWebAPI.Controllers
 {
@@ -34,17 +36,22 @@ namespace DbWebAPI.Controllers
     {
         private readonly SCxItemContext _context;
 
+        ///// <summary>DTO subset of all document data</summary>
+        //public ObservableCollection<SCxItemDto> SCxItemsDto { get; set; }
+
         /// <summary>
         ///     This method gets called by the runtime and configures the Database context.
         /// </summary>
         public SCxViewController(SCxItemContext context)
         {
             _context = context;
-            if (!_context.SCxItems.Any())
-            {                                       // If no data - setup test data for the last 31 days.
-                foreach (SCxItem sCxItem in SCxItem.AddThisMonthsSCxData(0)) { _context.SCxItems.Add(sCxItem); }
-                _context.SaveChangesAsync();
-            }
+            //SCxItemsDto = Data.DbInitializer.SqlLoadItemsDtoAsync(_context).Result;        // Load DTO of SC1 - SC9
+
+            //if (!_context.SCxItems.Any())
+            //{                                       // If no data - setup test data for the last 31 days.
+            //foreach (SCxItem sCxItem in SCxItem.AddThisMonthsSCxData(0)) { _context.SCxItems.Add(sCxItem); }
+            //_context.SaveChangesAsync();
+            //}
         }
 
         //*** VIEW PROCESSING... ***//
@@ -58,6 +65,17 @@ namespace DbWebAPI.Controllers
         public async Task<IActionResult> Index()
         {
             return View(await _context.SCxItems.OrderByDescending(item => item.TimeStamp).ToListAsync());
+        }
+
+        /// <summary>
+        ///     GET: SCxItemsDto - Get all. 
+        ///     This method returns Document DTO data (SC1 - SC9) to the Index View.
+        /// </summary>
+        //[Route("/SCxView")]
+        //[Route("~/SCxView/IndexDto")]
+        public async Task<IActionResult> IndexDto()
+        {
+            return View(Program.SCxItemsDto.OrderByDescending(item => item.TimeStamp).ToList());
         }
 
         /// <summary>
@@ -105,10 +123,8 @@ namespace DbWebAPI.Controllers
                         await _context.SaveChangesAsync();
                     }
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
+                catch (DbUpdateConcurrencyException ex) { Debug.WriteLine(ex.Message); throw new DbUpdateConcurrencyException("CreateConfirmed: " + ex.Message, ex); }
+                catch (Exception ex) { Debug.WriteLine(ex.Message); throw new NotSupportedException("CreateConfirmed: " + ex.Message, ex); }
                 return RedirectToAction(nameof(Index));
             }
             return View(sCxItem);
@@ -149,10 +165,8 @@ namespace DbWebAPI.Controllers
                         await _context.SaveChangesAsync();
                     }
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                catch (DbUpdateConcurrencyException ex) { Debug.WriteLine(ex.Message); throw new DbUpdateConcurrencyException("EditUpdate: " + ex.Message, ex); }
+                catch (Exception ex) { Debug.WriteLine(ex.Message); throw new NotSupportedException("EditUpdate: " + ex.Message, ex); }
                 return RedirectToAction(nameof(Index));
             }
             return View(sCxItem);

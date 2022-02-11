@@ -5,8 +5,7 @@
     "iisExpress": {
       "applicationUrl": "http://localhost:33249",
       "sslPort": 44349
-    },
-    "launchUrl": "swagger"
+    }
   },
   "profiles": {
     "IIS Express": {
@@ -20,10 +19,10 @@
     "DbWebAPI": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "Home",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "launchUrl": "Home",
       "dotnetRunMessages": "true",
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
     }

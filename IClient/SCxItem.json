@@ -1,0 +1,52 @@
+{
+  "components": {
+    "schemas": {
+       "SCxItem": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "System.Guid"
+            },
+            "timestamp": {
+              "type": "System.DateTimeOffset"
+            },
+            "type": {
+              "type": "string"
+            },
+            "dept": {
+              "type": "string"
+            },
+            "food": {
+              "type": "string"
+            },
+            "supplier": {
+              "type": "string"
+            },
+            "checkubd": {
+              "type": "integer"
+            },
+            "temperature": {
+              "type": "double"
+            },
+            "comment": {
+              "type": "string"
+            },
+            "signoff": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "id": "1",
+            "timestamp": "2021-01-01 10:25",
+            "type": "SC1:",
+            "dept": "Kitchen",
+            "food": "Beef",
+            "supplier": "Acme",
+            "checkubd": "2",
+            "comment": "BlaBla",
+            "signoff": "Supervisor"
+          }
+       }
+    }
+  }
+}

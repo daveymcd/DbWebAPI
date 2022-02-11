@@ -38,7 +38,7 @@ namespace DbWebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             // AddMvc supports Razor Pages, conventional routing for Views and attribute routing for REST Api
-            services.AddMvc().WithRazorPagesRoot("/Pages") ; 
+            services.AddMvc(options => options.SuppressAsyncSuffixInActionNames = false).WithRazorPagesRoot("/Pages");
 
             //// Register the Swagger generator, defining 1 or more Swagger documents (Swashbuckle implementation)
             //services.AddSwaggerGen();
@@ -64,11 +64,15 @@ namespace DbWebAPI
                     //    Url = "https://example.com/license"
                     //};
                 };
-
             });
 
             // Register Database service
-            services.AddDbContext<SCxItemContext> (opt => opt.UseInMemoryDatabase("FSAdiaryDb"));
+            services.AddDbContext<SCxItemContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddDatabaseDeveloperPageExceptionFilter();
+
+            // Register Database service
+            //services.AddDbContext<SCxItemContext> (opt => opt.UseInMemoryDatabase("FSAdiaryDb"));
         }
 
         /// <summary> This method gets called by the runtime. Use this method to configure the HTTP request pipeline.</summary>
@@ -84,7 +88,7 @@ namespace DbWebAPI
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection(); - Commented out for localhost testing
             app.UseStaticFiles();
 
             //// Enable middleware to serve generated Swagger as a JSON endpoint (Swashbuckle implementation)

@@ -1,0 +1,537 @@
+{
+  "x-generator": "NSwag v13.11.3.0 (NJsonSchema v10.4.4.0 (Newtonsoft.Json v12.0.0.0))",
+  "swagger": "2.0",
+  "info": {
+    "title": "My Title",
+    "version": "1.0.0"
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/Home/SCxItems/GetSCxItems": {
+      "get": {
+        "tags": [
+          "SCxItems"
+        ],
+        "summary": "Get All SCx Documents",
+        "description": "Request Responds with all SCx Document data",
+        "operationId": "GetSCxItemsAsync",
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SCxItem"
+            }
+          }
+        }
+      }
+    },
+    "/Home/SCxItems/GetSCxItemAsync/{id}": {
+      "get": {
+        "tags": [
+          "SCxItems"
+        ],
+        "summary": "Get Single SCx Document By Guid",
+        "description": "Request Responds with single SCx Document",
+        "operationId": "GetSCxItemAsync",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Document Id",
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SCxItem"
+            }
+          },
+          "400": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SCxItem"
+            }
+          },
+          "404": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SCxItem"
+            }
+          }
+        }
+      }
+    },
+    "/Home/SCxItems/GetSCxItemsSelect": {
+      "get": {
+        "tags": [
+          "SCxItems"
+        ],
+        "summary": "Select SCx Documents",
+        "description": "The Request Responds with a subset of SCx Document data, filtered according to search criteria. \nSelection is by Date/Time Range, Document Type, Department, Supplier, Use-By-Date check, Sign-off signitary or any combination. \nIf a Date & Time pair are supplied the search begins or ends at that point, however, if the Time element is not supplied then the whole days data for the Date is searched.",
+        "operationId": "GetSCxItemSelectAsync",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "SearchFromTimeStamp",
+            "in": "query",
+            "description": "Search start Date/Time",
+            "format": "date-time",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "SearchToTimeStamp",
+            "in": "query",
+            "description": "Search end Date/Time",
+            "format": "date-time",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "Type",
+            "in": "query",
+            "description": "Document Type",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "Dept",
+            "in": "query",
+            "description": "Catering Department",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "Supplier",
+            "in": "query",
+            "description": "Supplier Name",
+            "x-nullable": true
+          },
+          {
+            "type": "integer",
+            "name": "CheckUBD",
+            "in": "query",
+            "description": "Use-By-Date status",
+            "format": "int32",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "SignOff",
+            "in": "query",
+            "description": "Supervisor sign off",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SCxItem"
+            }
+          }
+        }
+      }
+    },
+    "/Home/SCxItems/GetSCxItemsSelectDto": {
+      "get": {
+        "tags": [
+          "SCxItems"
+        ],
+        "summary": "Select DTO Subset Of Data From SCx Documents",
+        "description": "'Data Transfer Object' version of GetSCxItemSelect(). \nThe Request Responds with a DTO subset of SCx Document data (Id, TimeStamp, Document Type & Dept.) filtered according to search criteria. \nSelection is by Date/Time Range, Document Type, Department, Supplier or any combination. \nIf a Date & Time pair is supplied the search begins or ends at that point, however, if the Time element is not supplied then the whole days data for the Date is searched.",
+        "operationId": "GetSCxItemSelectDtoAsync",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "SearchFromTimeStamp",
+            "in": "query",
+            "description": "Search Start Date/Time",
+            "format": "date-time",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "SearchToTimeStamp",
+            "in": "query",
+            "description": "Search End Date/Time",
+            "format": "date-time",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "Type",
+            "in": "query",
+            "description": "Document Type",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "Dept",
+            "in": "query",
+            "description": "Department",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SCxItem"
+            }
+          }
+        }
+      }
+    },
+    "/Home/SCxItems/PutSCxItemAsync": {
+      "put": {
+        "tags": [
+          "SCxItems"
+        ],
+        "summary": "Update SCx Document",
+        "description": "Request preforms Put operation on amended SCx Document data",
+        "operationId": "PutSCxItemAsync",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Id",
+            "in": "query",
+            "description": "Guid Unique Key",
+            "format": "guid",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "TimeStamp",
+            "in": "query",
+            "description": "Date/Time Document Created",
+            "format": "date-time",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "Type",
+            "in": "query",
+            "description": "SCx Document Type (SC1: - SC9:)",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "Dept",
+            "in": "query",
+            "description": "Catering department (Kitchen, Prep-area, Stores etc)",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "Food",
+            "in": "query",
+            "description": "Food type",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "Supplier",
+            "in": "query",
+            "description": "SC1: Stock Supplier Name",
+            "x-nullable": true
+          },
+          {
+            "type": "integer",
+            "name": "CheckUBD",
+            "in": "query",
+            "description": "SC1: Use-By-Date indicator (not-applicable/checked-OK/expired)",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "number",
+            "name": "Temperature",
+            "in": "query",
+            "description": "Food Temperature in Celsius",
+            "format": "double",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "Comment",
+            "in": "query",
+            "description": "General comment box",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "SignOff",
+            "in": "query",
+            "description": "Manger sign-off of completed Document",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SCxItem"
+            }
+          },
+          "400": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SCxItem"
+            }
+          },
+          "404": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SCxItem"
+            }
+          }
+        }
+      }
+    },
+    "/Home/SCxItems/PostSCxItem": {
+      "post": {
+        "tags": [
+          "SCxItems"
+        ],
+        "summary": "Create New SCx Document",
+        "description": "Request preforms Create operation on new SCx Document data",
+        "operationId": "PostSCxItemAsync",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "Id",
+            "in": "query",
+            "description": "Guid Unique Key",
+            "format": "guid",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "TimeStamp",
+            "in": "query",
+            "description": "Date/Time Document Created",
+            "format": "date-time",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "Type",
+            "in": "query",
+            "description": "SCx Document Type (SC1: - SC9:)",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "Dept",
+            "in": "query",
+            "description": "Catering department (Kitchen, Prep-area, Stores etc)",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "Food",
+            "in": "query",
+            "description": "Food type",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "Supplier",
+            "in": "query",
+            "description": "SC1: Stock Supplier Name",
+            "x-nullable": true
+          },
+          {
+            "type": "integer",
+            "name": "CheckUBD",
+            "in": "query",
+            "description": "SC1: Use-By-Date indicator (not-applicable/checked-OK/expired)",
+            "format": "int32",
+            "x-nullable": false
+          },
+          {
+            "type": "number",
+            "name": "Temperature",
+            "in": "query",
+            "description": "Food Temperature in Celsius",
+            "format": "double",
+            "x-nullable": false
+          },
+          {
+            "type": "string",
+            "name": "Comment",
+            "in": "query",
+            "description": "General comment box",
+            "x-nullable": true
+          },
+          {
+            "type": "string",
+            "name": "SignOff",
+            "in": "query",
+            "description": "Manger sign-off of completed Document",
+            "x-nullable": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SCxItem"
+            }
+          },
+          "409": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SCxItem"
+            }
+          }
+        }
+      }
+    },
+    "/Home/SCxItems/DeleteSCxItem/{id}": {
+      "delete": {
+        "tags": [
+          "SCxItems"
+        ],
+        "summary": "Delete SCx Document By Guid",
+        "description": "Request preforms Delete operation on an SCx Document",
+        "operationId": "DeleteSCxItemAsync",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Document Id",
+            "format": "guid",
+            "x-nullable": false
+          }
+        ],
+        "responses": {
+          "204": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SCxItem"
+            }
+          },
+          "400": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SCxItem"
+            }
+          },
+          "404": {
+            "x-nullable": false,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/SCxItem"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "SCxItem": {
+      "type": "object",
+      "description": "    DbWebAPI.Models.SCxItem - SCx Documents Data Model\n    Food Standards Agency 'Safe Catering' Regulatory Food Monitoring Records (SC1-SC9).\n    ",
+      "required": [
+        "Id",
+        "TimeStamp",
+        "CheckUBD",
+        "Temperature"
+      ],
+      "properties": {
+        "Id": {
+          "type": "string",
+          "description": "Guid Unique Key",
+          "format": "guid"
+        },
+        "TimeStamp": {
+          "type": "string",
+          "description": "Date/Time Document Created",
+          "format": "date-time"
+        },
+        "Type": {
+          "type": "string",
+          "description": "SCx Document Type (SC1: - SC9:)"
+        },
+        "Dept": {
+          "type": "string",
+          "description": "Catering department (Kitchen, Prep-area, Stores etc)"
+        },
+        "Food": {
+          "type": "string",
+          "description": "Food type"
+        },
+        "Supplier": {
+          "type": "string",
+          "description": "SC1: Stock Supplier Name"
+        },
+        "CheckUBD": {
+          "type": "integer",
+          "description": "SC1: Use-By-Date indicator (not-applicable/checked-OK/expired)",
+          "format": "int32"
+        },
+        "Temperature": {
+          "type": "number",
+          "description": "Food Temperature in Celsius",
+          "format": "double"
+        },
+        "Comment": {
+          "type": "string",
+          "description": "General comment box"
+        },
+        "SignOff": {
+          "type": "string",
+          "description": "Manger sign-off of completed Document"
+        }
+      }
+    }
+  }
+}

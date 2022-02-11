@@ -1,13 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DbWebAPI.Models
@@ -47,10 +53,23 @@ namespace DbWebAPI.Models
         [Key] public Guid Id { get; set; }
         /// <summary>Date of transaction</summary>
         [DataType(DataType.DateTime)] public DateTime TimeStamp { get; set; }
-        /// <summary>Document type SC1: - SC9:</summary>
+        /// <summary>Document type SC1 - SC9</summary>
         public string Type { get; set; }
         /// <summary>Catering Department (Kitchen, Prep-area, Stores etc)</summary>
-        public string Dept { get; set; }                                            
+        public string Dept { get; set; }
+        /// <summary>
+        ///     DbWebAPI.Models.SCxItem.Initialise();
+        ///     On Creation of an SCxItem, any uninitialised data will be given default value.
+        /// </summary>
+        /// <param name="item">Document to initialise</param>
+        public void Initialise(SCxItemDto item = null)
+        {
+            if (item is null) item = new();
+            if (item.Id == Guid.Empty) this.Id = Guid.NewGuid();
+            if (item.TimeStamp == DateTime.MinValue) this.TimeStamp = DateTime.Now;
+            if (item.Type is null) this.Type = string.Empty;
+            if (item.Dept is null) this.Dept = string.Empty;
+        }
     }
 
     /// <summary>
@@ -180,7 +199,8 @@ namespace DbWebAPI.Models
             {
                 Exception ex = new ArgumentOutOfRangeException("Date Range", "Search From Date entered is Later than Search To Date. Please correct the search criteria.");
                 //TempData["error"] = ex.Message;
-                throw ex;
+                Debug.WriteLine(ex.Message);
+                throw new ArgumentOutOfRangeException ("SCxSearch: " + ex.Message, ex);
             }
             else
             {   // *** use the search criteria to select a subset of the SCx documents from the Db
@@ -236,6 +256,392 @@ namespace DbWebAPI.Models
     ///     
     /// </remarks>
     ///
+    /////     Note: *** Future enhancements COMMENTED OUT...
+    ///// <summary> Company Name </summary>
+    //public string Company { get; set; }
+    /////<summary> Outlet Name (restaurant, unit etc) </summary>
+    //public string Outlet { get; set; }
+    ///// <summary>Document Logically Deleted</summary>
+    //public bool SCxDeleted { get; set; }
+    ///// <summary>Date/Time Document Last Amended</summary>
+    //[DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)] 
+    //public DateTime DocumentHistoryTimeStamp { get; set; } 
+    ///// <summary>Last User to Amended Document</summary>
+    //public string DocumentHistoryName { get; set; } 
+    public class SC1Item
+    {
+        /// <summary>
+        ///     Guid Unique Key
+        /// </summary>
+        [Key] public Guid Id { get; set; }
+
+        /// <summary>Date/Time Document Created</summary>
+        [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime TimeStamp { get; set; }
+
+        /// <summary>SCx Document Type (SC1 - SC9)</summary>
+        [DisplayName("Document")]
+        //[Required(ErrorMessage = "Document Type Is Required.")]
+        public string Type { get; set; }
+
+        /// <summary>Catering department (Kitchen, Prep-area, Stores etc)</summary>
+        public string Dept { get; set; }
+
+        /// <summary>Food type</summary>
+        public string Food { get; set; }
+
+        /// <summary>Stock Supplier Name</summary>
+        public string Supplier { get; set; }
+
+        /// <summary>Use-By-Date indicator (not-applicable/checked-OK/expired)</summary>
+        [DisplayName("Use By Date")]
+        public int CheckUBD { get; set; }
+
+        /// <summary>Food Temperature in Celsius</summary>  
+        [DisplayName("\u00B0C")]
+        public double Temperature { get; set; }
+
+        /// <summary>General comment box</summary>
+        public string Comment { get; set; }
+
+        /// <summary>Staff signiture of Document amendment</summary>
+        public string Sign { get; set; }
+
+        /// <summary>Manger Check sign-off of completed Document</summary>
+        [DisplayName("Manager Checked")]
+        public string SignOff { get; set; }
+
+        /// <summary>Date/Time Manager Signed-Off the Document</summary>
+        [DisplayName("Check Date"), DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime? CheckDate { get; set; }
+
+        /// <summary>
+        ///     DbWebAPI.Models.SC1Item.Initialise();
+        ///     On Creation of a Document, any uninitialised data will be given default value.
+        /// </summary>
+        /// <param name="item">Document to initialise</param>
+        public void Initialise(SC1Item item = null)
+        {
+            if (item is null) item = new();
+            if (item.Id == Guid.Empty) this.Id = Guid.NewGuid();
+            if (item.TimeStamp == DateTime.MinValue) this.TimeStamp = DateTime.Now;
+            if (item.Type is null) this.Type = string.Empty;
+            if (item.Dept is null) this.Dept = string.Empty;
+            if (item.Food is null) this.Food = string.Empty;
+            if (item.Supplier is null) this.Supplier = string.Empty;
+            if (item.CheckUBD < 0 || item.CheckUBD > 2) this.CheckUBD = 0;
+            if (item.Comment is null) this.Comment = string.Empty;
+            if (item.Sign is null) this.Sign = string.Empty;
+            if (item.CheckDate == DateTime.MinValue) this.CheckDate = null;
+            if (item.SignOff is null) this.SignOff = string.Empty;
+        }
+    }
+
+    /// <summary>
+    ///     SC2: Chiller Checks
+    /// </summary>
+    public class SC2Item
+    {   
+        /// <summary>Guid Unique Key</summary>
+        [Key] public Guid Id { get; set; }
+
+        /// <summary>Date/Time Document Created</summary>
+        [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime TimeStamp { get; set; }
+
+        /// <summary>SCx Document Type (SC1 - SC9)</summary>
+        [DisplayName("Document")]
+        public string Type { get; set; }
+
+        /// <summary>Catering department (Kitchen, Prep-area, Stores etc)</summary>
+        public string Dept { get; set; }
+
+        /// <summary>Food Temperature in Celsius</summary>  
+        [DisplayName("\u00B0C")]
+        public double Temperature { get; set; }
+
+        /// <summary>General comment box</summary>
+        public string Comment { get; set; }
+
+        /// <summary>Staff signiture of Document amendment</summary>
+        public string Sign { get; set; }
+
+        /// <summary>Manger Check sign-off of completed Document</summary>
+        [DisplayName("Manager Checked")]
+        public string SignOff { get; set; }
+
+        /// <summary>Date/Time Manager Signed-Off the Document</summary>
+        [DisplayName("Check Date"), DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime? CheckDate { get; set; }
+
+        /// <summary>
+        ///     DbWebAPI.Models.SC2Item.Initialise();
+        ///     On Creation of a Document, any uninitialised data will be given default value.
+        /// </summary>
+        /// <param name="item">Document to initialise</param>
+        public void Initialise(SC2Item item = null)
+        {
+            if (item is null) item = new();
+            if (item.Id == Guid.Empty) this.Id = Guid.NewGuid();
+            if (item.TimeStamp == DateTime.MinValue) this.TimeStamp = DateTime.Now;
+            if (item.Type is null) this.Type = string.Empty;
+            if (item.Dept is null) this.Dept = string.Empty;
+            if (item.Comment is null) this.Comment = string.Empty;
+            if (item.Sign is null) this.Sign = string.Empty;
+            if (item.SignOff is null) this.SignOff = string.Empty;
+            if (item.CheckDate == DateTime.MinValue) this.CheckDate = null;
+        }
+    }
+
+    /// <summary>
+    ///     SC3: Cooking Log
+    /// </summary>
+    public class SC3Item
+    {   
+        /// <summary>Guid Unique Key</summary>
+        [Key] public Guid Id { get; set; }
+
+        /// <summary>Date/Time Document Created</summary>
+        [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime TimeStamp { get; set; }
+
+        /// <summary>SCx Document Type (SC1 - SC9)</summary>
+        [DisplayName("Document")]
+        //[Required(ErrorMessage = "Document Type Is Required.")]
+        public string Type { get; set; }
+
+        /// <summary>Catering department (Kitchen, Prep-area, Stores etc)</summary>
+        public string Dept { get; set; }
+
+        /// <summary>Food type</summary>
+        public string Food { get; set; }
+
+        /// <summary>Date/Time Cooking began</summary>
+        [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime? CookStart { get; set; }
+
+        /// <summary>Date/Time Cooking Ended</summary>
+        [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime? CookEnd { get; set; }
+
+        /// <summary>Food Temperature in Celsius</summary>  
+        [DisplayName("\u00B0C")]
+        public double CookTemp { get; set; }
+
+        /// <summary>Staff Signature</summary>
+        public string CookSign { get; set; }
+
+        /// <summary>Date/Time Into Cooler</summary>
+        [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime? CoolStart { get; set; }
+
+        /// <summary>Food Temperature in Celsius</summary>  
+        [DisplayName("\u00B0C")]
+        public double CoolTemp { get; set; }
+
+        /// <summary>Staff Signature</summary>
+        public string CoolSign { get; set; }
+
+        /// <summary>Date/Time Reheating began</summary>
+        [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime? ReheatStart { get; set; }
+
+        /// <summary>Food Temperature in Celsius</summary>  
+        [DisplayName("\u00B0C")]
+        public double ReheatTemp { get; set; }
+
+        /// <summary>Staff Signature</summary>
+        public string ReheatSign { get; set; }
+
+        /// <summary>General comment box</summary>
+        public string Comment { get; set; }
+
+        /// <summary>Manger Check sign-off of completed Document</summary>
+        [DisplayName("Manager Checked")]
+        public string SignOff { get; set; }
+
+        /// <summary>Date/Time Manager Signed-Off the Document</summary>
+        [DisplayName("Check Date"), DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime? CheckDate { get; set; }
+
+        /// <summary>
+        ///     DbWebAPI.Models.SC3Item.Initialise();
+        ///     On Creation of a Document, any uninitialised data will be given default value.
+        /// </summary>
+        /// <param name="item">Document to initialise</param>
+        public void Initialise(SC3Item item = null)
+        {
+            if (item is null) item = new();
+            if (item.Id == Guid.Empty) this.Id = Guid.NewGuid();
+            if (item.TimeStamp == DateTime.MinValue) this.TimeStamp = DateTime.Now;
+            if (item.Type is null) this.Type = string.Empty;
+            if (item.Dept is null) this.Dept = string.Empty;
+            if (item.Food is null) this.Food = string.Empty;
+            if (item.CookSign is null) this.CookSign = string.Empty;
+            if (item.CoolSign is null) this.CoolSign = string.Empty;
+            if (item.ReheatSign is null) this.ReheatSign = string.Empty;
+            if (item.Comment is null) this.Comment = string.Empty;
+            if (item.SignOff is null) this.SignOff = string.Empty;
+            if (item.CheckDate == DateTime.MinValue) this.CheckDate = null;
+        }
+    }
+
+    /// <summary>
+    ///    SC4: Hot Holding
+    /// </summary>
+    public class SC4Item
+    {
+        /// <summary>Guid Unique Key</summary>
+        [Key] public Guid Id { get; set; }
+
+        /// <summary>Date/Time Document Created</summary>
+        [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime TimeStamp { get; set; }
+
+        /// <summary>SCx Document Type (SC1 - SC9)</summary>
+        [DisplayName("Document")]
+        //[Required(ErrorMessage = "Document Type Is Required.")]
+        public string Type { get; set; }
+
+        /// <summary>Catering department (Kitchen, Prep-area, Stores etc)</summary>
+        public string Dept { get; set; }
+
+        /// <summary>Food type</summary>
+        public string Food { get; set; }
+
+        /// <summary>Food Temperature after 2hrs in Celsius</summary>  
+        [DisplayName("\u00B0C")]
+        public double HoldTemp2 { get; set; }
+
+        /// <summary>Food Temperature after 4hrs in Celsius</summary>  
+        [DisplayName("\u00B0C")]
+        public double HoldTemp4 { get; set; }
+
+        /// <summary>Food Temperature after 6hrs in Celsius</summary>  
+        [DisplayName("\u00B0C")]
+        public double HoldTemp6 { get; set; }
+
+        /// <summary>General comment box</summary>
+        public string Comment { get; set; }
+
+        /// <summary>Staff signiture of Document amendment</summary>
+        public string Sign { get; set; }
+
+        /// <summary>Manger Check sign-off of completed Document</summary>
+        [DisplayName("Manager Checked")]
+        public string SignOff { get; set; }
+
+        /// <summary>Date/Time Manager Signed-Off the Document</summary>
+        [DisplayName("Check Date"), DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime? CheckDate { get; set; }
+
+        /// <summary>
+        ///     DbWebAPI.Models.SC4Item.Initialise();
+        ///     On Creation of a Document, any uninitialised data will be given default value.
+        /// </summary>
+        /// <param name="item">Document to initialise</param>
+        public void Initialise(SC4Item item = null)
+        {
+            if (item is null) item = new();
+            if (item.Id == Guid.Empty) this.Id = Guid.NewGuid();
+            if (item.TimeStamp == DateTime.MinValue) this.TimeStamp = DateTime.Now;
+            if (item.Type is null) this.Type = string.Empty;
+            if (item.Dept is null) this.Dept = string.Empty;
+            if (item.Food is null) this.Food = string.Empty;
+            if (item.Comment is null) this.Comment = string.Empty;
+            if (item.Sign is null) this.Sign = string.Empty;
+            if (item.SignOff is null) this.SignOff = string.Empty;
+            if (item.CheckDate == DateTime.MinValue) this.CheckDate = null;
+        }
+    }
+
+    /// <summary>
+    ///    SC9: Deliveries Out
+    /// </summary>
+    public class SC9Item
+    {
+        /// <summary>Guid Unique Key</summary>
+        [Key] public Guid Id { get; set; }
+
+        /// <summary>Date/Time Document Created</summary>
+        [DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime TimeStamp { get; set; }
+
+        /// <summary>SCx Document Type (SC1 - SC9)</summary>
+        [DisplayName("Document")]
+        //[Required(ErrorMessage = "Document Type Is Required.")]
+        public string Type { get; set; }
+
+        /// <summary>Catering department (Kitchen, Prep-area, Stores etc)</summary>
+        public string Dept { get; set; }
+
+        /// <summary>Food type</summary>
+        public string Food { get; set; }
+
+        /// <summary>Quantity Delivered</summary>
+        public int Quantity { get; set; }
+
+        /// <summary>Stock Batch Number</summary>
+        public string Batch { get; set; }
+
+        /// <summary>Use-By-Date indicator (not-applicable/checked-OK/expired)</summary>
+        [DisplayName("Use By Date")]
+        public int CheckUBD { get; set; }
+
+        /// <summary>Customer Name</summary>
+        public string CustName { get; set; }
+
+        /// <summary>Customer Address</summary>
+        public string CustAddr { get; set; }
+
+        /// <summary>Food Temperature in Celsius</summary>  
+        [DisplayName("\u00B0C")]
+        public double Temperature { get; set; }
+
+        /// <summary>Seperation of Raw or Ready-To-Eat foods boolean</summary>
+        public bool CheckRawRTE { get; set; }
+
+        /// <summary>General comment box</summary>
+        public string Comment { get; set; }
+
+        /// <summary>Staff signiture of Document amendment</summary>
+        public string Sign { get; set; }
+
+        /// <summary>Manger Check sign-off of completed Document</summary>
+        [DisplayName("Manager Checked")]
+        public string SignOff { get; set; }
+
+        /// <summary>Date/Time Manager Signed-Off the Document</summary>
+        [DisplayName("Check Date"), DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime? CheckDate { get; set; }
+
+        /// <summary>
+        ///     DbWebAPI.Models.SC9Item.Initialise();
+        ///     On Creation of a Document, any uninitialised data will be given default value.
+        /// </summary>
+        /// <param name="item">Document to initialise</param>
+        public void Initialise(SC9Item item = null)
+        {
+            if (item is null) item = new();
+            if (item.Id == Guid.Empty) this.Id = Guid.NewGuid();
+            if (item.TimeStamp == DateTime.MinValue) this.TimeStamp = DateTime.Now;
+            if (item.Type is null) this.Type = string.Empty;
+            if (item.Dept is null) this.Dept = string.Empty;
+            if (item.Food is null) this.Food = string.Empty;
+            if (item.Batch is null) this.Batch = string.Empty;
+            if (item.CheckUBD < 0 || item.CheckUBD > 2) this.CheckUBD = 0;
+            if (item.CustName is null) this.CustName = string.Empty;
+            if (item.CustAddr is null) this.CustAddr = string.Empty;
+            if (item.Comment is null) this.Comment = string.Empty;
+            if (item.Sign is null) this.Sign = string.Empty;
+            if (item.SignOff is null) this.SignOff = string.Empty;
+            if (item.CheckDate == DateTime.MinValue) this.CheckDate = null;
+        }
+    }
+
+    /// <summary>
+    ///     Redundant
+    /// </summary>
     public class SCxItem
     {
         /// <summary>Guid Unique Key</summary>
@@ -253,16 +659,13 @@ namespace DbWebAPI.Models
         /// <summary>Catering department (Kitchen, Prep-area, Stores etc)</summary>
         public string Dept { get; set; }
 
-        ///// <summary>Batch Number</summary>
-        //public string Batch { get; set; }
-
         /// <summary>Food type</summary>
         public string Food { get; set; }
 
-        /// <summary>SC1: Stock Supplier Name</summary>
+        /// <summary>Stock Supplier Name</summary>
         public string Supplier { get; set; }
 
-        /// <summary>SC1: Use-By-Date indicator (not-applicable/checked-OK/expired)</summary>
+        /// <summary>Use-By-Date indicator (not-applicable/checked-OK/expired)</summary>
         [DisplayName("Use By Date")]
         public int CheckUBD {get; set; }
 
@@ -273,57 +676,165 @@ namespace DbWebAPI.Models
         /// <summary>General comment box</summary>
         public string Comment { get; set; }
 
+        /// <summary>Staff signiture of Document amendment</summary>
+        public string Sign { get; set; }
+
         /// <summary>Manger sign-off of completed Document</summary>
         public string SignOff { get; set; }
 
+        /// <summary>Date/Time Manager Signed-Off the Document</summary>
+        [DisplayName("Check Date"), DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime? CheckDate { get; set; }
 
-        /////     Note: *** Future enhancements COMMENTED OUT...
+        /// <summary>
+        /// 
+        ///     DbWebAPI.Models.SCxItem.ApiClient - Xamarin App client interface.
+        ///     Hand coded version. A NSwag generated version is available in project folder DbWebAPI.IClient.
+        ///     
+        /// </summary>
+        public class ApiClient
+        {
+            private static string authorisationKey = string.Empty;
+            private readonly static string ApiBaseUrl = "HTTPS://10.0.2.2:5001/Home/SCxItems/";
+            private HttpClient client;
 
-        ///// <summary>Document Logically Deleted</summary>
-        //public bool SCxDeleted { get; set; }
+            /// <summary>
+            ///     
+            ///     DbWebAPI.Models.SCxItem.ApiClient.GetClient() - Get HTTP client and authorisation key.
+            ///     Login and Get autorisation from the API 
+            ///     
+            /// *** OpenAPI! NOT IMPLEMENTED. Debugging from android emulator...
+            /// 
+            ///     Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+            ///     ...
+            ///     void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+            ///     { // Check for internet access and warn if not connected...
+            ///         if (Connectivity.NetworkAccess == NetworkAccess.None) { ... }
+            ///         else if (Connectivity.NetworkAccess == NetworkAccess.Internet) { ... }
+            ///         else if (Connectivity.NetworkAccess == NetworkAccess.ConstrainedInternet) { ... }
+            ///         else if (Connectivity.NetworkAccess == NetworkAccess.Local) { ... }
+            ///         else if (Connectivity.NetworkAccess == NetworkAccess.Unknown) { ... }
+            ///         bool NetAccess = e.IsConnected;
+            ///     }
+            ///     
+            ///     IOS:
+            ///     To change the default HttpClient handler for Xamarin.iOS, open iOS project's properties. Under the iOS Build tab, there's an HttpClient Implementation option. If you set this option to NSUrlSession, HttpClient uses the native iOS handler without passing it into the constructor.
+            ///     To opt out of App Transport Security, add a new key to your Info.plist file called NSAppTransportSecurity. Inside that dictionary, add another key called NSExceptionDomains.
+            ///     Local debugging - The application must opt-out of ATS specifying a minimum of NSAllowsLocalNetworking
+            /// 
+            ///     ANDROID:
+            ///     To change the default HttpClient handler for Xamarin.Android, open the Android project's properties. Under the Android Options tab, click the Advanced button at the bottom. In the Advanced Android Options dialog, there's an SSL/TLS implementation option.Setting this value to Native TLS 1.2+ makes HttpClient default to using the message handler.
+            ///     To permit cleartext traffic you will need to create a network security configuration. First, you will create a new xml file under Resources/xml named network_security_config.xml. Inside of this file you will add a network-security-config with domain-config settings. The following configuration will enable cleartext traffic to be allowed for a specific domain and for an IP address:
+            ///     public static string BaseAddress = DeviceInfo.Platform == DevicePlatform.Android? "``http://10.0.2.2:5000``" : "``http://localhost:5000``";
+            ///     
+            /// </summary>
+            private async Task<HttpClient> GetClient()
+            {
+                string Url = $"{ApiBaseUrl}/login";
+                var handler = new HttpClientHandler()
+                {
+                    AllowAutoRedirect = false,
+                    UseProxy = true,
+                    AutomaticDecompression = DecompressionMethods.GZip,
+                    Credentials = new NetworkCredential("user", "passwd")
+                };
+                HttpClient client = new HttpClient(handler);
+                if (string.IsNullOrEmpty(authorisationKey))
+                {
+                //    authorisationKey = await client.GetStringAsync(Url + "login");
+                //    authorisationKey = JsonConvert.DeserializeObject<string>(authorisationKey);
+                }
 
-        ///// <summary>Date/Time Document Last Amended</summary>
-        //[DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)] 
-        //public DateTime TimeStampLastUpdate { get; set; } 
+                //client.DefaultRequestHeaders.Add("Authorization", authorisationKey);
+                //client.DefaultRequestHeaders.Add("Accept", "application/json");
+                return client;
+            }
 
-        ///// <summary>Last User to Amended Document</summary>
-        //public string NameLastUpdate { get; set; } 
+            /// <summary>
+            ///     
+            ///     DbWebAPI.Models.SCxItem.ApiClient.AddAsync(item) - Create a new document.
+            ///     HTTP POST operation on SCxItemsController for endpoint "Home/SCxItem/PostSCxItem
+            ///     
+            /// </summary>
+            /// <param name="item">Document to create</param>
+            public async Task<SCxItem> AddAsync(SCxItem? item = null)
+            {
+                string Url = $"{ApiBaseUrl}/PostSCxItem";
+                if (client is null) { client = await GetClient(); }
+                StringContent content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PostAsync(Url, content);
+                return JsonConvert.DeserializeObject<SCxItem>(response.Content.ToString());
+            }
 
-        ///// <summary>Document SubType - n/a, Cook, cool or Reheat (SC3:Cooking Log)</summary>
-        //[DisplayName("Action")]
-        //public double SC3SubType { get; set; }
+            /// <summary>
+            ///     
+            ///     DbWebAPI.Models.SCxItem.ApiClient.GetAsync(id) - Get a document by Id
+            ///     HTTP GET operation on SCxItemsController for endpoint "Home/SCxItem/GetSCxItem/{id}
+            ///     
+            /// </summary>
+            /// <remarks>
+            /// 
+            ///     Not passing the 'id' parameter will cause all SCx Documents to be received.
+            /// 
+            /// </remarks>
+            /// <param name="id">Document Guid to get</param>
+            public async Task<SCxItem> GetAsync(Guid id)
+            {
+                string Url = $"{ApiBaseUrl}/GetSCxItem";
+                if (client is null) { client = await GetClient(); }
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                //StringContent content = new StringContent(JsonConvert.SerializeObject(id), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.GetAsync(Url + "&id=" + id.ToString());
+                return JsonConvert.DeserializeObject<SCxItem>(response.Content.ToString());
+            }
 
-        ///// <summary>SC9: Customer Name</summary>
-        //public string Customer { get; set; }
+            /// <summary>
+            ///     
+            ///     DbWebAPI.Models.SCxItem.ApiClient.SelectDtoAsync(SCxSearchCriteria) - Select a subset of documents in shortend Data Transfer Object form
+            ///     HTTP GET operation on SCxItemsController for endpoint "Home/SCxItem/GetSCxItemsSelectDto
+            ///     
+            /// </summary>
+            /// <param name="SCxSearchItems">Search criteria for item selection</param>
+            public async Task<IList<SCxItem>> SelectDtoAsync(SCxSearchCriteria SCxSearchItems)
+            {
+                string Url = $"{ApiBaseUrl}/GetSCxItemsSelectDto";
+                if (client is null) { client = await GetClient(); }
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                StringContent content = new StringContent(JsonConvert.SerializeObject(SCxSearchItems), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.GetAsync(Url + "&" + content);
+                return JsonConvert.DeserializeObject<IList<SCxItem>>(response.Content.ToString());
+            }
 
-        ///// <summary>SC9: Customer Details</summary>
-        //public string CustomerAddress { get; set; } // Customer table ???
+            /// <summary>
+            ///     
+            ///     DbWebAPI.Models.SCxItem.ApiClient.PutAsync(item) - Update a document.
+            ///     HTTP PUT operation on SCxItemsController for endpoint "Home/SCxItem/PutSCxItem/{id}
+            ///     
+            /// </summary>
+            /// <param name="item">Document to update</param>
+            public async Task PutAsync(SCxItem item)
+            {
+                string Url = $"{ApiBaseUrl}/PutSCxItem";
+                if (client is null) { client = await GetClient(); }
+                StringContent content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.PutAsync(Url, content);
+            }
 
-        ///// <summary>SC9: Food Item Quantity</summary>
-        //[DisplayName("Quantity")]
-        //public int Quantity { get; set; }
-
-
-        ///// <summary>SC4: Food Temperature (+4 Hrs) in Celsius</summary>  
-        //[DisplayName("\u00B0C (+4 Hours)")]
-        //public double TempPlus4 { get; set; }
-
-        ///// <summary>SC4: Food Temperature (+6 Hrs) in Celsius</summary>  
-        //[DisplayName("+6 Hrs\u00B0C "]
-        //public double TempPlus6 { get; set; }
-
-        ///// <summary>Item Accepted/Rejected tick box</summary>
-        //public bool Accepted { get; set; } // can be infered!
-
-        ///// <summary>Staff Name Completion Details</summary>
-        //public string StaffName { get; set; }
-
-        ///// <summary>SC3: Date/Time task completed</summary>
-        //[DataType(DataType.DateTime), DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)] 
-        //public DateTime TimeStampCompleted { get; set; } 
-
-        ///// <summary>SC9: Seperation of Raw or Ready-To-Eat foods boolean</summary>
-        //public bool CheckRawRTE { get; set; }
+            /// <summary>
+            ///     
+            ///     DbWebAPI.Models.SCxItem.ApiClient.DeleteAsync(id) - Delete a document by Id
+            ///     HTTP DELETE operation on SCxItemsController for endpoint "Home/SCxItem/DeleteSCxItem/{id}
+            /// </summary>
+            /// <param name="item">Document to delete</param>
+            public async Task DeleteAsync(SCxItem item)
+            {
+                string Url = $"{ApiBaseUrl}/DeleteSCxItem";
+                if (client is null) { client = await GetClient(); }
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                StringContent content = new StringContent(JsonConvert.SerializeObject(item.Id), Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await client.DeleteAsync(Url + "&id=" + item.Id.ToString());
+            }
+        }
 
         /// <summary>
         ///     DbWebAPI.Models.SCxItem.Initialise();
@@ -558,7 +1069,7 @@ namespace DbWebAPI.Models
                     Id = Guid.NewGuid(),
                     Type = "SC4:",
                     TimeStamp = DateTime.Now.AddDays((double)monthOffset-14),
-                    Dept = "Front-of-House",
+                    Dept = "Front-Of-House",
                     Food = "Pork & Leek Pie",
                     Supplier = "Porkies Pies",
                     CheckUBD = 1,
@@ -570,7 +1081,7 @@ namespace DbWebAPI.Models
                     Id = Guid.NewGuid(),
                     Type = "SC4:",
                     TimeStamp = DateTime.Now.AddDays((double)monthOffset-13),
-                    Dept = "Front-of-House",
+                    Dept = "Front-Of-House",
                     Food = "Beef Wellington",
                     Supplier = "Bob's Bakers",
                     CheckUBD = 1,

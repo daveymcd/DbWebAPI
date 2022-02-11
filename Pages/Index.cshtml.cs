@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 
 namespace DbWebAPI
 {
@@ -99,7 +100,7 @@ namespace DbWebAPI
         ///     </form>
         /// </example>
         /// <param name="column">Column name to sort on</param>
-        public async void OnPostSortAsync(string column)
+        public async Task OnPostSortAsync(string column)
         {
             //sCxItem = await _context.SCxItems.FirstOrDefaultAsync();
             //var typeInfo = sCxItem.GetType();
@@ -171,7 +172,7 @@ namespace DbWebAPI
         ///         <input class="search" type="submit" value="Search" data-toggle="modal" data-target="#popup-modal" data-url="@Url.Page('Index', 'search')" />
         ///     </form>
         /// </example>
-        public async void OnPostSearchAsync()
+        public async Task OnPostSearchAsync()
         {
            sCxItems = SCxSearchParams.SCxSearch(await _context.SCxItems.ToListAsync());
         }
@@ -239,10 +240,8 @@ namespace DbWebAPI
                     var rtn = await _context.SaveChangesAsync();
                     return Partial("_PopupNew", sCxItem);
                 }
-                catch (Exception)
-                {
-                    throw;
-                }
+                catch (DbUpdateConcurrencyException ex) { Debug.WriteLine(ex.Message); throw new DbUpdateConcurrencyException("OnGetCreateAsync: " + ex.Message, ex); }
+                catch (Exception ex) { Debug.WriteLine(ex.Message); throw new NotSupportedException("OnGetCreateAsync: " + ex.Message, ex); }
             }
         }
 
@@ -367,10 +366,8 @@ namespace DbWebAPI
                 {
                     await _context.SaveChangesAsync();
             }
-                catch (DbUpdateConcurrencyException)
-                {
-                    throw;
-                }
+                catch (DbUpdateConcurrencyException ex) { Debug.WriteLine(ex.Message); throw new DbUpdateConcurrencyException("OnGetSaveAsync: " + ex.Message, ex); }
+                catch (Exception ex) { Debug.WriteLine(ex.Message); throw new NotSupportedException("OnGetSaveAsync: " + ex.Message, ex); }
             }
             return Partial("_popupEdit", sCxItem);
         }

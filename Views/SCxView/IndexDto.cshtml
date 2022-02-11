@@ -1,21 +1,21 @@
-﻿@model IEnumerable<DbWebAPI.Models.SCxItem>
+﻿@model IEnumerable<DbWebAPI.Models.SCxItemDto>
 @using DbWebAPI.Helpers;
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "IndexDto";
 }
 @*
-    DbWebAPI.Views.SCxViews.Index.cshtml - MVC Views landing page.
+    DbWebAPI.Views.SCxViews.IndexDto.cshtml - MVC Views All SCx Documents DTO page.
     Browser access to simple CRUD operations (For project documentation & 
     more functionallity, please see Razor Pages).
 *@
 <div>
     <h4 style="float:left;">DbWebAPI - ASP.NET MVC Views</h4>
 </div>
-<div style="padding: 40px 20px 0 20px; text-align: center">
+<div style="padding: 40px 20px 0 20px ; text-align:center">
     <button style="float:right;"
-            onclick="location.href='@Url.Action("IndexDto")'"
-            type="submit" value="&#62;" title="DTO list" class="btn btn-sm btn-primary">
-        &#62;
+            onclick="location.href='@Url.Action("Index")'"
+            type="submit" value="&#60;" title="Back to Home Page" class="btn btn-sm btn-primary">
+        &#60;
     </button>
     <button style="float:right;"
             onclick="location.href='@Url.Action("Create")'"
@@ -45,13 +45,13 @@
             <th>
                 @Html.DisplayNameFor(model => model.Type)
             </th>
-            <th>
+            @*@<th>
                 @Html.DisplayNameFor(model => model.Food)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Supplier)
             </th>
-            @*<th>
+            <th>
                     @Html.DisplayNameFor(model => model.CheckUBD)
                 </th>
                 <th>
@@ -89,13 +89,13 @@
                     @{ var typDesc = DropList.DropListSCx.FirstOrDefault(listEntry => listEntry.Id.ToString() == item.Type).Text; }
                     @Html.Raw(typDesc)
                 </td>
-                <td>
+                @*<td>
                     @Html.DisplayFor(modelItem => item.Food)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Supplier)
                 </td>
-                @*<td>
+                <td>
                         @Html.DisplayFor(modelItem => item.CheckUBD)
                     </td>
                     <td>

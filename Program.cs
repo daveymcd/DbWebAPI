@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using DbWebAPI.Helpers;
+using Microsoft.Extensions.DependencyInjection;
+using DbWebAPI.Models;
+using System.Collections.ObjectModel;
 
 #if ApiConventions
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
@@ -87,6 +90,9 @@ namespace DbWebAPI
     /// </remarks>>
     public class Program
     {
+        /// <summary>DTO subset of all document data</summary>
+        public static ObservableCollection<SCxItemDto> SCxItemsDto { get; set; }
+
         /// <summary>API Entry Point</summary>
         public static void Main(string[] args)
         {
@@ -104,11 +110,35 @@ namespace DbWebAPI
             config.AddRuleForOneLevel(NLog.LogLevel.Warn, fileTarget);
             config.AddRuleForOneLevel(NLog.LogLevel.Error, fileTarget);
             config.AddRuleForOneLevel(NLog.LogLevel.Fatal, fileTarget);
+            config.AddRuleForOneLevel(NLog.LogLevel.Info, fileTarget);
+            config.AddRuleForOneLevel(NLog.LogLevel.Debug, fileTarget);
+            config.AddRuleForOneLevel(NLog.LogLevel.Trace, fileTarget);
             LogManager.Configuration = config;
 
             //MessageHandler.DebugLog("Starting", true);
 
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+            CreateDbIfNotExists(host);
+            host.Run();
+        }
+
+        private static void CreateDbIfNotExists(IHost host)
+        {
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var context = services.GetRequiredService<SCxItemContext>();
+                    Data.DbInitializer.Initialize(context);
+                    SCxItemsDto = Data.DbInitializer.SqlLoadItemsDtoAsync(context).Result;        // Load DTO of SC1 - SC9
+                }
+                catch (Exception ex)
+                {
+                    var logger = services.GetRequiredService<ILogger<Program>>();
+                    logger.LogError(ex, "An error occurred creating the DB.");
+                }
+            }
         }
 
         /// <summary>Startup Web Service</summary>

@@ -27,7 +27,7 @@
             <summary>API Error Page</summary>
         </member>
         <member name="T:DbWebAPI.Controllers.SCxItemsController">
-            <summary>
+            <summary> 
             
                 DbWebApi.Controllers.SCxItemsController - Database Web Open API Controller
                 
@@ -43,71 +43,212 @@
                 
                 * SCxItem.cs is the document archive Class, holding the Food Hygiene Document data. 
                   Each Documents is TimeStamped and Typed. 
-                
+                  
+                * SCxItemDto is the document archive DTO Class, holding a document subset of...
+                    Id 
+                    TimeStamp 
+                    Type 
+                    Dept
+                  
             </remarks>
+        </member>
+        <member name="P:DbWebAPI.Controllers.SCxItemsController.ArchiveItemsDto">
+            <summary>Document Archive List returned to caller</summary>
+        </member>
+        <member name="P:DbWebAPI.Controllers.SCxItemsController.SCxItemsDto">
+            <summary>DTO subset of all document data</summary>
         </member>
         <member name="M:DbWebAPI.Controllers.SCxItemsController.#ctor(DbWebAPI.Models.SCxItemContext)">
             <summary>
+                DbWebAPI.Controllers.SCxItemContext
                 This method gets called by the runtime and configures the Database context.
             </summary>
+            <param name="context">Database set</param>
         </member>
-        <member name="M:DbWebAPI.Controllers.SCxItemsController.GetSCxItemsAsync">
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.GetSCxItemsAsync(DbWebAPI.Models.SCxItemDto)">
             <summary>
-                GET: SCxItems/GetSCxItemsAsync - Get all. 
-                HTTP get request endpoint. This method responds with all SCx Document data.
+                DbWebAPI.Controllers.GetSCxItemsAsync
+                GET: SCxItems/GetSCxItemsAsync 
+                HTTP get all documents request endpoint. 
+                This method responds with all SCx Document data.
             </summary>
         </member>
-        <member name="M:DbWebAPI.Controllers.SCxItemsController.GetSCxItemAsync(System.Guid)">
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.GetSCxItemAsync(DbWebAPI.Models.SCxItemDto)">
             <summary>
-                GET: SCxItems/GetSCxItemAsync/5 - Get by Id.
-                HTTP get by id request endpoint. This method responds with single SCx Document data.
+                DbWebAPI.Controllers.GetSCxItemAsync (override)
+                GET: SCxItems/GetSCxItemAsync 
+                HTTP get by id request endpoint. 
+                This method responds with single SCx Document data.
             </summary>
-            <param name="id">Document Id</param>
+            <param name="scxItemDto">Document Dto</param>
         </member>
-        <member name="M:DbWebAPI.Controllers.SCxItemsController.GetSCxItemsSelectAsync(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.String,System.String,System.String,System.Nullable{System.Int32},System.String)">
-            <summary>
-                GET: SCxItems/GetSCxItemsSelectAsync - Select entries.
-                HTTP get by selection request endpoint. This method responds with selected SCx Documents.
-            </summary>
-            <param name="SearchFromTimeStamp">Search start Date/Time</param>
-            <param name="SearchToTimeStamp">Search end Date/Time</param>
-            <param name="Type">Document Type</param>
-            <param name="Dept">Catering Department</param>
-            <param name="Supplier">Supplier Name</param>
-            <param name="CheckUBD">Use-By-Date status</param>
-            <param name="SignOff">Supervisor sign off</param>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.GetSCxItemsSelectAsync(DbWebAPI.Models.SCxItemDto)">
+            <param name="scxItemDto">Document selection criteria</param>
         </member>
         <member name="M:DbWebAPI.Controllers.SCxItemsController.GetSCxItemsSelectDtoAsync(System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.String,System.String)">
             <summary>
-                GET: SCxItems/GetSCxItemsSelectDtoAsync - select entries DTO.
-                HTTP get by selection request endpoint. This method responds with a Data Transfer Object subset of selected SCx Document data.
+                DbWebAPI.Controllers.GetSCxItemsSelectDtoAsync
+                GET: SCxItems/GetSCxItemsSelectDtoAsync
+                HTTP get subset of document data by selection request endpoint. 
+                This method responds with a Data Transfer Object subset of selected SCx Document data.
             </summary>
             <param name="SearchFromTimeStamp">Search Start Date/Time</param>
             <param name="SearchToTimeStamp">Search End Date/Time</param>
             <param name="Type">Document Type</param>
             <param name="Dept">Department</param>
         </member>
-        <member name="M:DbWebAPI.Controllers.SCxItemsController.PutSCxItemAsync(System.Guid,DbWebAPI.Models.SCxItem)">
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.GetArchiveDtoAsync(DbWebAPI.Models.SCxItemDto,System.String)">
             <summary>
-                PUT: SCxItem/PutSCxItemAsync/5 - update by Id.
-                HTTP Put by id request endpoint. This method responds by updating a single SCx Document.
+                DbWebAPI.Controllers.GetArchiveDtoAsync
+                GET: SCxItems/GetArchiveDtoAsync
+                HTTP get Archive 'Data Transfer Object' request endpoint. 
+                This method responds with a selected subset of document archival data.
+                
+                The DTO is used to transfer the archive date based structure (year/month/day folders), 
+                without any document detail (used by calling program to create a folder based display of archive).
             </summary>
-            <param name="id">Document Id</param>
-            <param name="sCxItem">Document</param>
+            <remarks>
+                This Endpoint retrieves the minimum amount of document data to allow the App to display the document folder structure.
+                This results in the lightest payload possible over HTTP:
+                
+                    Period = Years  - results in one archive DTO for each year of archival material
+                    Period = Months - results in one archive DTO for each month of archival material for the year specified by sCxItem.TimeStamp
+                    Period = Days   - results in one archive DTO for each day of archival material for the year and month specified by sCxItem.TimeStamp
+                    Period = Day    - results in one archive DTO for each department's archival material for the year, month and day specified by sCxItem.TimeStamp
+                    Period = All    - results in all of the above
+                    
+            </remarks>
+            <param name="scxItemDto">Document buffer contains additional selection critera (Search Start Date/Time, Dept). Default is Today.</param>
+            <param name="Period">Period data should be returned for - 'All', 'Years', 'Months'. 'Days' or 'Day'. Default is "All"</param>
         </member>
-        <member name="M:DbWebAPI.Controllers.SCxItemsController.PostSCxItemAsync(DbWebAPI.Models.SCxItem)">
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.PutSC1ItemAsync(DbWebAPI.Models.SC1Item)">
             <summary>
-                POST: SCxItems/PostSCxItemAsync - create SCxItem.
-                HTTP Post request endpoint. This method responds by creating a new SCx Document.
+                DbWebAPI.Controllers.PutSC1ItemAsync
+                PUT: SCxItem/PutSC1ItemAsync
+                HTTP Put by Id request endpoint. 
+                This method responds by updating a single Document.
             </summary>
-            <param name="sCxItem">Document</param>
+            <param name="item">Document</param>
         </member>
-        <member name="M:DbWebAPI.Controllers.SCxItemsController.DeleteSCxItemAsync(System.Guid)">
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.PutSC2ItemAsync(DbWebAPI.Models.SC2Item)">
             <summary>
-                DELETE: SCxItems/DeleteSCxItemAsync/5 - delete by Id.
-                HTTP Delete by id request endpoint. This method responds by deleting a single SCx Document.
+                DbWebAPI.Controllers.PutSC2ItemAsync
+                PUT: SCxItem/PutSC2ItemAsync
+                HTTP Put by Id request endpoint. 
+                This method responds by updating a single Document.
             </summary>
-            <param name="id">Document Id</param>
+            <param name="item">Document</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.PutSC3ItemAsync(DbWebAPI.Models.SC3Item)">
+            <summary>
+                DbWebAPI.Controllers.PutSC3ItemAsync
+                PUT: SCxItem/PutSC3ItemAsync
+                HTTP Put by Id request endpoint. 
+                This method responds by updating a single Document.
+            </summary>
+            <param name="item">Document</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.PutSC4ItemAsync(DbWebAPI.Models.SC4Item)">
+            <summary>
+                DbWebAPI.Controllers.PutSC4ItemAsync
+                PUT: SCxItem/PutSC4ItemAsync
+                HTTP Put by Id request endpoint. 
+                This method responds by updating a single Document.
+            </summary>
+            <param name="item">Document</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.PutSC9ItemAsync(DbWebAPI.Models.SC9Item)">
+            <summary>
+                DbWebAPI.Controllers.PutSC9ItemAsync
+                PUT: SCxItem/PutSC9ItemAsync
+                HTTP Put by Id request endpoint. 
+                This method responds by updating a single Document.
+            </summary>
+            <param name="item">Document</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.PostSC1ItemAsync(DbWebAPI.Models.SC1Item)">
+            <summary>
+                DbWebAPI.Controllers.PostSC1ItemAsync
+                POST: SCxItems/PostSC1ItemAsync
+                HTTP Post SC1 data request endpoint. 
+                This method responds by creating a new SCx Document.
+            </summary>
+            <param name="item">Document</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.PostSC2ItemAsync(DbWebAPI.Models.SC2Item)">
+            <summary>
+                DbWebAPI.Controllers.PostSC2ItemAsync (override)
+                POST: SCxItems/PostSC2ItemAsync
+                HTTP Post SC2 data request endpoint. 
+                This method responds by creating a new SCx Document.
+            </summary>
+            <param name="item">Document</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.PostSC3ItemAsync(DbWebAPI.Models.SC3Item)">
+            <summary>
+                DbWebAPI.Controllers.PostSC3ItemAsync (override)
+                POST: SCxItems/PostSC3ItemAsync
+                HTTP Post SC3 data request endpoint. 
+                This method responds by creating a new SCx Document.
+            </summary>
+            <param name="item">Document</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.PostSC4ItemAsync(DbWebAPI.Models.SC4Item)">
+            <summary>
+                DbWebAPI.Controllers.PostSC4ItemAsync (override)
+                POST: SCxItems/PostSC4ItemAsync
+                HTTP Post SC4 data request endpoint. 
+                This method responds by creating a new SCx Document.
+            </summary>
+            <param name="item">Document</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.PostSC9ItemAsync(DbWebAPI.Models.SC9Item)">
+            <summary>
+                DbWebAPI.Controllers.PostSC9ItemAsync (override)
+                POST: SCxItems/PostSC9ItemAsync
+                HTTP Post SC9 data request endpoint. 
+                This method responds by creating a new SCx Document.
+            </summary>
+            <param name="item">Document</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.DeleteSCxItemAsync(DbWebAPI.Models.SCxItemDto)">
+            <summary>
+                DbWebAPI.Controllers.DeleteSCxItemAsync
+                DELETE: SCxItems/DeleteSCxItemAsync/5
+                HTTP Delete by id request endpoint. 
+                This method responds by deleting a single SCx Document.
+            </summary>
+            <param name="scxItemDto">Document DTO</param>
+        </member>
+        <member name="T:DbWebAPI.Controllers.SCxItemsController.Grouping`2">
+            <summary>
+                DbWebAPI.Controllers.Grouping
+                Grouping Class - Grouping fuctionallity for sort
+            </summary>
+            <typeparam name="K"></typeparam>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.Grouping`2.#ctor(`0,System.Collections.Generic.IEnumerable{`1})">
+            <summary>
+                Grouping - Group Documents together.
+            </summary>
+            <param name="key">Sort Key</param>
+            <param name="items">Document list</param>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxItemsController.SqlLoadSCxItemsAsync(DbWebAPI.Models.SCxItemContext,DbWebAPI.Models.SCxItemDto)">
+            <summary>
+                DbWebAPI.Controllers.SqlLoadSCxItemsAsync
+                Loads all Document data from the selected document table (SC1 - SC9).
+                Called by SCxItemsController.GetSCxItemsSelectAsync 
+            </summary>
+            <remarks>
+                Uses a SQL select query to select rows from the specified table (SC1 - SC9). 
+                    
+                The ArchiveItemsDto data that will be sorted into 
+                year/month/day/dept/Type.
+            </remarks>
+            <param name="_context">Database set</param>
+            <param name="scxItemDto">SCxItem DTO used as parameters for selection criteria</param>
         </member>
         <member name="T:DbWebAPI.Controllers.SCxViewController">
             <summary>
@@ -137,6 +278,12 @@
             <summary>
                 GET: SCxItems - Get all. 
                 This method returns all SCx Document data to the Index View.
+            </summary>
+        </member>
+        <member name="M:DbWebAPI.Controllers.SCxViewController.IndexDto">
+            <summary>
+                GET: SCxItemsDto - Get all. 
+                This method returns Document DTO data (SC1 - SC9) to the Index View.
             </summary>
         </member>
         <member name="M:DbWebAPI.Controllers.SCxViewController.Details(System.Guid)">
@@ -187,6 +334,85 @@
                 This method deletes a single SCx Document.
             </summary>
             <param name="id">Document Id</param>
+        </member>
+        <member name="T:DbWebAPI.Data.DbInitializer">
+            <summary>
+            
+                DbWebAPI.Data - SCx Test Data Class
+                
+                Setup the SCxDb Database with test data.
+            </summary>
+            <remarks>
+            
+                Called from DbWebApi.Program.cs.CreateDbIfNotExists(IHost)
+                to setup the SQL Server database context.
+                
+            </remarks>
+        </member>
+        <member name="M:DbWebAPI.Data.DbInitializer.Initialize(DbWebAPI.Models.SCxItemContext)">
+            <summary>
+                DbWebAPI.Data.DbInitializer.Initialise
+                
+                Called by DbWebAPI.Program
+                Invoke DbWebAPI.Models.OnModelCreating to associate Tables.
+                and add test archive data to SCxDb database 
+            </summary>
+            <param name="context">DbContext service for SQL Server database</param>
+        </member>
+        <member name="M:DbWebAPI.Data.DbInitializer.AddThisMonthsSCxData(DbWebAPI.Models.SCxItemContext,System.Nullable{System.Double})">
+            <summary>
+                DbWebAPI.Data.DbInitializer.AddThisMonthsSCxData
+                
+                Called by DbWebAPI.Data.DbInitializer.Initialize
+                Add a months worth of test archive data to SCxDb database 
+                Method can be repeated any number of times to create years 
+                worth of data.    
+            </summary>
+            <param name="context">DbContext Service for SQL Server Database</param>
+            <param name="monthOffset">month offset from current month, to setup data for</param>
+            <returns></returns>
+        </member>
+        <member name="M:DbWebAPI.Data.DbInitializer.AddThisWeeksSCxData(DbWebAPI.Models.SCxItemContext,System.Nullable{System.Double})">
+            <summary> 
+                 DbWebAPI.Data.DbInitializer.AddThisWeeksSCxData
+                 
+                 Called by DbWebAPI.Data.DbInitializer.AddThisMonthsSCxData
+                 to setup 'Last week of the month' test archive data 
+            </summary>
+            <param name="context">DbContext service for SQL Server database</param>
+            <param name="monthOffset">Month offset (from current Month) to set data up for</param>
+        </member>
+        <member name="M:DbWebAPI.Data.DbInitializer.AddTodaysSCxData(DbWebAPI.Models.SCxItemContext,System.Nullable{System.Double})">
+            <summary> 
+                 DbWebAPI.Data.DbInitializer.AddTodaysSCxData
+                 
+                 Called by DbWebAPI.Data.DbInitialiser.Initialize
+                 to setup 'Last day of the month' test archive data 
+            </summary>
+            <param name="context">DbContext service for SQL Server database</param>
+            <param name="monthOffset">Month offset (from current Month) to set data up for</param>
+        </member>
+        <member name="M:DbWebAPI.Data.DbInitializer.SqlLoadItemsDtoAsync(DbWebAPI.Models.SCxItemContext)">
+            <summary>
+                DbWebAPI.Controllers.SqlLoadItemsDtoAsync
+                Loads a 'Data Transfer Object' subset of all Document data.
+                Called by SCxItemsController.GetArchiveDtoAsync 
+            </summary>
+            <remarks>
+                Uses a SQL sub-select query to merge all the document data 
+                (SC1 - SC9) into a 'ArchiveItemsDto' which consists of 
+                the following columns...
+                
+                    Id
+                    TimeStamp
+                    Type
+                    Dept. 
+                    
+                The ArchiveItemsDto data that will be sorted into 
+                year/month/day/dept/Type and is ultimately passed back to  
+                the calling APP to create the archive folders layout.
+            </remarks>
+            <param name="_context">Database set</param>
         </member>
         <member name="T:DbWebAPI.Helpers.DropList">
             <summary> General Helper Class </summary>
@@ -243,7 +469,7 @@
                 
             </summary>
         </member>
-        <member name="M:DbWebAPI.Helpers.MessageHandler.MessageLog(System.String,System.String)">
+        <member name="M:DbWebAPI.Helpers.MessageHandler.MessageLog(System.String,System.String,System.String,System.String,System.String,System.Int32)">
             <summary>
             
                 Helpers.MessageHandler.MessageLog(string, string)
@@ -258,10 +484,14 @@
                 
             </remarks>
             <example>
-                Helpers.MessageLog("Exception Name or Message", "Nlog");
+                Helpers.MessageLog("Exception Name or Message", "Trace", "Nlog");
             </example>
             <param name="exceptionMsg">Exeption Name</param>
             <param name="logService">Nlog or EventLog</param>
+            <param name="messageType">Debug/Info/Log/Trace/Warn/Error or Fatal</param>
+            <param name="memberName">Calling Method Name</param>
+            <param name="fileName">File that Method is defined in</param>
+            <param name="lineNumber">File Line Number call made from</param>
         </member>
         <member name="M:DbWebAPI.Helpers.MessageHandler.DebugLog(System.String,System.Boolean,System.String,System.String,System.Int32)">
             <summary>
@@ -281,8 +511,8 @@
             </example>
             <param name="msgBody">Main Message</param>
             <param name="fullTrace">Full Trace History of just calling method name</param>
-            <param name="memberName">Method Name</param>
-            <param name="fileName">File Method defined in</param>
+            <param name="memberName">Calling Method Name</param>
+            <param name="fileName">File that Method is defined in</param>
             <param name="lineNumber">File Line Number call made from</param>
         </member>
         <member name="T:DbWebAPI.Models.ErrorViewModel">
@@ -331,10 +561,17 @@
             <summary>Date of transaction</summary>
         </member>
         <member name="P:DbWebAPI.Models.SCxItemDto.Type">
-            <summary>Document type SC1: - SC9:</summary>
+            <summary>Document type SC1 - SC9</summary>
         </member>
         <member name="P:DbWebAPI.Models.SCxItemDto.Dept">
             <summary>Catering Department (Kitchen, Prep-area, Stores etc)</summary>
+        </member>
+        <member name="M:DbWebAPI.Models.SCxItemDto.Initialise(DbWebAPI.Models.SCxItemDto)">
+            <summary>
+                DbWebAPI.Models.SCxItem.Initialise();
+                On Creation of an SCxItem, any uninitialised data will be given default value.
+            </summary>
+            <param name="item">Document to initialise</param>
         </member>
         <member name="T:DbWebAPI.Models.SCxSearchCriteria">
             <summary>
@@ -422,7 +659,7 @@
             </example>
             <param name="sCxSearchItems">List of documents to search</param>
         </member>
-        <member name="T:DbWebAPI.Models.SCxItem">
+        <member name="T:DbWebAPI.Models.SC1Item">
              <summary>
              
                  DbWebAPI.Models.SCxItem - SCx Documents Data Model
@@ -460,6 +697,269 @@
              </remarks>
             
         </member>
+        <member name="P:DbWebAPI.Models.SC1Item.Id">
+            <summary>
+                Guid Unique Key
+            </summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC1Item.TimeStamp">
+            <summary>Date/Time Document Created</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC1Item.Type">
+            <summary>SCx Document Type (SC1 - SC9)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC1Item.Dept">
+            <summary>Catering department (Kitchen, Prep-area, Stores etc)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC1Item.Food">
+            <summary>Food type</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC1Item.Supplier">
+            <summary>Stock Supplier Name</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC1Item.CheckUBD">
+            <summary>Use-By-Date indicator (not-applicable/checked-OK/expired)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC1Item.Temperature">
+            <summary>Food Temperature in Celsius</summary>  
+        </member>
+        <member name="P:DbWebAPI.Models.SC1Item.Comment">
+            <summary>General comment box</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC1Item.Sign">
+            <summary>Staff signiture of Document amendment</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC1Item.SignOff">
+            <summary>Manger Check sign-off of completed Document</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC1Item.CheckDate">
+            <summary>Date/Time Manager Signed-Off the Document</summary>
+        </member>
+        <member name="M:DbWebAPI.Models.SC1Item.Initialise(DbWebAPI.Models.SC1Item)">
+            <summary>
+                DbWebAPI.Models.SC1Item.Initialise();
+                On Creation of a Document, any uninitialised data will be given default value.
+            </summary>
+            <param name="item">Document to initialise</param>
+        </member>
+        <member name="T:DbWebAPI.Models.SC2Item">
+            <summary>
+                SC2: Chiller Checks
+            </summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC2Item.Id">
+            <summary>Guid Unique Key</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC2Item.TimeStamp">
+            <summary>Date/Time Document Created</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC2Item.Type">
+            <summary>SCx Document Type (SC1 - SC9)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC2Item.Dept">
+            <summary>Catering department (Kitchen, Prep-area, Stores etc)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC2Item.Temperature">
+            <summary>Food Temperature in Celsius</summary>  
+        </member>
+        <member name="P:DbWebAPI.Models.SC2Item.Comment">
+            <summary>General comment box</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC2Item.Sign">
+            <summary>Staff signiture of Document amendment</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC2Item.SignOff">
+            <summary>Manger Check sign-off of completed Document</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC2Item.CheckDate">
+            <summary>Date/Time Manager Signed-Off the Document</summary>
+        </member>
+        <member name="M:DbWebAPI.Models.SC2Item.Initialise(DbWebAPI.Models.SC2Item)">
+            <summary>
+                DbWebAPI.Models.SC2Item.Initialise();
+                On Creation of a Document, any uninitialised data will be given default value.
+            </summary>
+            <param name="item">Document to initialise</param>
+        </member>
+        <member name="T:DbWebAPI.Models.SC3Item">
+            <summary>
+                SC3: Cooking Log
+            </summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.Id">
+            <summary>Guid Unique Key</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.TimeStamp">
+            <summary>Date/Time Document Created</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.Type">
+            <summary>SCx Document Type (SC1 - SC9)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.Dept">
+            <summary>Catering department (Kitchen, Prep-area, Stores etc)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.Food">
+            <summary>Food type</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.CookStart">
+            <summary>Date/Time Cooking began</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.CookEnd">
+            <summary>Date/Time Cooking Ended</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.CookTemp">
+            <summary>Food Temperature in Celsius</summary>  
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.CookSign">
+            <summary>Staff Signature</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.CoolStart">
+            <summary>Date/Time Into Cooler</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.CoolTemp">
+            <summary>Food Temperature in Celsius</summary>  
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.CoolSign">
+            <summary>Staff Signature</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.ReheatStart">
+            <summary>Date/Time Reheating began</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.ReheatTemp">
+            <summary>Food Temperature in Celsius</summary>  
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.ReheatSign">
+            <summary>Staff Signature</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.Comment">
+            <summary>General comment box</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.SignOff">
+            <summary>Manger Check sign-off of completed Document</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC3Item.CheckDate">
+            <summary>Date/Time Manager Signed-Off the Document</summary>
+        </member>
+        <member name="M:DbWebAPI.Models.SC3Item.Initialise(DbWebAPI.Models.SC3Item)">
+            <summary>
+                DbWebAPI.Models.SC3Item.Initialise();
+                On Creation of a Document, any uninitialised data will be given default value.
+            </summary>
+            <param name="item">Document to initialise</param>
+        </member>
+        <member name="T:DbWebAPI.Models.SC4Item">
+            <summary>
+               SC4: Hot Holding
+            </summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC4Item.Id">
+            <summary>Guid Unique Key</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC4Item.TimeStamp">
+            <summary>Date/Time Document Created</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC4Item.Type">
+            <summary>SCx Document Type (SC1 - SC9)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC4Item.Dept">
+            <summary>Catering department (Kitchen, Prep-area, Stores etc)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC4Item.Food">
+            <summary>Food type</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC4Item.HoldTemp2">
+            <summary>Food Temperature after 2hrs in Celsius</summary>  
+        </member>
+        <member name="P:DbWebAPI.Models.SC4Item.HoldTemp4">
+            <summary>Food Temperature after 4hrs in Celsius</summary>  
+        </member>
+        <member name="P:DbWebAPI.Models.SC4Item.HoldTemp6">
+            <summary>Food Temperature after 6hrs in Celsius</summary>  
+        </member>
+        <member name="P:DbWebAPI.Models.SC4Item.Comment">
+            <summary>General comment box</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC4Item.Sign">
+            <summary>Staff signiture of Document amendment</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC4Item.SignOff">
+            <summary>Manger Check sign-off of completed Document</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC4Item.CheckDate">
+            <summary>Date/Time Manager Signed-Off the Document</summary>
+        </member>
+        <member name="M:DbWebAPI.Models.SC4Item.Initialise(DbWebAPI.Models.SC4Item)">
+            <summary>
+                DbWebAPI.Models.SC4Item.Initialise();
+                On Creation of a Document, any uninitialised data will be given default value.
+            </summary>
+            <param name="item">Document to initialise</param>
+        </member>
+        <member name="T:DbWebAPI.Models.SC9Item">
+            <summary>
+               SC9: Deliveries Out
+            </summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.Id">
+            <summary>Guid Unique Key</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.TimeStamp">
+            <summary>Date/Time Document Created</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.Type">
+            <summary>SCx Document Type (SC1 - SC9)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.Dept">
+            <summary>Catering department (Kitchen, Prep-area, Stores etc)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.Food">
+            <summary>Food type</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.Quantity">
+            <summary>Quantity Delivered</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.Batch">
+            <summary>Stock Batch Number</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.CheckUBD">
+            <summary>Use-By-Date indicator (not-applicable/checked-OK/expired)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.CustName">
+            <summary>Customer Name</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.CustAddr">
+            <summary>Customer Address</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.Temperature">
+            <summary>Food Temperature in Celsius</summary>  
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.CheckRawRTE">
+            <summary>Seperation of Raw or Ready-To-Eat foods boolean</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.Comment">
+            <summary>General comment box</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.Sign">
+            <summary>Staff signiture of Document amendment</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.SignOff">
+            <summary>Manger Check sign-off of completed Document</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SC9Item.CheckDate">
+            <summary>Date/Time Manager Signed-Off the Document</summary>
+        </member>
+        <member name="M:DbWebAPI.Models.SC9Item.Initialise(DbWebAPI.Models.SC9Item)">
+            <summary>
+                DbWebAPI.Models.SC9Item.Initialise();
+                On Creation of a Document, any uninitialised data will be given default value.
+            </summary>
+            <param name="item">Document to initialise</param>
+        </member>
+        <member name="T:DbWebAPI.Models.SCxItem">
+            <summary>
+                Redundant
+            </summary>
+        </member>
         <member name="P:DbWebAPI.Models.SCxItem.Id">
             <summary>Guid Unique Key</summary>
         </member>
@@ -476,10 +976,10 @@
             <summary>Food type</summary>
         </member>
         <member name="P:DbWebAPI.Models.SCxItem.Supplier">
-            <summary>SC1: Stock Supplier Name</summary>
+            <summary>Stock Supplier Name</summary>
         </member>
         <member name="P:DbWebAPI.Models.SCxItem.CheckUBD">
-            <summary>SC1: Use-By-Date indicator (not-applicable/checked-OK/expired)</summary>
+            <summary>Use-By-Date indicator (not-applicable/checked-OK/expired)</summary>
         </member>
         <member name="P:DbWebAPI.Models.SCxItem.Temperature">
             <summary>Food Temperature in Celsius</summary>  
@@ -487,8 +987,103 @@
         <member name="P:DbWebAPI.Models.SCxItem.Comment">
             <summary>General comment box</summary>
         </member>
+        <member name="P:DbWebAPI.Models.SCxItem.Sign">
+            <summary>Staff signiture of Document amendment</summary>
+        </member>
         <member name="P:DbWebAPI.Models.SCxItem.SignOff">
             <summary>Manger sign-off of completed Document</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItem.CheckDate">
+            <summary>Date/Time Manager Signed-Off the Document</summary>
+        </member>
+        <member name="T:DbWebAPI.Models.SCxItem.ApiClient">
+            <summary>
+            
+                DbWebAPI.Models.SCxItem.ApiClient - Xamarin App client interface.
+                Hand coded version. A NSwag generated version is available in project folder DbWebAPI.IClient.
+                
+            </summary>
+        </member>
+        <member name="M:DbWebAPI.Models.SCxItem.ApiClient.GetClient">
+            <summary>
+                
+                DbWebAPI.Models.SCxItem.ApiClient.GetClient() - Get HTTP client and authorisation key.
+                Login and Get autorisation from the API 
+                
+            *** OpenAPI! NOT IMPLEMENTED. Debugging from android emulator...
+            
+                Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+                ...
+                void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+                { // Check for internet access and warn if not connected...
+                    if (Connectivity.NetworkAccess == NetworkAccess.None) { ... }
+                    else if (Connectivity.NetworkAccess == NetworkAccess.Internet) { ... }
+                    else if (Connectivity.NetworkAccess == NetworkAccess.ConstrainedInternet) { ... }
+                    else if (Connectivity.NetworkAccess == NetworkAccess.Local) { ... }
+                    else if (Connectivity.NetworkAccess == NetworkAccess.Unknown) { ... }
+                    bool NetAccess = e.IsConnected;
+                }
+                
+                IOS:
+                To change the default HttpClient handler for Xamarin.iOS, open iOS project's properties. Under the iOS Build tab, there's an HttpClient Implementation option. If you set this option to NSUrlSession, HttpClient uses the native iOS handler without passing it into the constructor.
+                To opt out of App Transport Security, add a new key to your Info.plist file called NSAppTransportSecurity. Inside that dictionary, add another key called NSExceptionDomains.
+                Local debugging - The application must opt-out of ATS specifying a minimum of NSAllowsLocalNetworking
+            
+                ANDROID:
+                To change the default HttpClient handler for Xamarin.Android, open the Android project's properties. Under the Android Options tab, click the Advanced button at the bottom. In the Advanced Android Options dialog, there's an SSL/TLS implementation option.Setting this value to Native TLS 1.2+ makes HttpClient default to using the message handler.
+                To permit cleartext traffic you will need to create a network security configuration. First, you will create a new xml file under Resources/xml named network_security_config.xml. Inside of this file you will add a network-security-config with domain-config settings. The following configuration will enable cleartext traffic to be allowed for a specific domain and for an IP address:
+                public static string BaseAddress = DeviceInfo.Platform == DevicePlatform.Android? "``http://10.0.2.2:5000``" : "``http://localhost:5000``";
+                
+            </summary>
+        </member>
+        <member name="M:DbWebAPI.Models.SCxItem.ApiClient.AddAsync(DbWebAPI.Models.SCxItem)">
+            <summary>
+                
+                DbWebAPI.Models.SCxItem.ApiClient.AddAsync(item) - Create a new document.
+                HTTP POST operation on SCxItemsController for endpoint "Home/SCxItem/PostSCxItem
+                
+            </summary>
+            <param name="item">Document to create</param>
+        </member>
+        <member name="M:DbWebAPI.Models.SCxItem.ApiClient.GetAsync(System.Guid)">
+            <summary>
+                
+                DbWebAPI.Models.SCxItem.ApiClient.GetAsync(id) - Get a document by Id
+                HTTP GET operation on SCxItemsController for endpoint "Home/SCxItem/GetSCxItem/{id}
+                
+            </summary>
+            <remarks>
+            
+                Not passing the 'id' parameter will cause all SCx Documents to be received.
+            
+            </remarks>
+            <param name="id">Document Guid to get</param>
+        </member>
+        <member name="M:DbWebAPI.Models.SCxItem.ApiClient.SelectDtoAsync(DbWebAPI.Models.SCxSearchCriteria)">
+            <summary>
+                
+                DbWebAPI.Models.SCxItem.ApiClient.SelectDtoAsync(SCxSearchCriteria) - Select a subset of documents in shortend Data Transfer Object form
+                HTTP GET operation on SCxItemsController for endpoint "Home/SCxItem/GetSCxItemsSelectDto
+                
+            </summary>
+            <param name="SCxSearchItems">Search criteria for item selection</param>
+        </member>
+        <member name="M:DbWebAPI.Models.SCxItem.ApiClient.PutAsync(DbWebAPI.Models.SCxItem)">
+            <summary>
+                
+                DbWebAPI.Models.SCxItem.ApiClient.PutAsync(item) - Update a document.
+                HTTP PUT operation on SCxItemsController for endpoint "Home/SCxItem/PutSCxItem/{id}
+                
+            </summary>
+            <param name="item">Document to update</param>
+        </member>
+        <member name="M:DbWebAPI.Models.SCxItem.ApiClient.DeleteAsync(DbWebAPI.Models.SCxItem)">
+            <summary>
+                
+                DbWebAPI.Models.SCxItem.ApiClient.DeleteAsync(id) - Delete a document by Id
+                HTTP DELETE operation on SCxItemsController for endpoint "Home/SCxItem/DeleteSCxItem/{id}
+            </summary>
+            <param name="item">Document to delete</param>
         </member>
         <member name="M:DbWebAPI.Models.SCxItem.Initialise(DbWebAPI.Models.SCxItem)">
             <summary>
@@ -506,6 +1101,9 @@
         <member name="T:DbWebAPI.Models.SCxItemContext">
             <summary>
                 DbWebAPI.Models.SCxItemContext - DbContext
+                
+                Setup the SQL Server database context for the API.
+                Called from DbWebApi.Startup.cs
             </summary>
         </member>
         <member name="M:DbWebAPI.Models.SCxItemContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{DbWebAPI.Models.SCxItemContext})">
@@ -514,9 +1112,31 @@
             </summary>
         </member>
         <member name="P:DbWebAPI.Models.SCxItemContext.SCxItems">
+            <summary>DbWebAPI.Models.SCxItems - Document List (IList of SCxItem)</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItemContext.SC1Items">
+            <summary>SC1: Deliveries In Documents</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItemContext.SC2Items">
+            <summary>SC2: Cooler Checks Documents</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItemContext.SC3Items">
+            <summary>SC3: Cooking Log Documents</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItemContext.SC4Items">
+            <summary>SC4: Hot Holding Documents</summary>
+        </member>
+        <member name="P:DbWebAPI.Models.SCxItemContext.SC9Items">
+            <summary>SC9: Deliveries Out Documents</summary>
+        </member>
+        <member name="M:DbWebAPI.Models.SCxItemContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
-                DbWebAPI.Models.SCxItems - Document List (IList of SCxItem)
+                DbWebAPI.Models.OnModelCreating (override)
+                
+                Invoked by EnsureCreated() call in DbWebAPI.Data.DbInitializer.Initialize()
+                Equate SCx Item to its Database table.
             </summary>
+            <param name="modelBuilder">Context Model</param>
         </member>
         <member name="T:DbWebAPI.IndexModel">
             <summary>
@@ -884,6 +1504,9 @@
              
              </remarks>>
         </member>
+        <member name="P:DbWebAPI.Program.SCxItemsDto">
+            <summary>DTO subset of all document data</summary>
+        </member>
         <member name="M:DbWebAPI.Program.Main(System.String[])">
             <summary>API Entry Point</summary>
         </member>
@@ -916,6 +1539,177 @@
         </member>
         <member name="M:DbWebAPI.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
             <summary> This method gets called by the runtime. Use this method to configure the HTTP request pipeline.</summary>
+        </member>
+        <member name="M:IClient.IIClient.GetSCxItemsAsync(System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Get All SCx Documents</summary>
+            <exception cref="T:IClient.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:IClient.IIClient.GetSCxItemAsync(System.Guid,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Get Single SCx Document By Guid</summary>
+            <param name="id">Document Id</param>
+            <exception cref="T:IClient.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:IClient.IIClient.GetSCxItemSelectAsync(System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Nullable{System.Int32},System.String,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Select SCx Documents</summary>
+            <param name="searchFromTimeStamp">Search start Date/Time</param>
+            <param name="searchToTimeStamp">Search end Date/Time</param>
+            <param name="type">Document Type</param>
+            <param name="dept">Catering Department</param>
+            <param name="supplier">Supplier Name</param>
+            <param name="checkUBD">Use-By-Date status</param>
+            <param name="signOff">Supervisor sign off</param>
+            <exception cref="T:IClient.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:IClient.IIClient.GetSCxItemSelectDtoAsync(System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Select DTO Subset Of Data From SCx Documents</summary>
+            <param name="searchFromTimeStamp">Search Start Date/Time</param>
+            <param name="searchToTimeStamp">Search End Date/Time</param>
+            <param name="type">Document Type</param>
+            <param name="dept">Department</param>
+            <exception cref="T:IClient.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:IClient.IIClient.PutSCxItemAsync(System.Nullable{System.Guid},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Double},System.String,System.String,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Update SCx Document</summary>
+            <param name="id">Guid Unique Key</param>
+            <param name="timeStamp">Date/Time Document Created</param>
+            <param name="type">SCx Document Type (SC1: - SC9:)</param>
+            <param name="dept">Catering department (Kitchen, Prep-area, Stores etc)</param>
+            <param name="food">Food type</param>
+            <param name="supplier">SC1: Stock Supplier Name</param>
+            <param name="checkUBD">SC1: Use-By-Date indicator (not-applicable/checked-OK/expired)</param>
+            <param name="temperature">Food Temperature in Celsius</param>
+            <param name="comment">General comment box</param>
+            <param name="signOff">Manger sign-off of completed Document</param>
+            <exception cref="T:IClient.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:IClient.IIClient.PostSCxItemAsync(System.Nullable{System.Guid},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Double},System.String,System.String,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Create New SCx Document</summary>
+            <param name="id">Guid Unique Key</param>
+            <param name="timeStamp">Date/Time Document Created</param>
+            <param name="type">SCx Document Type (SC1: - SC9:)</param>
+            <param name="dept">Catering department (Kitchen, Prep-area, Stores etc)</param>
+            <param name="food">Food type</param>
+            <param name="supplier">SC1: Stock Supplier Name</param>
+            <param name="checkUBD">SC1: Use-By-Date indicator (not-applicable/checked-OK/expired)</param>
+            <param name="temperature">Food Temperature in Celsius</param>
+            <param name="comment">General comment box</param>
+            <param name="signOff">Manger sign-off of completed Document</param>
+            <exception cref="T:IClient.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:IClient.IIClient.DeleteSCxItemAsync(System.Guid,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Delete SCx Document By Guid</summary>
+            <param name="id">Document Id</param>
+            <exception cref="T:IClient.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:IClient.IClient.GetSCxItemsAsync(System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Get All SCx Documents</summary>
+            <exception cref="T:IClient.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:IClient.IClient.GetSCxItemAsync(System.Guid,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Get Single SCx Document By Guid</summary>
+            <param name="id">Document Id</param>
+            <exception cref="T:IClient.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:IClient.IClient.GetSCxItemSelectAsync(System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.Nullable{System.Int32},System.String,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Select SCx Documents</summary>
+            <param name="searchFromTimeStamp">Search start Date/Time</param>
+            <param name="searchToTimeStamp">Search end Date/Time</param>
+            <param name="type">Document Type</param>
+            <param name="dept">Catering Department</param>
+            <param name="supplier">Supplier Name</param>
+            <param name="checkUBD">Use-By-Date status</param>
+            <param name="signOff">Supervisor sign off</param>
+            <exception cref="T:IClient.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:IClient.IClient.GetSCxItemSelectDtoAsync(System.Nullable{System.DateTimeOffset},System.Nullable{System.DateTimeOffset},System.String,System.String,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Select DTO Subset Of Data From SCx Documents</summary>
+            <param name="searchFromTimeStamp">Search Start Date/Time</param>
+            <param name="searchToTimeStamp">Search End Date/Time</param>
+            <param name="type">Document Type</param>
+            <param name="dept">Department</param>
+            <exception cref="T:IClient.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:IClient.IClient.PutSCxItemAsync(System.Nullable{System.Guid},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Double},System.String,System.String,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Update SCx Document</summary>
+            <param name="id">Guid Unique Key</param>
+            <param name="timeStamp">Date/Time Document Created</param>
+            <param name="type">SCx Document Type (SC1: - SC9:)</param>
+            <param name="dept">Catering department (Kitchen, Prep-area, Stores etc)</param>
+            <param name="food">Food type</param>
+            <param name="supplier">SC1: Stock Supplier Name</param>
+            <param name="checkUBD">SC1: Use-By-Date indicator (not-applicable/checked-OK/expired)</param>
+            <param name="temperature">Food Temperature in Celsius</param>
+            <param name="comment">General comment box</param>
+            <param name="signOff">Manger sign-off of completed Document</param>
+            <exception cref="T:IClient.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:IClient.IClient.PostSCxItemAsync(System.Nullable{System.Guid},System.Nullable{System.DateTimeOffset},System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Double},System.String,System.String,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Create New SCx Document</summary>
+            <param name="id">Guid Unique Key</param>
+            <param name="timeStamp">Date/Time Document Created</param>
+            <param name="type">SCx Document Type (SC1: - SC9:)</param>
+            <param name="dept">Catering department (Kitchen, Prep-area, Stores etc)</param>
+            <param name="food">Food type</param>
+            <param name="supplier">SC1: Stock Supplier Name</param>
+            <param name="checkUBD">SC1: Use-By-Date indicator (not-applicable/checked-OK/expired)</param>
+            <param name="temperature">Food Temperature in Celsius</param>
+            <param name="comment">General comment box</param>
+            <param name="signOff">Manger sign-off of completed Document</param>
+            <exception cref="T:IClient.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="M:IClient.IClient.DeleteSCxItemAsync(System.Guid,System.Threading.CancellationToken)">
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <summary>Delete SCx Document By Guid</summary>
+            <param name="id">Document Id</param>
+            <exception cref="T:IClient.ApiException">A server side error occurred.</exception>
+        </member>
+        <member name="T:IClient.SCxItem">
+            <summary>    DbWebAPI.Models.SCxItem - SCx Documents Data Model
+                Food Standards Agency 'Safe Catering' Regulatory Food Monitoring Records (SC1-SC9).
+                </summary>
+        </member>
+        <member name="P:IClient.SCxItem.Id">
+            <summary>Guid Unique Key</summary>
+        </member>
+        <member name="P:IClient.SCxItem.TimeStamp">
+            <summary>Date/Time Document Created</summary>
+        </member>
+        <member name="P:IClient.SCxItem.Type">
+            <summary>SCx Document Type (SC1: - SC9:)</summary>
+        </member>
+        <member name="P:IClient.SCxItem.Dept">
+            <summary>Catering department (Kitchen, Prep-area, Stores etc)</summary>
+        </member>
+        <member name="P:IClient.SCxItem.Food">
+            <summary>Food type</summary>
+        </member>
+        <member name="P:IClient.SCxItem.Supplier">
+            <summary>SC1: Stock Supplier Name</summary>
+        </member>
+        <member name="P:IClient.SCxItem.CheckUBD">
+            <summary>SC1: Use-By-Date indicator (not-applicable/checked-OK/expired)</summary>
+        </member>
+        <member name="P:IClient.SCxItem.Temperature">
+            <summary>Food Temperature in Celsius</summary>
+        </member>
+        <member name="P:IClient.SCxItem.Comment">
+            <summary>General comment box</summary>
+        </member>
+        <member name="P:IClient.SCxItem.SignOff">
+            <summary>Manger sign-off of completed Document</summary>
         </member>
     </members>
 </doc>

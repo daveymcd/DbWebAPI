@@ -29,11 +29,20 @@ namespace DbWebAPI.Helpers
         ///     
         /// </remarks>
         /// <example>
-        ///     Helpers.MessageLog("Exception Name or Message", "Nlog");
+        ///     Helpers.MessageLog("Exception Name or Message", "Trace", "Nlog");
         /// </example>
         /// <param name="exceptionMsg">Exeption Name</param>
         /// <param name="logService">Nlog or EventLog</param>
-        public static void MessageLog(string exceptionMsg = "Timing Log", string logService = "Nlog")
+        /// <param name="messageType">Debug/Info/Log/Trace/Warn/Error or Fatal</param>
+        /// <param name="memberName">Calling Method Name</param>
+        /// <param name="fileName">File that Method is defined in</param>
+        /// <param name="lineNumber">File Line Number call made from</param>
+        public static void MessageLog(string exceptionMsg = "Timing Log", 
+                                      string messageType = "Info", 
+                                      string logService = "Nlog",
+                                      [CallerMemberName] string memberName = "",
+                                      [CallerFilePath] string fileName = "",
+                                      [CallerLineNumber] int lineNumber = 0)
         {
             var source = "DbWebAPI";
             var log = "Application";
@@ -48,7 +57,34 @@ namespace DbWebAPI.Helpers
             else
             {
                 Logger logger = LogManager.GetCurrentClassLogger();
-                logger.Error(exceptionMsg, DateTime.Now);
+                switch (messageType)
+                {
+#if DEBUG
+                    case "Info":
+                        logger.Info(exceptionMsg, DateTime.Now);
+                        break;
+                    case "Log":
+                        logger.Log(LogLevel.Fatal, exceptionMsg, DateTime.Now);
+                        break;
+                    case "Trace":
+                        logger.Trace(string.Concat( fileName, ".", memberName, " Line:", lineNumber, " - ", exceptionMsg), DateTime.Now);
+                        break;
+#endif
+                    case "Warn":
+                        logger.Warn(exceptionMsg, DateTime.Now);
+                        break;
+                    case "Error":
+                        logger.Error(exceptionMsg, DateTime.Now);
+                        break;
+                    case "Fatal":
+                        logger.Fatal(exceptionMsg, DateTime.Now);
+                        break;
+                    default:
+#if DEBUG
+                        logger.Debug(exceptionMsg, DateTime.Now);
+#endif
+                        break;
+                }
             }
         }
 
@@ -69,8 +105,8 @@ namespace DbWebAPI.Helpers
         /// </example>
         /// <param name="msgBody">Main Message</param>
         /// <param name="fullTrace">Full Trace History of just calling method name</param>
-        /// <param name="memberName">Method Name</param>
-        /// <param name="fileName">File Method defined in</param>
+        /// <param name="memberName">Calling Method Name</param>
+        /// <param name="fileName">File that Method is defined in</param>
         /// <param name="lineNumber">File Line Number call made from</param>
         [STAThread]
         public static async Task DebugLog(string msgBody = "",

@@ -1,0 +1,1 @@
+﻿dotnet run .\bin\Debug\net5.0\DbWebAPI 

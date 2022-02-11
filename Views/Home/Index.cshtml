@@ -27,6 +27,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--Set device screen default scale for Responsive Design-->
 
     <style>
+        .Yellow {
+            color: lightgoldenrodyellow;
+        }
+
+            .Yellow p {
+                text-shadow: 0.3px 0.3px 0.3px rgba(0,0,0,0.5);
+            }
+
+            .Yellow button {
+                background-color: lightgoldenrodyellow;
+            }
+
+            .Yellow hr {
+                border-color: lightgoldenrodyellow;
+            }
+
         .blue {
             color: lightskyblue;
         }
@@ -137,6 +153,9 @@
             A Xamarin Mobile Application manages the business requirements of the regulation and uses the REST API service to access the document archive.
         </p>
     </div>
+    <div class="yellow" style="text-align:left; width:100%;">
+        <button class="clearfix"><a href="https://github.com/daveymcd/DbWebAPI/wiki" target="_blank" title="GitHub Repository for DbWebAPI">GitHub</a></button>
+    </div>
 
     <div class="flexContainerRow clearfix blue">
         <div class="col1 flexContainerColumn sideBySide1col" style="margin:10% 0.5% 0.5% 0;">
@@ -151,7 +170,7 @@
             <p>REST API Controller provides CRUD access of the document archive to a Xamarin App. Written in C# and uses Nswag to expose the Json Endpoints. </p>
         </div>
         <div class="col1 flexContainerColumn sideBySide1col" >
-            <button class="clearfix"><a href="https://localhost:5001/swagger/index.html#/SCxItems" title="Swagger Page">Nswag</a></button>
+            <button class="clearfix"><a href="https://localhost:5001/swagger/index.html#/SCxItems" title="Swagger Page">NSwag</a></button>
         </div>
     </div>
 
